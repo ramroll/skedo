@@ -56,14 +56,14 @@ class SelectedNode{
   }
 
   selectReceiver(x : number, y : number, skip : Node | null, node : Node){
-    let p : Node | null = this.select(x, y, skip, node)
+    let p : Node | null | undefined = this.select(x, y, skip, node)
     while(p && !p.isContainer()) {
       p = p?.getParent()
     }
-    if(p === node.root() && this.node.isFlex()) {
-      p = p.page.pageNode
+    if(p === node.page?.root && this.node.isFlex()) {
+      p = p.page?.pageNode
     }
-    return p
+    return p || null
     
   }
 
@@ -143,7 +143,6 @@ export default class Selection extends Emiter<Topic> {
     })
     
     list.forEach((p) => this.items.delete(p))
-    console.log('emit',node.getType())
     node.emit(Topic.SelectionChanged)
     this.emit(Topic.SelectionChanged)
     this.ver ++
@@ -161,7 +160,6 @@ export default class Selection extends Emiter<Topic> {
   contains(node : Node) : boolean {
     const result = !!([...this.items.keys()].find(x => x === node))
     const first = [...this.items.keys()][0]
-    console.log("result", result, first?.getType(), node.getType())
     return result
   }
 
@@ -175,7 +173,6 @@ export default class Selection extends Emiter<Topic> {
     }
     for(let node of this.nodes() ){
       const defaultContainer =node.isFlex() ? this.editor.page.pageNode : this.editor.root
-      node.setDummy(true)
       defaultContainer.add(node)
     }
     this.items.forEach(item => item.reset())
@@ -210,9 +207,6 @@ export default class Selection extends Emiter<Topic> {
     this.dragStarted = false
     if(this.items.size === 1) {
       this.assistLine.endMove()
-    }
-    for(let node of this.nodes()) {
-      node.setDummy(false)
     }
     for(let item of this.items.values()) {
       item.end()

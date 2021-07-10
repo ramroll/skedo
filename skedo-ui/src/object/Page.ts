@@ -1,12 +1,23 @@
 import Node from "./Node";
-import { Emiter, Topic, boxDescriptor, JsonWidgetTree, NodeJsonStructure, CustomResponse, Logger} from '@skedo/core'
+import {
+  Emiter,
+  Topic,
+  boxDescriptor,
+  NodeJsonStructure,
+  BoxDescriptor,
+  NodeData,
+  BoxDescriptorInput,
+  Logger,
+  sizeUnitToNumber,
+  ComponentMeta,
+} from "@skedo/core"
 import { EditorModel } from "./EditorModel";
 import ComponentsLoader from "./ComponentsLoader";
 import { History } from "./History";
 import Cord from "./Cord";
 import PageExporter from "./PageExporter";
 import {fileRemote, pageRemote, compose} from "@skedo/request"
-
+import {fromJS} from 'immutable'
 
 
 
@@ -18,22 +29,28 @@ export default class Page extends Emiter<Topic>{
   history : History
   name : string
   logger : Logger = new Logger('page')
+  editor : EditorModel
 
   constructor(name : string, editor :EditorModel,  json : NodeJsonStructure){
     super()
     this.name = name
+    this.editor = editor
     this.history = new History()
     this.id_base = 1
     this.nodes = []
     editor.page = this
-    this.root = new Node(editor, boxDescriptor({
+
+    const box = boxDescriptor({
       left : 0,
       top : 0,
       width : 3200,
       height : 3200,
       mode : 'normal'
-    }), ComponentsLoader.loadByName("basic", "root"))
-    const pageNode = Node.fromJson(json, editor)
+    })
+    const meta = ComponentsLoader.loadByName("basic", "root")
+    this.root = new Node(meta, meta.createData(this.createId(), box))
+    this.linkPage(this.root)
+    const pageNode = this.fromJson(json)
     pageNode.setAllowDrag(false)
     this.root.add(pageNode)
     this.pageNode = pageNode
@@ -45,11 +62,6 @@ export default class Page extends Emiter<Topic>{
     window["pageHistory"] = this.history
 
     this.history.clear()
-  }
-
-  addNode(node : Node) {
-    this.nodes[this.id_base++] = node
-    return this.id_base - 1
   }
 
 
@@ -86,4 +98,104 @@ export default class Page extends Emiter<Topic>{
 
   }
 
+  createFromJSON = (json: NodeJsonStructure) => {
+    if(typeof json.box.width !== 'object') {
+      json.box = boxDescriptor(json.box as BoxDescriptorInput)
+    }
+    return this.fromJson(json)
+  }
+
+  createFromMeta(
+    meta :ComponentMeta 
+  ) {
+    const box = meta.box
+    const pageNode = this.pageNode.getRect()
+    const width = sizeUnitToNumber("width", box.width, pageNode.width, pageNode.height)
+    const height = sizeUnitToNumber("height", box.height, pageNode.width, pageNode.height)
+    const cord = this.editor.cord
+    const ipt = boxDescriptor({ 
+      left : cord.worldX() - width / 2,
+      top : cord.worldY() - height / 2,
+      width : box.width.isAuto ? '' : box.width.value + box.width.unit,
+      height : box.height.isAuto ? '' : box.height.value + box.height.unit,
+      mode : box.mode
+    })
+
+    const id = this.createId()
+    const nodeData = meta.createData(id, ipt)
+    const node = new Node(
+      meta,
+      nodeData
+    )
+    this.linkPage(node)
+    return node
+  }
+
+  fromJson(
+    json: NodeJsonStructure
+  ): Node {
+    if(typeof json.box.width !== 'object') {
+      json.box = boxDescriptor(json.box as BoxDescriptorInput)
+    }
+    const meta = ComponentsLoader.loadByName(
+      json.group,
+      json.name
+    )
+    
+    const id = json.id || this.createId() 
+    const instanceData = json.id ? 
+      fromJS(json) : meta.createData(id, json.box as BoxDescriptor) 
+    const node = new Node(meta, instanceData as NodeData)
+    this.linkPage(node)
+
+    if(!json.id) {
+      json.children &&
+        json.children.forEach((child) => {
+          node.add(this.fromJson(child))
+        })
+    } else {
+      json.children &&
+        node.setChildren(json.children.map(child => {
+          const childNode = this.fromJson(child)
+          childNode.setParent(node)
+          return childNode
+        }))
+    }
+    return node
+  }
+
+  copy(source : Node) {
+    const rect = source.getRect()
+    const id = this.id_base++
+
+    const box = boxDescriptor({
+      left : rect.left,
+      top : rect.top,
+      width : rect.width,
+      height : rect.height,
+      mode : source.getBox().mode
+    })
+
+
+    const data = source.meta.createData(id, box)
+    const node = new Node(
+      source.meta,
+      data
+    )
+    source.getChildren().forEach((child) => {
+      node.add(this.copy(child))
+    })
+    this.nodes[id] = node
+    return node
+  }
+
+  private createId(){
+    return this.id_base++
+  }
+
+  private linkPage(node : Node) {
+    this.nodes[node.getId()] = node
+    node.page = this
+
+  }
 }

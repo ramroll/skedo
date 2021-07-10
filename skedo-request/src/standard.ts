@@ -1,9 +1,10 @@
 import {fetch} from './init'
-export interface CustomResponse{
+
+export type CustomResponse = {
 	success : boolean,
 	message? : string,
 	errorCode? : number,
-	httpCode : number,
+	httpCode? : number,
 	data? : any
 }
 

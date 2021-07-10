@@ -19,7 +19,7 @@ class MountPoint {
 			return null
 		}
 		const id = Number.parseInt(p.getAttribute("id")?.split("-").pop() || '')
-		return this.node.page.nodes[id]
+		return this.node.page?.nodes[id]
 	}
 
 	getRect() : Rect{
@@ -46,8 +46,12 @@ class MountPoint {
 
 	getAbsPosition() : Array<number>  {
 		const rect = this.ele.getBoundingClientRect()
-		const left = Math.round(rect.left + this.node.editor.cord.scrollX - this.node.editor.cord.viewport.left)
-		const top = Math.round(rect.top+ this.node.editor.cord.scrollY - this.node.editor.cord.viewport.top)
+		const cord = this.node.page?.editor.cord
+		if(!cord) {
+			throw new Error("Page is not initialized to node.")
+		}
+		const left = Math.round(rect.left + cord.scrollX - cord.viewport.left)
+		const top = Math.round(rect.top+ cord.scrollY - cord.viewport.top)
 		return [left, top]
 	}
 

@@ -108,7 +108,7 @@ const ComponentTreeNode = ({node, editor, rootRef} : ComponentTreeProps) => {
           />
         )}
 
-        {renderItem(node)}
+        {renderItem(node, editor)}
         <FlexShadow node={node} />
       </div>
       {node.getEditMode() === false && (

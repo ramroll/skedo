@@ -8,18 +8,13 @@ import {
   Node as NodeInterface,
   BoxDescriptor,
   sizeUnitToNumber,
-  NodeJsonStructure,
-  boxDescriptor as boxDescriptorFN, 
-  BoxDescriptorInput,
 } from "@skedo/core"
-import Page from "./Page"
-import { EditorModel } from "./EditorModel"
-import ComponentsLoader from "./ComponentsLoader"
 import { Map as ImmutableMap, fromJS } from "immutable"
 import NodeStyleHelper from "../components/NodeStyleHelper"
 import InjectComponent from "../components/InjectComponent"
 import ReactDOM from "react-dom"
 import MountPoint from "./MountPoint"
+import Page from "./Page"
 
 export declare type NodeData = ImmutableMap<string, any>
 
@@ -31,53 +26,25 @@ export default class Node
   extends Emiter<Topic>
   implements NodeInterface
 {
-  page: Page
-  editor: EditorModel
   meta: ComponentMeta
   logger: Logger
   data: NodeData
   styleHelper: NodeStyleHelper
-  dummy: boolean
   mountPoint?: MountPoint
   receiving: Node | null
   level: number = 0
+  page? :Page 
   // #region 初始化
   constructor(
-    editor: EditorModel,
-    boxDescriptor:  BoxDescriptor | null,
     meta: ComponentMeta,
-    dummy = false,
-    importData : NodeData | null = null
+    data : NodeData
   ) {
     super()
-
     this.logger = new Logger("node")
     this.meta = meta
-    this.dummy = dummy
-    this.editor = editor
-    this.page = editor.page
-
-    this.data = this.meta.createData(
-      this.page.addNode(this),
-      boxDescriptor,
-      importData
-    )
-
-    // this.data = this.loadValuesFromProps(this.data)
-    // 需要先从属性编辑器的属性配置中导入默认属性
-    // 然后再读取配置中style选项
-    if(!importData) { 
-      this.data = this.data.update(
-        "style",
-        (style: ImmutableMap<string, any>) => {
-          const metaStyle = fromJS(meta.style) as ImmutableMap<string,any>
-          return style.merge(metaStyle)
-        }
-      )
-    }
+    this.data = data
     this.receiving = null
     this.styleHelper = new NodeStyleHelper(this)
-    this.initMutations()
   }
 
   //#endregion
@@ -111,10 +78,6 @@ export default class Node
 
   isContainer(): boolean {
     return this.data.get("isContainer")
-  }
-
-  root(): Node {
-    return this.page.root
   }
 
   getRect(): Rect {
@@ -242,128 +205,6 @@ export default class Node
     return this.getRect().bound(x, y)
   }
 
-  select(
-    x: number,
-    y: number,
-    altDown: boolean = false
-  ): Node | null {
-    let node = this.__select(x, y)
-
-    const parent = node?.getParent()
-    if (!altDown && parent && parent.isFlex()) {
-      node = parent
-    }
-
-    this.logger.log("select node", node?.getType(), altDown)
-
-    return node
-  }
-
-  __select(x: number, y: number, depth = 0): Node | null {
-    if (depth > 10) {
-      throw new Error("depth overflow")
-    }
-
-    const children = this.getChildren()
-    if (this.bound(x, y)) {
-      if (
-        !children.find((node) =>
-          node.bound(
-            x - this.getRect().left,
-            y - this.getRect().top
-          )
-        )
-      ) {
-        return this
-      }
-    }
-
-    for (let child of children) {
-      const result = child.__select(
-        x - this.getRect().left,
-        y - this.getRect().top,
-        depth + 1
-      )
-
-      if (result != null) {
-        return result
-      }
-    }
-    return null
-  }
-
-  copy() {
-    const rect = this.getRect()
-    const node = new Node(
-      this.editor,
-      boxDescriptorFN({
-        left : rect.left,
-        top : rect.top,
-        width : rect.width,
-        height : rect.height,
-        mode : this.getBox().mode
-      }),
-      this.meta,
-      true
-    )
-    this.getChildren().forEach((child) => {
-      node.add(child.copy())
-    })
-    return node
-  }
-
-  //#endregion
-
-  // #region mutations
-  initMutations() {
-    const transactionWrapper = (
-      fn: (...arg: Array<any>) => any,
-      name: string
-    ) => {
-      return (...args: Array<any>) => {
-        const a = this.data
-        const result = fn(...args)
-        const b = this.data
-
-        if (!this.dummy) {
-          this.page.history.record({
-            from: a,
-            to: b,
-            name,
-            node: this,
-          })
-        }
-        return result
-      }
-    }
-
-    this.setParent = transactionWrapper(
-      this.setParent,
-      "set-parent"
-    )
-    this.add = transactionWrapper(this.add, "add-node")
-    this.addFromJSON = transactionWrapper(
-      this.addFromJSON,
-      "add-from-json"
-    )
-    this.setChildren = transactionWrapper(
-      this.setChildren,
-      "set-children"
-    )
-    this.setXY = transactionWrapper(this.setXY, "set-xy")
-    this.setXYWH = transactionWrapper(this.setXYWH, "set-xywh")
-    this.float = transactionWrapper(this.float, "float")
-    this.remove = transactionWrapper(this.remove, "remove")
-    this.setpassProps = transactionWrapper(
-      this.setpassProps,
-      "set-passprops"
-    )
-    this.updateByPath = transactionWrapper(
-      this.updateByPath,
-      "update-by-path"
-    )
-  }
-
   setParent = (node: Node | null) => {
     this.logger.debug(
       "set-parent",
@@ -417,15 +258,6 @@ export default class Node
     this.emit(Topic.Updated)
   }
 
-  addFromJSON = (json: NodeJsonStructure) => {
-    if(typeof json.box.width !== 'object') {
-      json.box = boxDescriptorFN(json.box as BoxDescriptorInput)
-    }
-    const child = Node.fromJson(json, this.editor)
-    this.add(child)
-    this.emit(Topic.Updated)
-    return child
-  }
 
   setChildren = (children: Array<Node>) => {
 
@@ -548,10 +380,6 @@ export default class Node
     this.emit(Topic.Updated)
   }
 
-  setDummy(dummy: boolean) {
-    this.dummy = dummy
-  }
-
   setReceiving(node: Node | null) {
     this.logger.debug('set-receiving', node?.getType())
     if (this.receiving !== node) {
@@ -562,99 +390,12 @@ export default class Node
 
   //#endregion
 
-  // #region 静态区
-  static findDropTarget(root: Node, node: Node) {
-    const absRect = node.absRect()
-
-    console.debug(
-      "[node]",
-      "find-drop-target",
-      node.getType(),
-      absRect
-    )
-
-    // p是node插入后的父元素
-    const rect = node.getRect()
-    let p = root.select(
-      absRect.left + rect.width / 2,
-      absRect.top + rect.height / 2
-    )
-
-    console.debug(
-      "[node]",
-      "find-drop-target>",
-      p ? p.getType() : null
-    )
-    // 递归找到能够承载p的最小层级
-    while (
-      p &&
-      (!p.absContains(node) || !p.isContainer())
-    ) {
-      p = p.getParent()
-      console.debug(
-        "[node]",
-        "find-drop-target>",
-        p ? p.getType() : null
-      )
-    }
-    // 最小层级是自己或者自己的父元素
-    if (p === node || p === node.getParent()) {
-      console.debug(
-        "[node]",
-        "find-drop-target-result",
-        null,
-        p ? p.getType() : "null",
-        node.getType(),
-        node.getParent()
-      )
-      return null
-    }
-
-    console.debug("[node]", "find-drop-target-result", p)
-    return p
-  }
-
-  static fromJson(
-    json: NodeJsonStructure,
-    editor: EditorModel
-  ): Node {
-    if(typeof json.box.width !== 'object') {
-      json.box = boxDescriptorFN(json.box as BoxDescriptorInput)
-    }
-    const meta = ComponentsLoader.loadByName(
-      json.group,
-      json.name
-    )
-    
-    const instanceData = json.id ? 
-      fromJS(json) : null
-    const node = new Node(editor, json.box as BoxDescriptor, meta, false, instanceData as (NodeData | null))
-    if (json.passProps) {
-      node.setpassProps(json.passProps)
-    }
-    
-
-    if(!json.id) {
-      json.children &&
-        json.children.forEach((child) => {
-          node.add(Node.fromJson(child, editor))
-        })
-    } else {
-      json.children &&
-        node.setChildren(json.children.map(child => {
-          const childNode = Node.fromJson(child, editor)
-          childNode.setParent(node)
-          return childNode
-        }))
-    }
-    return node
-  }
-
-  //#endregion
-
   // #region  external render
   renderExternal(elem: HTMLElement) {
-    const component = <InjectComponent node={this} />
+    if(!this.page) {
+      throw new Error("Page must be initialzied before this.")
+    }
+    const component = <InjectComponent node={this} editor={this.page?.editor} />
     this.logger.log("render external", elem, component)
     ReactDOM.render(component, elem)
   }

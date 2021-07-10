@@ -2,11 +2,14 @@ import { Topic } from './Topic'
 import { Node } from './Node'
 import { Emiter } from './Emiter'
 import { NodeJsonStructure } from './NodeJsonStructure'
+import { Page } from './Page'
 
 export class Bridge {
   node : Node 
-  constructor(node : Node){
+  page : Page 
+  constructor(node : Node, page : Page){
     this.node = node
+    this.page = page
   }
 
   editMode(){
@@ -30,33 +33,36 @@ export class Bridge {
   }
 
   createChildBridge(json : NodeJsonStructure) : Bridge {
-    const node = this.node.addFromJSON(json)
-    return new Bridge(node)
+    const child = this.page.createFromJSON(json)
+    this.node.add(child)
+    return new Bridge(child, this.page)
   }
 
   createNode(json : NodeJsonStructure) : Node{
-    return this.node.createNodeFromJson(json)
+    return this.page.createFromJSON(json)
   }
 
   renderExternal(elem : HTMLElement) {
     this.node && this.node.renderExternal && this.node.renderExternal(elem)
   }
 
-  createLink(node : Node, passProps : any, key : any) {
-    const linked = this.node.createLink(node, passProps, key)
-    return new Bridge(linked)
-  }
+  // createLink(node : Node, passProps : any, key : any) {
+  //   const linked = this.node.createLink(node, passProps, key)
+  //   return new Bridge(linked)
+  // }
 
   static getMockBridge(){
     const node : unknown = new Emiter<Topic>()
+    const page : unknown = new Emiter<Topic>()
     
     // @ts-ignore
-    node.addFromJSON = () => {
+    page.createFromJSON = () => {
     }
     // @ts-ignore
     node.renderExternal = () => {
     }
-    const bridge = new Bridge(node as Node)
+
+    const bridge = new Bridge(node as Node, page as Page)
 
     return bridge
 

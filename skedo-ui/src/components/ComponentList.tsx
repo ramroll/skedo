@@ -37,7 +37,7 @@ const ComponentList = ({editor} : ComponentListProps) => {
             {list.map((compConf) => {
             return (
               <div
-                key={compConf.type}
+                key={compConf.name}
                 draggable
                 onDragStart={(event) => {
 

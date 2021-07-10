@@ -4,12 +4,13 @@ import ComponentTreeNode from './ComponentTreeNode'
 import ComponentsLoader from '../object/ComponentsLoader'
 import NodeStyleHelper from './NodeStyleHelper'
 import ExternalComponent from './ExternalComponent'
+import EditorModel from '../object/EditorModel'
 
-function renderDIV(node : Node) {
+function renderDIV(node : Node, editor : EditorModel) {
   return node.getChildren().map((child) => {
     return (
       <ComponentTreeNode
-        editor={node.editor}
+        editor={editor}
         key={child.getId()}
         node={child}
       />
@@ -19,9 +20,9 @@ function renderDIV(node : Node) {
 
 
 
-function renderFlexDiv(node : Node) {
+function renderFlexDiv(node : Node, editor : EditorModel) {
   if(!node.receiving) {
-    return renderDIV(node)
+    return renderDIV(node, editor)
   }
 
   const children = node.getChildren()
@@ -62,7 +63,7 @@ function renderFlexDiv(node : Node) {
     }
     else return (
       <ComponentTreeNode
-        editor={node.editor}
+        editor={editor}
         key={child.getId()}
         node={child}
       />
@@ -71,13 +72,13 @@ function renderFlexDiv(node : Node) {
 }
 
 
-function renderLocalComponent(node : Node, C :React.FC<any> | React.ComponentClass ) {
-  const bridge = new Bridge(node)
+function renderLocalComponent(node : Node, editor : EditorModel, C :React.FC<any> | React.ComponentClass ) {
+  const bridge = new Bridge(node, editor.page)
   return <C key={node.getId()} bridge={bridge}  {...node.getPassProps().toJS()} />
 }
 
-function renderExternalComponent(node : Node) {
-  const bridge = new Bridge(node)
+function renderExternalComponent(node : Node, editor : EditorModel) {
+  const bridge = new Bridge(node, editor.page)
   if(!node.meta.url) {
     return null
   }
@@ -90,24 +91,22 @@ function renderExternalComponent(node : Node) {
   )
 }
 
-function renderItem(node : Node) {
+function renderItem(node : Node, editor : EditorModel) {
   if(node.isContainer()) {
     if(node.isFlex()) {
-      return renderFlexDiv(node)
+      return renderFlexDiv(node, editor)
     }
-    return renderDIV(node)
+    return renderDIV(node, editor)
   }
 
   if(node.meta.url) {
 
     const localComponent = ComponentsLoader.getLocalComponentByURL(node.meta.url)
     if(localComponent) {
-      return renderLocalComponent(node, localComponent)
+      return renderLocalComponent(node, editor, localComponent)
     }
-    return renderExternalComponent(node)
+    return renderExternalComponent(node, editor)
   }
-  
-
 
   return null
 

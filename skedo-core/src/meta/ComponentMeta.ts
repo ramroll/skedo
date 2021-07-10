@@ -102,28 +102,18 @@ export class ComponentMeta {
     }
   }
 
-  createData(id : number, box : BoxDescriptor | null, 
-    importData : ImmutableMap<string, any> | null = null) {
+  createData(id : number, box : BoxDescriptor | null) {
 
     const isBoxDescritor = typeof box?.width === 'object'
 
-    if(importData) {
-      importData = importData.set('allowDrag', true)
-        .set('editMode', false)
-        .set('isMoving', false)
-        .set('allowDrag', true)
-        .set('isContainer', this.isContainer)
-      return importData
-    }
-
     let data = ImmutableMap({
+      id,
       parent: null,
       type: this.type,
       name : this.name,
       group: this.group,
       style: ImmutableMap<string, any>(),
       children: [],
-      id,
       allowDrag: true,
       isMoving: false,
       editMode: false,
@@ -132,7 +122,13 @@ export class ComponentMeta {
       box : fromJS(box)
     })
 
-    
+    data = data.update(
+      "style",
+      (style: any) => {
+        const metaStyle = fromJS(this.style) as ImmutableMap<string,any>
+        return style.merge(metaStyle)
+      }
+    ) 
 
     for(let key in this.props) {
       const prop = this.props[key]

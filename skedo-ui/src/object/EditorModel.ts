@@ -133,23 +133,7 @@ export class EditorModel extends StateMachine<EditorState, DragTrigger> {
       return EditorState.Start
     }
     if(!this.dropNode) {
-      const box = this.dropCompoentMeta.box
-      const pageNode = this.page.pageNode.getRect()
-      const width = sizeUnitToNumber("width", box.width, pageNode.width, pageNode.height)
-      const height = sizeUnitToNumber("height", box.height, pageNode.width, pageNode.height)
-      const ipt = boxDescriptor({ 
-        left : this.cord.worldX() - width / 2,
-        top : this.cord.worldY() - height / 2,
-        width : box.width.isAuto ? '' : box.width.value + box.width.unit,
-        height : box.height.isAuto ? '' : box.height.value + box.height.unit,
-        mode : box.mode
-      })
-      const node = new Node(
-        this,
-        ipt,
-        this.dropCompoentMeta,
-      )
-
+      const node = this.page.createFromMeta(this.dropCompoentMeta)
       this.selection.clear()
       this.selection.add(node)
       this.dropNode = node
@@ -317,7 +301,7 @@ export class EditorModel extends StateMachine<EditorState, DragTrigger> {
     }
     else if(this.ctrlDown && e.key === 'v') {
       for(let node of this.copyList) {
-        const copyNode = node.copy()
+        const copyNode = this.page.copy(node)
         node.getParent().add(copyNode)
         node.getParent().emit(Topic.Updated)
       }
