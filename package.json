@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@types/rollup": "^0.54.0",
+    "rollup": "^2.53.0"
+  }
+}

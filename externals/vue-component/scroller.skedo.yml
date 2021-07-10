@@ -1,0 +1,20 @@
+type: vue
+image: null
+title: 滚动列表
+initialWidth: 100
+initialHeight: 100
+url: null
+author: null
+src: .\src\components\Scroller.vue
+version: 1.0.0
+editor:
+  groups:
+    - name: example
+      title: 样例
+      props:
+        - name: src
+          label: 字号
+          type: list<image-upload>
+          path: passProps.imgs
+group: custom1
+name: scroller

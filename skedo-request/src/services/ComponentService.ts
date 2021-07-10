@@ -13,6 +13,16 @@ export class ComponentService{
 			}
 		})
 	}
+
+	public async put(group : string, name : string, values : any) : Promise<CustomResponse> {
+		return await fetchStandard(config.componentUrl(group, name), {
+			method : 'PUT',
+			headers : {
+				'content-type' : 'application/json'
+			},
+			body : JSON.stringify(values)
+		})
+	}
 }
 
 class ExternalComponentService {

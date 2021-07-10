@@ -1,11 +1,11 @@
-type: tabs
+name: tabs
+type: vue
 image: tabs.png
 title: 标签页
 box:
   mode: fill
-url: >-
-  https://voice-static.oss-accelerate.aliyuncs.com/coms/custom1/tabs/tabs-1.0.0.js
 author: null
+src: ./src/components/Tabs.vue
 file: ./build/tabs.js
 version: 1.0.0
 componentType: vue

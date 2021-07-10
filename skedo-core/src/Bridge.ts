@@ -34,8 +34,17 @@ export class Bridge {
     return new Bridge(node)
   }
 
+  createNode(json : NodeJsonStructure) : Node{
+    return this.node.createNodeFromJson(json)
+  }
+
   renderExternal(elem : HTMLElement) {
     this.node && this.node.renderExternal && this.node.renderExternal(elem)
+  }
+
+  createLink(node : Node, passProps : any, key : any) {
+    const linked = this.node.createLink(node, passProps, key)
+    return new Bridge(linked)
   }
 
   static getMockBridge(){
@@ -52,5 +61,6 @@ export class Bridge {
     return bridge
 
   }
+
 
 }

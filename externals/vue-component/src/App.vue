@@ -1,21 +1,22 @@
 <template>
-  <Tabs :style="style" :tabs="tabs" :bridge="bridge">
-  </Tabs>
+  <!-- <Tabs :style="style" :tabs="tabs" :bridge="bridge">
+  </Tabs> -->
+  <Scroller :bridge="bridge" />
 </template>
 
 <script lang="ts">
 import { Bridge, Emiter, Topic, Node } from '@skedo/core'
 import { defineComponent } from 'vue'
 import Tabs from './components/Tabs.vue'
+import Scroller from './components/Scroller.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
-    Tabs
+    Tabs,
+    Scroller
   },
   data : () => {
-
-
 
     const bridge = Bridge.getMockBridge()
     return {

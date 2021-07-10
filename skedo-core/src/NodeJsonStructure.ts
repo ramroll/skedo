@@ -1,7 +1,7 @@
 import { BoxDescriptor, BoxDescriptorInput } from "./BoxDescriptor";
 
 export type NodeJsonStructure = {
-	type : string,
+	type? : string,
 	group : string,
 	style : any,
 	name : string,

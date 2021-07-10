@@ -47,6 +47,7 @@ export interface ComponentMetaConfig {
 
   /* External components' */
   componentType? : 'react' | 'vue', 
+  src : string, // source file location
   file : string, // js file location
   url? : string,
   yml : string, 
