@@ -1,0 +1,68 @@
+.editor {
+  width : 300px;
+  min-height: 600px;
+  background-color: white;
+}
+
+
+.prop {
+  margin-right : 3px;
+}
+
+.prop-label {
+  color : #999;
+  text-align: center;
+  margin-right : 3px;
+  
+}
+
+.group {
+  user-select:  none;
+  background-color: white;
+  padding: 10px 0 10px 20px;
+  border-top :4px solid #ccc;
+  &:first-child {
+    border-top:none;
+  }
+  .group-row {
+    display : flex;
+    flex-wrap : wrap;
+    align-items: center;
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+    &.last{
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  h2 {
+    color : #666;
+    height : 28px;
+    line-height: 28px;
+    align-items: center;
+    display :flex;
+    justify-content: space-between;
+    font-size:12px;
+    font-weight: bold;
+    padding-right : 10px;
+    // border-top:1px solid #666;
+    // border-bottom:1px solid #dedede;
+    box-shadow: 1px 1px 1px #f2f2f2;
+    cursor : pointer;
+    svg {
+       fill  : #d7d7d7
+    }
+  }
+
+  .row-label {
+    font-size: 12px;
+    margin-bottom: 2px;
+    letter-spacing: 2px;
+    color:#666
+  }
+}
+
+.color-picker {
+  border : 1px solid black;
+}

@@ -1,0 +1,28 @@
+type: tabs
+image: tabs.png
+title: 标签页
+box:
+  mode: fill
+url: >-
+  https://voice-static.oss-accelerate.aliyuncs.com/coms/custom1/tabs/tabs-1.0.0.js
+author: null
+file: ./build/tabs.js
+version: 1.0.0
+componentType: vue
+style:
+  background: white
+  display: flex
+  flexDirection: row
+  height: 100%
+editor:
+  groups:
+    - name: swiper
+      title: 标签页
+      props:
+        - name: src
+          label: 字号
+          type: list<image-upload>
+          path: passProps.imgs
+group: custom1
+imageUrl: >-
+  https://voice-static.oss-accelerate.aliyuncs.com/img/c7c64f66ef03731291c63ad4ff227f9cb6e1e597.png

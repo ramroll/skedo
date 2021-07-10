@@ -1,0 +1,48 @@
+.tabs {
+	display : flex;
+	flex-direction: column;
+	width : 100%;
+	height: 100%;
+}
+
+.tab {
+	width : 100%;
+	height : 100%;
+}
+
+.panel {
+	flex : 1
+}
+
+
+.panel {
+}
+
+.menu {
+	border-top : 1px solid #eee;
+	height : 48px;
+	width : 100%;
+	box-shadow: 1px 2px 3px #eee;
+	display: flex;
+	flex-direction: row;
+	.menu-item {
+		display: flex;
+		padding : 4px 0px;
+		cursor : pointer;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		flex : 1; 
+		font-size : 12px;
+		img  {
+			max-height: 20px;
+		}
+		div {
+			height : 20px;
+			line-height: 20px;
+			font-weight: bold;
+			color : #666;
+			font-family: "Microsoft YaHei";
+		}
+	}
+}

@@ -1,0 +1,26 @@
+group : basic
+type : input 
+imageUrl : https://voice-static.oss-accelerate.aliyuncs.com//img/0806f4bf95c45186dbd4895ecb1c79544beff60d.png
+title : 输入框 
+box:
+  width : 100
+  height : 24
+isContainer : false 
+url: local.Input
+editor:
+  groups: 
+  - name: input
+    title: 输入框设置
+    props:
+    - name: multiline
+      type: select 
+      path: passProps.multiline
+      default: off 
+      props: 
+        style:
+          width : 120
+      selections:
+      - value: off 
+        text: 单行 
+      - value: on 
+        text: 多行 

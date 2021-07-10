@@ -1,0 +1,83 @@
+.text {
+  overflow : hidden;
+  div {
+    width :100%;
+    user-select: none;
+  }
+  input, input:focus{
+    width : 100%;
+    outline : none;
+    border : none
+  }
+}
+
+.button{
+  overflow : hidden;
+  width :100%;
+  height : 100%;
+  button {
+    width :100%;
+    height : 100%;
+    user-select: none;
+    background : none;
+    outline: none;
+    border : none;
+  }
+  input, input:focus{
+    width : 100%;
+    height : 100%;
+    outline : none;
+    border : none;
+    background: none;
+    text-align :center
+  }
+}
+
+
+
+
+.image {
+  width : 100%;
+  height : 100%;
+  position: relative;
+  input{
+    position: absolute;
+    top : 0;
+    left : 0;
+    width : 100%;
+    height : 100%;
+    z-index: 10;
+    opacity: 0;
+  }
+
+  img {
+    position: absolute;
+    top : 0;
+    left : 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.button {
+  outline: none;
+}
+
+.input {
+  width : 100%;
+  height : 100%;
+  cursor : pointer;
+}
+
+.textarea {
+  width : 100%;
+  height : 100%;
+  cursor : pointer;
+}
+
+.icon {
+  svg {
+    width : 100%;
+    height : 100%;
+  }
+}

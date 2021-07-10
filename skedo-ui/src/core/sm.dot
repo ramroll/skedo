@@ -1,0 +1,44 @@
+digraph {
+
+
+  rankdir=LR
+  edge[minlen=2]
+  start -> drag_select[label="down@node"];
+  start -> flex_drag[label="down@flex_node+alt"];
+  start -> flex_drag[label="down@flex_node"];
+
+  flex_drag -> flex_moving[label="move"]
+  flex_moving -> flex_drop[label="up"]
+  flex_moving -> flex_moving[label="move"]
+  flex_drop -> selected;
+ 
+
+  // 选择
+  drag_select -> moving[label=move]
+  drag_select -> selected[label=up]
+  selected -> selected[label="down+ctrl"]
+  selected -> selected[label="up"]
+  selected -> moving[label="down@node"]
+  selected -> flex_moving[label="down@flex_node"]
+  selected -> start[label="down@nothing"]
+  // selected -> selected[label="down+ctrl"]
+  moving -> moving[label="move"]
+  moving -> endmove[label="up"]
+  endmove -> selected;
+
+  // 插入元素
+  start -> add_start[label="dragstart"]; 
+  add_start -> add_moving[label="dragover"]; 
+  add_moving -> add_moving[label="dragover"]; 
+  add_moving -> add_start[label="dragout"]
+  add_moving -> start [label="dragend"]
+
+
+  // 调整大小的交互
+  selected -> start_resize[label="down@bar"];
+  start_resize -> resize[label="move"];
+  resize -> resize[label="move"]
+  resize -> selected[label="up"];
+
+
+}
