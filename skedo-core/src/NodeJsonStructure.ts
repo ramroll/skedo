@@ -4,6 +4,7 @@ export type NodeJsonStructure = {
 	type : string,
 	group : string,
 	style : any,
+	name : string,
 	children : Array<NodeJsonStructure>,
 	id? : number,
 	passProps? : any,

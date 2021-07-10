@@ -1,4 +1,6 @@
+name : ""
 type : ""
+group : ""
 editor : 
   groups:
   - name: shape

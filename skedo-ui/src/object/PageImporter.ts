@@ -17,7 +17,7 @@ export default class PageImporter {
 		const node = new Node(
       this.editor,
       json.box as BoxDescriptor,
-      ComponentsLoader.loadByType(json.group, json.type),
+      ComponentsLoader.loadByName(json.group, json.type),
 			false,
 			data
     )

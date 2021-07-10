@@ -621,9 +621,9 @@ export default class Node
     if(typeof json.box.width !== 'object') {
       json.box = boxDescriptorFN(json.box as BoxDescriptorInput)
     }
-    const meta = ComponentsLoader.loadByType(
+    const meta = ComponentsLoader.loadByName(
       json.group,
-      json.type
+      json.name
     )
     
     const instanceData = json.id ? 

@@ -32,7 +32,7 @@ export default class Page extends Emiter<Topic>{
       width : 3200,
       height : 3200,
       mode : 'normal'
-    }), ComponentsLoader.loadByType("basic", "root"))
+    }), ComponentsLoader.loadByName("basic", "root"))
     const pageNode = Node.fromJson(json, editor)
     pageNode.setAllowDrag(false)
     this.root.add(pageNode)

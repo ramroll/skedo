@@ -32,6 +32,7 @@ export interface PropsEditorConfigure {
 
 export interface ComponentMetaConfig {
   type : string,
+  name : string,
   image : string,
   title : string,
   isContainer : boolean,
@@ -56,6 +57,7 @@ export interface ComponentMetaConfig {
 
 export class ComponentMeta {
   type : string  
+  name : string  
   group : string
   image : string
   title : string
@@ -73,6 +75,7 @@ export class ComponentMeta {
 
   constructor(config : ComponentMetaConfig) {
     this.type = config.type
+    this.name = config.name
     this.group = config.group
     this.image = config.image
     this.title = config.title
@@ -115,6 +118,7 @@ export class ComponentMeta {
     let data = ImmutableMap({
       parent: null,
       type: this.type,
+      name : this.name,
       group: this.group,
       style: ImmutableMap<string, any>(),
       children: [],

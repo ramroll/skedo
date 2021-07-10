@@ -1,4 +1,4 @@
-type: swiper
+name: swiper
 image: ./swiper.png
 title: 轮播图
 box:

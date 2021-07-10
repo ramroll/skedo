@@ -30,7 +30,7 @@ require.context('../', true, /\.yml$/)
 		const n = a.split('/').pop()
 		if(n && n !== 'default') {
 			const config : ComponentMetaConfig = require(`../${key}`)
-			ymls[config.group + '.' + config.type] = config 
+			ymls[config.group + '.' + config.name] = config 
 		}
 	})
 
@@ -44,8 +44,8 @@ export default class ComponentsLoader extends Emiter<Topic> {
 	list : Array<ComponentMeta> = []
 
 
-	static loadByType(group : string, type :string) : ComponentMeta {
-    const key = group + '.'  + type
+	static loadByName(group : string, name:string) : ComponentMeta {
+    const key = group + '.'  + name 
 		if (!metas[key]) {
       const props = R.clone(
         ComponentsLoader.defaultProps
@@ -84,9 +84,9 @@ export default class ComponentsLoader extends Emiter<Topic> {
           content
         ) as any
         ymls[config.group + "." + config.type] = config
-        ComponentsLoader.loadByType(
+        ComponentsLoader.loadByName(
           config.group,
-          config.type
+          config.name
         )
       } catch (ex) {
         console.error(`load component ${item.group}.${item.type} error`, ex.toString())
@@ -101,7 +101,7 @@ export default class ComponentsLoader extends Emiter<Topic> {
 		}
 		for(let key in ymls) {
       const [group, name] = key.split('.')
-			ComponentsLoader.loadByType(group, name)
+			ComponentsLoader.loadByName(group, name)
 		}
     await this.loadRemote()
 		this.state = 1

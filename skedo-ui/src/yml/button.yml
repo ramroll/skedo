@@ -1,5 +1,5 @@
 group : basic
-type : "button"
+name: "button"
 imageUrl : "https://voice-static.oss-accelerate.aliyuncs.com//img/70680ec911a742b4ff60b041308f1424dc701efc.png"
 title : "按钮"
 box : {
