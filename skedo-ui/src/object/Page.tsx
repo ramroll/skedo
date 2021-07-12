@@ -99,7 +99,6 @@ export default class Page extends Emiter<Topic>{
     })
 
     const result = await composedRemoteCall("/page", "test.json", "1.0.0", text)
-    console.log(result)
     this.logger.log('save', json)
 
   }
@@ -191,7 +190,7 @@ export default class Page extends Emiter<Topic>{
     source.getChildren().forEach((child) => {
       node.add(this.copy(child))
     })
-    this.nodes[id] = node
+    this.linkPage(node)
     return node
   }
 
@@ -201,7 +200,6 @@ export default class Page extends Emiter<Topic>{
 
   private linkPage(node : Node) {
     this.nodes[node.getId()] = node
-    node.cord = this.editor.cord
   }
 
 

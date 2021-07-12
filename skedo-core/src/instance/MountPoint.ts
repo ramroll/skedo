@@ -13,7 +13,6 @@ export class MountPoint {
 		this.node = node
 	}
 
-
 	getRect() : Rect{
 		const rect = this.ele.getBoundingClientRect()
 		const parent = this.node.getParent()
@@ -40,7 +39,7 @@ export class MountPoint {
 		const rect = this.ele.getBoundingClientRect()
 		const cord = this.cord
 		if(!cord) {
-			throw new Error("Page is not initialized to node.")
+			throw new Error(`Page is not initialized to node ${this.node.getId()}.`)
 		}
 		const left = Math.round(rect.left + cord.scrollX - cord.viewport.left)
 		const top = Math.round(rect.top+ cord.scrollY - cord.viewport.top)

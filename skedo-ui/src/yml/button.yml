@@ -4,7 +4,7 @@ imageUrl : "https://voice-static.oss-accelerate.aliyuncs.com//img/70680ec911a742
 title : "按钮"
 box : {
   width : 75,
-  height : 26
+  height : 26,
 }
 initialHeight :  26 
 defaultProps : {

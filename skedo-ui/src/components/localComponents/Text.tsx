@@ -56,7 +56,6 @@ const Text : React.FC<TextProps> = ({text, fontSize, fontStyle = new Set<string>
     style.fontStyle = "italic"
   }
 
-  console.log('state', state)
 
   return <div className={styles.text} style={style}>
     <div 

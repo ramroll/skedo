@@ -31,7 +31,7 @@ const ComponentTreeNode = ({node, editor, rootRef} : ComponentTreeProps) => {
 
   useEffect(() => {
     if(ref.current) {
-      node.mount(ref.current)
+      node.mount(ref.current, editor.cord)
     }
   }, [node])
 

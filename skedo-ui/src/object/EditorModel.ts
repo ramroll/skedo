@@ -1,12 +1,18 @@
 import { MouseEvent as ReactMouseEvent,  UIEvent } from 'react'
-import Node from './Node'
 import StateMachine from './StateMachine'
 import Selection from './Selection'
 import Resizer from './Resizer'
 import PropertyEditor from './PropertyEditor'
 import Page from './Page'
-import {ComponentMeta, Logger, throttle, Topic, JsonWidgetTree, sizeUnitToNumber, NodeJsonStructure, boxDescriptor} from '@skedo/core'
-import Cord from '../../../skedo-core/src/instance/Cord'
+import {
+  ComponentMeta,
+  Logger,
+  throttle,
+  Topic,
+  Cord,
+  Node,
+  NodeJsonStructure,
+} from "@skedo/core"
 
 enum EditorState{
   Start,
@@ -169,7 +175,6 @@ export class EditorModel extends StateMachine<EditorState, DragTrigger> {
 
   startDrag = () =>{
     const node = this.page.nodeByCord(this.cord)
-    console.log(node, node?.getEditMode())
 
     if (node?.getEditMode()) {
       this.selection.clear()
@@ -183,7 +188,6 @@ export class EditorModel extends StateMachine<EditorState, DragTrigger> {
       this.selection.replace(node)
     }
 
-    console.log('here----', this.selection.contains(node), node.getType())
     return EditorState.StartDragMove
 
   }
@@ -408,7 +412,6 @@ export class EditorModel extends StateMachine<EditorState, DragTrigger> {
     }
   }
   onMouseUp = (e : MouseEvent) => {
-    console.log('up...', this.state)
     this.mouseDown = false
     this.saveMovePosition(e)
     this.next(DragTrigger.Up)

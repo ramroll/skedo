@@ -29,8 +29,12 @@ export default class Test extends Service {
     console.log(content.toString('utf-8'))
     stream.push(content.toString("utf-8"))
     stream.push(null)
-    const fileName =  file
+    let fileName =  file
     await ctx.oss.putStream(fileName, stream)
+
+    if(fileName[0] !== '/')  {
+      fileName = '/' +fileName
+    }
     
     return {
       success : true, 
@@ -43,8 +47,12 @@ export default class Test extends Service {
     stream.setEncoding('utf-8')
     stream.push(content)
     stream.push(null)
-    const fileName = path +  '/' + file
+    let fileName = path +  '/' + file
     await ctx.oss.putStream(fileName, stream)
+    
+    if(fileName[0] !== '/')  {
+      fileName = '/' +fileName
+    }
     
     return {
       success : true,

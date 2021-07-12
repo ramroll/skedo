@@ -1,5 +1,5 @@
 import { Topic } from './Topic'
-import { Node } from './Node'
+import { Node } from './instance/Node'
 import { Emiter } from './Emiter'
 import { NodeJsonStructure } from './NodeJsonStructure'
 import { Page } from './Page'
@@ -41,15 +41,6 @@ export class Bridge {
   createNode(json : NodeJsonStructure) : Node{
     return this.page.createFromJSON(json)
   }
-
-  renderExternal(elem : HTMLElement) {
-    this.node && this.node.renderExternal && this.node.renderExternal(elem)
-  }
-
-  // createLink(node : Node, passProps : any, key : any) {
-  //   const linked = this.node.createLink(node, passProps, key)
-  //   return new Bridge(linked)
-  // }
 
   static getMockBridge(){
     const node : unknown = new Emiter<Topic>()

@@ -9,33 +9,56 @@ import { Map as ImmutableMap, fromJS } from "immutable"
 import { MountPoint } from "./MountPoint"
 import { Cord } from "./Cord"
 
-
-
 export declare type NodeData = ImmutableMap<string, any>
+
+class InstanceData extends Emiter<Topic> {
+  protected data: NodeData
+	constructor(data : NodeData) {
+    super()
+		this.data = data
+	}
+
+  public setInstanceData(key : string, value : any) : void {
+    this.data = this.data.set(key, value)
+  }
+  
+  public updateInstanceData(key : string, updator : (value : any) => any)  {
+    this.data = this.data.updateIn([key], updator)
+  }
+
+  public updateInstanceByPath (path: Array<string>, value: any){
+    this.data = PropMeta.setPropValue(
+      path,
+      this.data,
+      value
+    )
+    this.emit(Topic.Updated)
+  }
+
+  public getData(){
+    return this.data
+  }
+}
 
 /**
  * 最核心的一个类
  * 类似VirtualDOM，代表页面上的一个节点
  */
-export class Node
-  extends Emiter<Topic>
+export class Node extends InstanceData
 {
   meta: ComponentMeta
   private logger: Logger
-  private data: NodeData
   private mountPoint?: MountPoint
   private receiving: Node | null
   level: number = 0
-  cord? : Cord 
   // #region 初始化
   constructor(
     meta: ComponentMeta,
     data : NodeData
   ) {
-    super()
+    super(data)
     this.logger = new Logger("node")
     this.meta = meta
-    this.data = data
     this.receiving = null
   }
 
@@ -46,8 +69,8 @@ export class Node
     return this.mountPoint
   }
 
-  mount(ele: HTMLElement) {
-    this.mountPoint = new MountPoint(ele, this, this.cord!)
+  mount(ele: HTMLElement, cord :Cord) {
+    this.mountPoint = new MountPoint(ele, this, cord)
   }
   // #endregion
 
@@ -216,11 +239,11 @@ export class Node
       node?.getType()
     )
     if (node !== null) this.level = node.level + 1
-    this.data = this.data.set("parent", node)
+    this.setInstanceData('parent', node)
   }
 
   setMoving = (isMoving: boolean) => {
-    this.data = this.data.set("isMoving", isMoving)
+    this.setInstanceData('isMoving', isMoving)
   }
 
   add = (node: Node) => {
@@ -247,9 +270,11 @@ export class Node
     }
 
     node.setParent(this)
-    this.data = this.data.update(
+
+    this.updateInstanceData(
       "children",
-      (children: Array<Node>) => {
+      (_children) => {
+        let children = _children as Array<Node>
         children = children.concat(node)
         if (this.isFlex()) {
           children = children.sort(
@@ -264,13 +289,16 @@ export class Node
 
 
   setChildren (children: Array<Node>) {
-    this.data = this.data.set("children", children)
+    this.setInstanceData('children', children)
   }
 
 
   private updateBoxValue(key : string, value : number) {
-    return this.data.update('box', box => {
+    this.updateInstanceData('box', box => {
       const item = box.get(key)
+      if(!item.get) {
+        debugger
+      }
       const unit = item.get('unit')
       if(unit === 'px') {
         box = box.setIn([key, 'value'], value)
@@ -289,21 +317,21 @@ export class Node
     })
   }
 
-  setXY = (x: number, y: number) => {
-    this.data = this.updateBoxValue('left', x)
-    this.data =  this.updateBoxValue('top', y)
+  public setXY = (x: number, y: number) => {
+    this.updateBoxValue('left', x)
+    this.updateBoxValue('top', y)
   }
 
   setXYWH = (x : number, y : number, w : number, h : number) => {
-    this.data = this.updateBoxValue('left', x)
-    this.data = this.updateBoxValue("width", w)
-    this.data = this.updateBoxValue("height", h)
-    this.data = this.updateBoxValue("top", y)
+    this.updateBoxValue('left', x)
+    this.updateBoxValue("width", w)
+    this.updateBoxValue("height", h)
+    this.updateBoxValue("top", y)
   }
 
   setWH = (w : number, h : number) => {
-    this.data = this.updateBoxValue("width", w)
-    this.data = this.updateBoxValue("height",h)
+    this.updateBoxValue("width", w)
+    this.updateBoxValue("height",h)
   }
 
   static moveA2B = (a: Node, b: Node) => {
@@ -326,20 +354,8 @@ export class Node
     b.add(a)
   }
 
-  float = () => {
-    this.logger.log("float", this.getParent() === null)
-    const [x, y] = this.absPosition()
-    const parent = this.getParent()
-    if (parent) {
-      parent.remove(this)
-    }
-    this.setParent(null)
-    this.setXY(x, y)
-    parent?.emit(Topic.Updated)
-  }
-
-  remove = (node: Node) => {
-    this.data = this.data.update(
+  public remove (node: Node) {
+    this.updateInstanceData(
       "children",
       (children: Array<Node>) => {
         return children.filter((x) => x !== node)
@@ -348,40 +364,37 @@ export class Node
   }
 
 
-  setpassProps = (passObject: any) => {
-    this.data = this.data.set(
+  public setpassProps = (passObject: any) => {
+    this.setInstanceData(
       "passProps",
       fromJS(passObject)
     )
   }
 
-  setAllowDrag = (allowDrag: boolean) => {
-    this.data = this.data.set("allowDrag", allowDrag)
+  public setAllowDrag = (allowDrag: boolean) => {
+    this.setInstanceData("allowDrag", allowDrag)
   }
 
-  setEditMode = (mode: boolean) => {
-    this.data = this.data.set("editMode", mode)
+  public setEditMode = (mode: boolean) => {
+    this.setInstanceData("editMode", mode)
     this.emit(Topic.EditMode, mode)
   }
 
-  updateData = (data: NodeData) => {
+  /**
+   * 
+   * ///TODO: 结合历史部分重构
+   * @param data 
+   */
+  public updateData = (data: NodeData) => {
     this.data = data
     this.emit(Topic.Updated)
   }
 
-  autoResize() {
+  public autoResize() {
     const rect = this.getRect()
     this.setWH(rect.width, rect.height)
   }
 
-  updateByPath = (path: Array<string>, value: any) => {
-    this.data = PropMeta.setPropValue(
-      path,
-      this.data,
-      value
-    )
-    this.emit(Topic.Updated)
-  }
 
   setReceiving(node: Node | null) {
     this.logger.debug('set-receiving', node?.getType())

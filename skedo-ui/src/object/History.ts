@@ -1,5 +1,4 @@
-import Node, {NodeData} from "./Node"
-import {LinkedList, ListNode, Logger} from '@skedo/core'
+import {LinkedList, Node, NodeData, ListNode, Logger} from '@skedo/core'
 
 export interface HistoryItem {
 	node : Node,

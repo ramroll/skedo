@@ -1,5 +1,4 @@
-import {Emiter, PropMeta, Topic} from '@skedo/core'
-import Node from "./Node"
+import {NodeType as Node, Emiter, PropMeta, Topic} from '@skedo/core'
 
 export default class PropItem extends Emiter<Topic> {
 
@@ -13,11 +12,11 @@ export default class PropItem extends Emiter<Topic> {
     this.nodes = []
     this.nodes.push(node)
     this.disabled = meta.disabled || false
-    this.value = PropMeta.getPropValue(meta.path, node.data) 
+    this.value = PropMeta.getPropValue(meta.path, node.getData()) 
   }
 
   merge(prop : PropMeta, node : Node) {
-    const value = PropMeta.getPropValue(prop.path, node.data)
+    const value = PropMeta.getPropValue(prop.path, node.getData())
     if(value !== this.value) {
       this.disabled = true
     } 
@@ -31,7 +30,7 @@ export default class PropItem extends Emiter<Topic> {
     if (this.nodes.length > 0) {
       this.value = PropMeta.getPropValue(
         this.meta.path,
-        this.nodes[0].data
+        this.nodes[0].getData()
       )
       // If immutable object
       if(this.value && this.value.toJS) {
@@ -43,7 +42,7 @@ export default class PropItem extends Emiter<Topic> {
 
   set(value : any) {
     this.nodes.forEach(node => {
-      node.updateByPath(this.meta.path, value)
+      node.updateInstanceByPath(this.meta.path, value)
     })
     this.emit(Topic.PropertyChanged)
   }

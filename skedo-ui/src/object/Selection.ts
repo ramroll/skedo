@@ -1,8 +1,7 @@
-import Node from "./Node" 
-import {Emiter, Logger, Topic} from '@skedo/core'
+import {Emiter, Logger, Topic, NodeType as Node, Cord} from '@skedo/core'
+import Page from './Page'
 import { AssistLine } from "./AssistLine"
 import EditorModel from "./EditorModel"
-import Cord from "../../../skedo-core/src/instance/Cord"
 import { History } from "./History"
 
 class SelectedNode{
@@ -11,10 +10,12 @@ class SelectedNode{
   startY : number = 0
   receiver : Node | null = null
   node : Node
+  page : Page 
   logger : Logger = new Logger('selection')
 
-  constructor(node : Node){
+  constructor(node : Node, page : Page){
     this.node = node
+    this.page = page
     this.reset()
   }
 
@@ -60,8 +61,8 @@ class SelectedNode{
     while(p && !p.isContainer()) {
       p = p?.getParent()
     }
-    if(p === node.page?.root && this.node.isFlex()) {
-      p = p.page?.pageNode
+    if(p === this.page.root && this.node.isFlex()) {
+      p = this.page.pageNode
     }
     return p || null
     
@@ -97,7 +98,6 @@ class SelectedNode{
       this.receiver.emit(Topic.Updated)
       this.receiver = null
     }
-    this.node.emit(Topic.ResizeModelUpdated)
   }
 
 }
@@ -132,7 +132,7 @@ export default class Selection extends Emiter<Topic> {
   add(node : Node) {
     this.clearEditMode()
 
-    this.items.set(node, new SelectedNode(node))
+    this.items.set(node, new SelectedNode(node, this.editor.page))
 
     const list : Array<Node> = []
 

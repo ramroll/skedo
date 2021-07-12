@@ -83,7 +83,7 @@ export default class ComponentsLoader extends Emiter<Topic> {
         const config: ComponentMetaConfig = yaml.load(
           content
         ) as any
-        ymls[config.group + "." + config.type] = config
+        ymls[config.group + "." + config.name] = config
         ComponentsLoader.loadByName(
           config.group,
           config.name

@@ -54,7 +54,6 @@ function renderFlexDiv(node : Node, editor : EditorModel) {
 
   const style = NodeStyleHelper.basicStyle(receiving, node)
   style.background = `rgba(0,0,0,.4)`
-  console.log(style)
   return children.map((child) => {
     if(child === receiving) {
       return <div style={style}></div>

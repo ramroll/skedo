@@ -17,7 +17,6 @@ const SelectionFrame = ({node, selection} : SelectionProps) => {
   const [, setVer] = useState(0)
   useEffect(() => {
     const subscription = node.on(Topic.SelectionChanged).subscribe(() => {
-      console.log('subscribe', node.getType())
       setVer(x => x + 1)
     })
 

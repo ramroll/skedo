@@ -1,10 +1,11 @@
 name: swiper
+type: react
 image: ./swiper.png
 title: 轮播图
 box:
   width: 100%
 url: >-
-  https://voice-static.oss-accelerate.aliyuncs.com/coms/custom/swiper/Swiper-1.0.0.js
+  https://voice-static.oss-accelerate.aliyuncs.com/custom/react/build/Swiper-1.0.0.js
 author: null
 file: build/Swiper.js
 version: 1.0.0

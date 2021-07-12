@@ -122,13 +122,6 @@ export class ComponentMeta {
       box : fromJS(box)
     })
 
-    data = data.update(
-      "style",
-      (style: any) => {
-        const metaStyle = fromJS(this.style) as ImmutableMap<string,any>
-        return style.merge(metaStyle)
-      }
-    ) 
 
     for(let key in this.props) {
       const prop = this.props[key]
@@ -140,6 +133,16 @@ export class ComponentMeta {
         )
       }
     }
+    
+    data = data.update(
+      "style",
+      (style: any) => {
+        const metaStyle = fromJS(this.style) as ImmutableMap<string,any>
+        return style.merge(metaStyle)
+      }
+    ) 
+
+
     return data
   }
 

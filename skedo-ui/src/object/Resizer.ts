@@ -1,6 +1,4 @@
-import Cord from '../../../skedo-core/src/instance/Cord'
-import {Emiter, Topic, Rect} from '@skedo/core'
-import Node from './Node'
+import {Emiter, Topic, Rect, Cord, NodeType as Node} from '@skedo/core'
 
 export default class Resizer extends Emiter<Topic> {
 
