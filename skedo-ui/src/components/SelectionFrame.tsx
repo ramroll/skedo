@@ -1,9 +1,8 @@
 
 import React, {useState, useEffect} from "react"
-import {Topic} from '@skedo/core'
+import {Topic, Node} from '@skedo/core'
 import Selection from '../object/Selection'
 import Resizer from '../object/Resizer'
-import Node from '../object/Node'
 import styles from '../style/core.module.scss'
 
 

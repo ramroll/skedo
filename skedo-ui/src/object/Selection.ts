@@ -2,7 +2,7 @@ import Node from "./Node"
 import {Emiter, Logger, Topic} from '@skedo/core'
 import { AssistLine } from "./AssistLine"
 import EditorModel from "./EditorModel"
-import Cord from "./Cord"
+import Cord from "../../../skedo-core/src/instance/Cord"
 import { History } from "./History"
 
 class SelectedNode{

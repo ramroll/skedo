@@ -1,5 +1,5 @@
 import  { useEffect,  RefObject } from 'react';
-import Node from '../object/Node'
+import { NodeType } from '@skedo/core'
 import styles from '../style/core.module.scss'
 import useBound from '../hooks/useBound'
 import ComponentTreeNode from './ComponentTreeNode'
@@ -9,7 +9,7 @@ import EditorModel from '../object/EditorModel';
 type ComponentTreeProps = {
   level? : number,
   style ? : any,
-  node : Node,
+  node : NodeType,
   editor : EditorModel,
   rootRef? : RefObject<HTMLDivElement>
 }

@@ -1,6 +1,6 @@
-import {Rect} from "@skedo/core"
+import { Rect } from "../Rect"
 
-export default class Cord {
+export class Cord {
 
 	clientX : number
 	clientY : number

@@ -1,4 +1,4 @@
-import Cord from './Cord'
+import Cord from '../../../skedo-core/src/instance/Cord'
 import {Emiter, Topic, Rect} from '@skedo/core'
 import Node from './Node'
 

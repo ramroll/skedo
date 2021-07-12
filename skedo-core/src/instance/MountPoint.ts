@@ -1,31 +1,23 @@
-import { Rect } from '@skedo/core'
-import Node from './Node'
+import { Cord } from './Cord'
+import { Node } from './Node'
+import { Rect } from '../Rect'
 
-class MountPoint {
+export class MountPoint {
 	ele : HTMLElement
 	node : Node
+	cord : Cord
 
-	constructor(ele : HTMLElement, node : Node) {
+	constructor(ele : HTMLElement, node : Node, cord : Cord) {
 		this.ele = ele
+		this.cord = cord
 		this.node = node
 	}
 
-	findParentNode() {
-		let p = this.ele.parentElement
-		while(p && !p.hasAttribute("data-skedo-node")) {
-			p = p.parentElement
-		}
-		if(p === null) {
-			return null
-		}
-		const id = Number.parseInt(p.getAttribute("id")?.split("-").pop() || '')
-		return this.node.page?.nodes[id]
-	}
 
 	getRect() : Rect{
 		const rect = this.ele.getBoundingClientRect()
 		const parent = this.node.getParent()
-		if(parent && parent.mountPoint) {
+		if(parent && parent.getMountPoint()) {
 			const [x, y] = this.positionDiff(parent)
 			return new Rect(
 				Math.round(x),
@@ -46,7 +38,7 @@ class MountPoint {
 
 	getAbsPosition() : Array<number>  {
 		const rect = this.ele.getBoundingClientRect()
-		const cord = this.node.page?.editor.cord
+		const cord = this.cord
 		if(!cord) {
 			throw new Error("Page is not initialized to node.")
 		}
@@ -57,7 +49,7 @@ class MountPoint {
 
 	positionDiff(node : Node){
 		const rect1 = this.ele.getBoundingClientRect()
-		const rect2 = node.mountPoint?.ele.getBoundingClientRect()
+		const rect2 = node.getMountPoint()?.ele.getBoundingClientRect()
 		if(!rect2) {
 			throw new Error("You cannot call positiondiff on unmounted node.")
 		}
@@ -67,5 +59,3 @@ class MountPoint {
 	}
 
 }
-
-export default MountPoint

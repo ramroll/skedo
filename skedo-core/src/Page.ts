@@ -1,4 +1,4 @@
-import { Node } from "./Node";
+import { Node } from "./instance/Node";
 import { NodeJsonStructure } from "./NodeJsonStructure";
 
 export interface Page {

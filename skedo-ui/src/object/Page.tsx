@@ -1,7 +1,10 @@
-import Node from "./Node";
+import ReactDOM from 'react-dom'
 import {
   Emiter,
   Topic,
+  Cord,
+  Node,
+  NodeType,
   boxDescriptor,
   NodeJsonStructure,
   BoxDescriptor,
@@ -14,22 +17,24 @@ import {
 import { EditorModel } from "./EditorModel";
 import ComponentsLoader from "./ComponentsLoader";
 import { History } from "./History";
-import Cord from "./Cord";
 import PageExporter from "./PageExporter";
 import {fileRemote, pageRemote, compose} from "@skedo/request"
 import {fromJS} from 'immutable'
+import InjectComponent from "../components/InjectComponent";
+import NodeStyleHelper from "../components/NodeStyleHelper";
 
 
 
 export default class Page extends Emiter<Topic>{
-  root : Node
+  root : NodeType
   id_base : number 
   nodes : Array<Node>
-  pageNode : Node
+  pageNode : NodeType
   history : History
   name : string
   logger : Logger = new Logger('page')
   editor : EditorModel
+  styleHelper : NodeStyleHelper
 
   constructor(name : string, editor :EditorModel,  json : NodeJsonStructure){
     super()
@@ -39,6 +44,7 @@ export default class Page extends Emiter<Topic>{
     this.id_base = 1
     this.nodes = []
     editor.page = this
+    this.styleHelper = new NodeStyleHelper()
 
     const box = boxDescriptor({
       left : 0,
@@ -164,7 +170,7 @@ export default class Page extends Emiter<Topic>{
     return node
   }
 
-  copy(source : Node) {
+  copy(source : NodeType) {
     const rect = source.getRect()
     const id = this.id_base++
 
@@ -195,7 +201,13 @@ export default class Page extends Emiter<Topic>{
 
   private linkPage(node : Node) {
     this.nodes[node.getId()] = node
-    node.page = this
+    node.cord = this.editor.cord
+  }
 
+
+  renderExternal(node : NodeType, elem: HTMLElement) {
+    const component = <InjectComponent node={node} editor={this.editor} />
+    this.logger.log("render external", elem, component)
+    ReactDOM.render(component, elem)
   }
 }

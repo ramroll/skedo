@@ -6,7 +6,7 @@ import Resizer from './Resizer'
 import PropertyEditor from './PropertyEditor'
 import Page from './Page'
 import {ComponentMeta, Logger, throttle, Topic, JsonWidgetTree, sizeUnitToNumber, NodeJsonStructure, boxDescriptor} from '@skedo/core'
-import Cord from './Cord'
+import Cord from '../../../skedo-core/src/instance/Cord'
 
 enum EditorState{
   Start,

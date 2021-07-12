@@ -1,13 +1,7 @@
-import { BoxDescriptor } from "../../../skedo-core/src/BoxDescriptor"
-import Node from "../object/Node"
+import { NodeType as Node, BoxDescriptor } from "@skedo/core"
 
 export default class NodeStyleHelper {
 	
-	node : Node 
-	constructor(node : Node) {
-		this.node = node
-	}
-
   static getBoxSyle(box : BoxDescriptor) : any{
     if(box.mode === 'fill') {
       return {
@@ -52,7 +46,7 @@ export default class NodeStyleHelper {
     }
 
     style.border = 'none'
-    const nodeStyle = node.data.get('style').toJS()
+    const nodeStyle = node.getStyleObject()
 
     // 编辑器模式Margin用Padding表达
     // Padding应该是组件内部响应（不需要统一处理）
@@ -79,9 +73,9 @@ export default class NodeStyleHelper {
     return style
   }
 
-  movingStyle(){
-    if(this.node.isMoving()) {
-      if(this.node.getParent() && this.node.getParent().isFlex()) {
+  movingStyle(node : Node){
+    if(node.isMoving()) {
+      if(node.getParent() && node.getParent().isFlex()) {
         return {
           position : '',
           backgroundColor : 'grey'
@@ -96,10 +90,10 @@ export default class NodeStyleHelper {
   }
 
 
-  getRenderStyle(autoResizing = false) : any{
+  getRenderStyle(node: Node, autoResizing = false) : any{
     const style : any =  {} 
-    Object.assign(style, NodeStyleHelper.basicStyle(this.node, this.node.getParent()))
-    Object.assign(style, this.movingStyle())
+    Object.assign(style, NodeStyleHelper.basicStyle(node, node.getParent()))
+    Object.assign(style, this.movingStyle(node))
     if(autoResizing) {
       delete style.width
       delete style.height
@@ -107,9 +101,9 @@ export default class NodeStyleHelper {
     return style
   }
 
-  getInnerStyle() {
-    const style = this.node.data.get('style').toJS()
-    if(this.node.receiving) {
+  getInnerStyle(node : Node) {
+    const style = node.getStyleObject()
+    if(node.getReceiving()) {
       style.background = "rgba(0,0,0,.05)"
     }
     delete style.margin
@@ -120,11 +114,11 @@ export default class NodeStyleHelper {
     return style
   }
 
-  getFlexShadowStyle(received : Node) :any {
-    if(!this.node.mountPoint || !received.mountPoint) {
+  getFlexShadowStyle(node : Node, received : Node) :any {
+    if(!node.getMountPoint() || !received.getMountPoint()) {
       return {}
     }
-    const [left, top] = received.mountPoint.positionDiff(this.node)
+    const [left, top] = received.getMountPoint()!.positionDiff(node)
     const style = {
       position : 'absolute',
       left,

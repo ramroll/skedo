@@ -1,4 +1,8 @@
-export * from './Node'
+export * from './instance/Node'
+export * from './instance/Cord'
+export * from './instance/MountPoint'
+export * from './instance/LinkedNode'
+
 export * from './Bridge'
 export * from './Emiter'
 export * from './Rect'
@@ -13,4 +17,5 @@ export * from './LinkedList'
 export * from './JsonWidgetTree'
 export * from "./BoxDescriptor"
 export * from './NodeJsonStructure'
+export * from "./NodeType"
 

@@ -1,4 +1,4 @@
-import Node from '../object/Node'
+import { NodeType as Node } from '@skedo/core'
 import {Bridge} from '@skedo/core'
 import ComponentTreeNode from './ComponentTreeNode'
 import ComponentsLoader from '../object/ComponentsLoader'
@@ -21,17 +21,15 @@ function renderDIV(node : Node, editor : EditorModel) {
 
 
 function renderFlexDiv(node : Node, editor : EditorModel) {
-  if(!node.receiving) {
+  if(!node.getReceiving()) {
     return renderDIV(node, editor)
   }
 
-  const children = node.getChildren()
-  children.forEach(child => {
-    console.log(child.getRect().left)
-  })
-  children.push(node.receiving)
+  const children = node.getChildren() as Array<Node>
+  children.push(node.getReceiving() as Node)
 
-  const absRect = node.receiving.absRect()
+  const receiving = node.getReceiving()!
+  const absRect = receiving.absRect()
   const absContainerRect = node.absRect() 
   const left = absRect.left - absContainerRect.left 
   const top = absRect.top - absContainerRect.top
@@ -39,26 +37,26 @@ function renderFlexDiv(node : Node, editor : EditorModel) {
   if (node.getStyle("flexDirection") === "column") {
     children.sort((a, b) => {
       const topA =
-        a === node.receiving ? top : a.getRect().top
+        a === receiving ? top : a.getRect().top
       const topB =
-        b === node.receiving ? top: b.getRect().top
+        b === receiving ? top: b.getRect().top
       return topA - topB
     })
   } else {
     children.sort((a, b) => {
       const leftA =
-        a === node.receiving ? left : a.getRect().left
+        a === receiving ? left : a.getRect().left
       const leftB =
-        b === node.receiving ? left : b.getRect().left
+        b === receiving ? left : b.getRect().left
       return leftA - leftB
     })
   }
 
-  const style = NodeStyleHelper.basicStyle(node.receiving, node)
+  const style = NodeStyleHelper.basicStyle(receiving, node)
   style.background = `rgba(0,0,0,.4)`
   console.log(style)
   return children.map((child) => {
-    if(child === node.receiving) {
+    if(child === receiving) {
       return <div style={style}></div>
     }
     else return (

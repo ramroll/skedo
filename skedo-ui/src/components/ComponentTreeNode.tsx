@@ -4,17 +4,18 @@ import {throttle } from 'rxjs/operators'
 import {interval} from 'rxjs'
 import {Topic} from '@skedo/core'
 import AssistLineSVG from './AssistLineSVG';
-import Node from '../object/Node'
+import { NodeType } from '@skedo/core'
 import SelectionFrame from './SelectionFrame'
 import styles from '../style/core.module.scss'
 import renderItem from './renderItem'
 import EditorModel from '../object/EditorModel';
+import Page from '../object/Page'
 
 
 
 type ComponentTreeProps = {
   style ? : any,
-  node : Node,
+  node : NodeType,
   editor : EditorModel,
   rootRef? : RefObject<HTMLDivElement>
 }
@@ -91,13 +92,13 @@ const ComponentTreeNode = ({node, editor, rootRef} : ComponentTreeProps) => {
           "skedo-type" : node.getType()
         }
       }
-      style={node.styleHelper.getRenderStyle(autoResizing)}
+      style={page.styleHelper.getRenderStyle(node, autoResizing)}
       key={node.getId()}
       id={"c-" + node.getId()}
     >
       <div
         className={styles["element-inner"]}
-        style={node.styleHelper.getInnerStyle()}
+        style={page.styleHelper.getInnerStyle(node)}
       >
         {node.level === 0 && (
           <AssistLineSVG
@@ -109,7 +110,7 @@ const ComponentTreeNode = ({node, editor, rootRef} : ComponentTreeProps) => {
         )}
 
         {renderItem(node, editor)}
-        <FlexShadow node={node} />
+        <FlexShadow node={node} page={editor.page} />
       </div>
       {node.getEditMode() === false && (
         <SelectionFrame
@@ -122,19 +123,21 @@ const ComponentTreeNode = ({node, editor, rootRef} : ComponentTreeProps) => {
 }
 
 interface FlexShadowProps {
-  node : Node
+  node : NodeType,
+  page : Page 
 }
 
 
-const FlexShadow = ({node} : FlexShadowProps) => {
-  const received = node.receiving
+const FlexShadow = ({node, page} : FlexShadowProps) => {
+  const received = node.getReceiving()
   if(!received) {
     return null
   }
   if (received.isFlex() ) {
     return (
       <div
-        style={node.styleHelper.getFlexShadowStyle(
+        style={page.styleHelper.getFlexShadowStyle(
+          node,
           received
         )}
       ></div>

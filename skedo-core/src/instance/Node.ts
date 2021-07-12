@@ -1,20 +1,15 @@
-import {
-  Emiter,
-  Rect,
-  ComponentMeta,
-  Logger,
-  PropMeta,
-  Topic,
-  Node as NodeInterface,
-  BoxDescriptor,
-  sizeUnitToNumber,
-} from "@skedo/core"
+import { Emiter }  from "../Emiter"
+import { Rect } from '../Rect'
+import { ComponentMeta } from "../meta/ComponentMeta"
+import { Logger } from '../Logger'
+import { PropMeta } from '../meta/PropMeta'
+import { Topic } from "../Topic"
+import { BoxDescriptor, sizeUnitToNumber } from "../BoxDescriptor"
 import { Map as ImmutableMap, fromJS } from "immutable"
-import NodeStyleHelper from "../components/NodeStyleHelper"
-import InjectComponent from "../components/InjectComponent"
-import ReactDOM from "react-dom"
-import MountPoint from "./MountPoint"
-import Page from "./Page"
+import { MountPoint } from "./MountPoint"
+import { Cord } from "./Cord"
+
+
 
 export declare type NodeData = ImmutableMap<string, any>
 
@@ -22,18 +17,16 @@ export declare type NodeData = ImmutableMap<string, any>
  * 最核心的一个类
  * 类似VirtualDOM，代表页面上的一个节点
  */
-export default class Node
+export class Node
   extends Emiter<Topic>
-  implements NodeInterface
 {
   meta: ComponentMeta
-  logger: Logger
-  data: NodeData
-  styleHelper: NodeStyleHelper
-  mountPoint?: MountPoint
-  receiving: Node | null
+  private logger: Logger
+  private data: NodeData
+  private mountPoint?: MountPoint
+  private receiving: Node | null
   level: number = 0
-  page? :Page 
+  cord? : Cord 
   // #region 初始化
   constructor(
     meta: ComponentMeta,
@@ -44,14 +37,17 @@ export default class Node
     this.meta = meta
     this.data = data
     this.receiving = null
-    this.styleHelper = new NodeStyleHelper(this)
   }
 
   //#endregion
 
   // #region runtime
+  getMountPoint() {
+    return this.mountPoint
+  }
+
   mount(ele: HTMLElement) {
-    this.mountPoint = new MountPoint(ele, this)
+    this.mountPoint = new MountPoint(ele, this, this.cord!)
   }
   // #endregion
 
@@ -62,6 +58,10 @@ export default class Node
 
   getStyle(key: string): any {
     return this.data.getIn(["style", key])
+  }
+
+  getReceiving() {
+    return this.receiving
   }
 
   isMoving(): boolean {
@@ -105,6 +105,10 @@ export default class Node
 
   isFlex() {
     return this.getStyle("display") === "flex"
+  }
+
+  getStyleObject(){
+    return this.data.get("style").toJS()
   }
 
   getEditMode(): boolean {
@@ -205,7 +209,7 @@ export default class Node
     return this.getRect().bound(x, y)
   }
 
-  setParent = (node: Node | null) => {
+  setParent (node: Node | null){
     this.logger.debug(
       "set-parent",
       this.getType(),
@@ -259,8 +263,7 @@ export default class Node
   }
 
 
-  setChildren = (children: Array<Node>) => {
-
+  setChildren (children: Array<Node>) {
     this.data = this.data.set("children", children)
   }
 
@@ -389,16 +392,6 @@ export default class Node
   }
 
   //#endregion
-
-  // #region  external render
-  renderExternal(elem: HTMLElement) {
-    if(!this.page) {
-      throw new Error("Page must be initialzied before this.")
-    }
-    const component = <InjectComponent node={this} editor={this.page?.editor} />
-    this.logger.log("render external", elem, component)
-    ReactDOM.render(component, elem)
-  }
   // //#endregion
 
   findByType(type : string) {
