@@ -8,6 +8,7 @@ import { BoxDescriptor, sizeUnitToNumber } from "../BoxDescriptor"
 import { Map as ImmutableMap, fromJS } from "immutable"
 import { MountPoint } from "./MountPoint"
 import { Cord } from "./Cord"
+import { Bridge } from "../Bridge"
 
 export declare type NodeData = ImmutableMap<string, any>
 
@@ -50,6 +51,8 @@ export class Node extends InstanceData
   private logger: Logger
   private mountPoint?: MountPoint
   private receiving: Node | null
+  private remoteCache? : Map<string, any>
+  bridgeCache? : Bridge 
   level: number = 0
   // #region 初始化
   constructor(
@@ -124,6 +127,10 @@ export class Node extends InstanceData
 
   getType() {
     return this.data.get("type")
+  }
+
+  getName(){
+    return this.data.get('name')
   }
 
   isFlex() {
@@ -405,10 +412,25 @@ export class Node extends InstanceData
   }
 
   //#endregion
+
+  public getRemoteCache(key :string) {
+    return this.remoteCache?.get(key)
+  }
+
+  public setRemoteCache(key :string, value : any) {
+    if(!this.remoteCache) {
+      this.remoteCache = new Map()
+    }
+    this.remoteCache.set(key, value)
+  }
   // //#endregion
 
-  findByType(type : string) {
-    return [...this.bfs()].filter(x => x.getType() === type)
+  findByName(name: string) {
+    const result = [...this.bfs()].filter(x => x.getName() === name)
+    if(result.length === 1) {
+      return result[0]
+    }
+    return result
   }
 
   print() {

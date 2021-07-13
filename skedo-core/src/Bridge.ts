@@ -12,34 +12,32 @@ export class Bridge {
     this.page = page
   }
 
-  editMode(){
-    this.node.setEditMode(true)
+  public setEditMode(mode :boolean){
+    this.node.setEditMode(mode)
     this.node.emit(Topic.Updated)
   }
 
-  normalMode(){
-    this.node.setEditMode(false)
-    this.node.emit(Topic.ResizeModelUpdated)
-  }
-
-  setPropsValue(key : string, value : any)  {
+  public setPropsValue(key : string, value : any)  {
     const passProps = this.node.getPassProps()
     this.node.setpassProps(passProps.set(key, value))
     this.node.emit(Topic.Updated)
   }
 
-  triggerAutoResizing() {
+  public triggerAutoResizing() {
     this.node.emit(Topic.ResizeModelUpdated)
   }
 
-  createChildBridge(json : NodeJsonStructure) : Bridge {
-    const child = this.page.createFromJSON(json)
+
+  public addChild(child: Node) {
     this.node.add(child)
-    return new Bridge(child, this.page)
   }
 
-  createNode(json : NodeJsonStructure) : Node{
+  public createNode(json : NodeJsonStructure) : Node{
     return this.page.createFromJSON(json)
+  }
+
+  public renderExternal(node : Node, elem :Element) {
+    this.page.renderExternal(node, elem)
   }
 
   static getMockBridge(){
@@ -50,7 +48,7 @@ export class Bridge {
     page.createFromJSON = () => {
     }
     // @ts-ignore
-    node.renderExternal = () => {
+    page.renderExternal = () => {
     }
 
     const bridge = new Bridge(node as Node, page as Page)
@@ -59,5 +57,15 @@ export class Bridge {
 
   }
 
+
+  static of(node : Node, page : Page) {
+    let bridge = node.bridgeCache
+    if(!bridge) {
+      bridge = new Bridge(node, page)
+      node.bridgeCache = bridge
+    }
+    return bridge
+
+  }
 
 }

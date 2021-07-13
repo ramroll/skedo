@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 // import {Component as VueComponent, createApp} from 'vue'
-import {Bridge} from '@skedo/core'
+import {Bridge, Node} from '@skedo/core'
 import styles from '../style/core.module.scss'
 import { componentRemote } from '@skedo/request'
 const vue = require('vue')
@@ -8,10 +8,10 @@ const vue = require('vue')
 interface ExternalComponentProps {
 	url : string ,
 	bridge : Bridge ,
-	componentType : 'react' | 'vue',
+	node: Node,
 }
 interface ExternalComponentState {
-	C : React.ElementType<Props> | null ,
+	C : JSX.Element | null ,
 }
 
 interface Props {
@@ -45,8 +45,19 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 
 	componentDidMount(){
 		const self = this
-		const {componentType} = this.props
+		const componentType = this.props.node.meta.type
 
+		const cache = this.props.node.getRemoteCache(this.props.url)
+		if(cache) {
+			console.log('use remote cache')
+			this.setState({
+				C : cache 
+			})
+			return
+		}
+		
+		
+		const node = this.props.node
 		componentRemote.external.get(this.props.url)
 			.then(text => {
 				(function(){
@@ -66,13 +77,19 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 					}
 					if(componentType === 'react') {
 						// eslint-disable-next-line
-						const Component = eval(text)
-						self.setState({C : Component})
+						const ComponentC = eval(text)
+						const ReactComponent = <ComponentC bridge={self.props.bridge} />
+
+						node.setRemoteCache(node.meta.url!, ReactComponent)
+						self.setState({C : ReactComponent})
 					} else if(componentType === 'vue') {
 						// eslint-disable-next-line
 						const Component = eval(text)
+						const VueComponentType = makeVueComponent(Component) 
+						const VueComponent = <VueComponentType bridge={self.props.bridge} />
+						node.setRemoteCache(node.meta.url!, VueComponent)
 						self.setState({
-							C : makeVueComponent(Component)  
+							C : VueComponent 
 						})
 					} else {
 						/// TODO : normalize component type in meta config 
@@ -87,6 +104,7 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 		if(this.state.C === null) {
 			return null
 		}
-		return <this.state.C bridge={this.props.bridge} />
+		return this.state.C
+		// return <this.state.C bridge={this.props.bridge} />
 	}
 }

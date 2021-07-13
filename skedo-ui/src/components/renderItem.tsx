@@ -5,6 +5,7 @@ import ComponentsLoader from '../object/ComponentsLoader'
 import NodeStyleHelper from './NodeStyleHelper'
 import ExternalComponent from './ExternalComponent'
 import EditorModel from '../object/EditorModel'
+import { useMemo } from 'react'
 
 function renderDIV(node : Node, editor : EditorModel) {
   return node.getChildren().map((child) => {
@@ -75,13 +76,13 @@ function renderLocalComponent(node : Node, editor : EditorModel, C :React.FC<any
 }
 
 function renderExternalComponent(node : Node, editor : EditorModel) {
-  const bridge = new Bridge(node, editor.page)
+  const bridge = Bridge.of(node, editor.page)
   if(!node.meta.url) {
     return null
   }
   return (
     <ExternalComponent
-      componentType={node.meta.componentType}
+      node={node}
       url={node.meta.url}
       bridge={bridge}
     />

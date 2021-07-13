@@ -1,6 +1,7 @@
 name: tabs
 type: vue
 image: tabs.png
+group: custom1
 title: 标签页
 box:
   mode: fill
@@ -23,6 +24,6 @@ editor:
           label: 字号
           type: list<image-upload>
           path: passProps.imgs
-group: custom1
 imageUrl: >-
   https://voice-static.oss-accelerate.aliyuncs.com/img/c7c64f66ef03731291c63ad4ff227f9cb6e1e597.png
+url: https://voice-static.oss-accelerate.aliyuncs.com/custom1/tabs-1.0.0.js

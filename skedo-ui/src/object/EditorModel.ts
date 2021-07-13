@@ -90,17 +90,12 @@ export class EditorModel extends StateMachine<EditorState, DragTrigger> {
     this.addRule(EditorState.Moving, DragTrigger.Move, this.dragMove)
     this.addRule(EditorState.Moving, DragTrigger.Up, this.endMove)
     this.addRule(EditorState.StartDragMove, DragTrigger.Up, this.endMove)
-    // flex & drag
-    this.addRule(EditorState.Start, DragTrigger.DownWithFlex, this.flexDragStart)
-    this.addRule(EditorState.FlexMoving, DragTrigger.Move, this.flexDragMove)
-    this.addRule(EditorState.FlexMoving, DragTrigger.Up, this.flexDragDrop)
     
     // select more
     this.addRule(EditorState.Selected, DragTrigger.DownWithNode, this.startDrag)
     this.addRule(EditorState.Selected, DragTrigger.CtrlDown, this.waitSelectMore)
     this.addRule(EditorState.Selected, DragTrigger.Up, this.waitSelect)
     this.addRule(EditorState.Selected, DragTrigger.DownWithNothing, this.cancelSelect)
-    this.addRule(EditorState.Selected, DragTrigger.DownWithFlex, this.flexDragStart)
 
     // resize 
     this.addRule(EditorState.Selected, DragTrigger.DownWithBar, this.startResize)
@@ -172,7 +167,6 @@ export class EditorModel extends StateMachine<EditorState, DragTrigger> {
   }
 
 
-
   startDrag = () =>{
     const node = this.page.nodeByCord(this.cord)
 
@@ -208,35 +202,6 @@ export class EditorModel extends StateMachine<EditorState, DragTrigger> {
     this.selection.move()
     return EditorState.Moving
   }
-
-  flexDragStart = () => {
-    
-    const node = this.page.nodeByCord(this.cord)
-
-    if(!node) {
-      return EditorState.Start
-    }
-
-    if(!this.selection.contains(node)) {
-      this.selection.replace(node)
-    }
-    this.selection.startDrag()
-    return EditorState.FlexMoving
-  }
-
-  flexDragMove = () => {
-    this.selection.move()
-    return EditorState.FlexMoving
-  }
-
-  flexDragDrop = () => {
-    this.selection.endDrag()
-
-    this.page.history.commit()
-    return EditorState.Selected
-  }
-
-
 
   endMove = () => {
     this.selection.endDrag()
@@ -388,16 +353,7 @@ export class EditorModel extends StateMachine<EditorState, DragTrigger> {
         this.next(DragTrigger.DownWithNothing)
       } else {
         // 父级元素有Flex状态触发Flex布局
-        if(node.getParent() && node.getParent().isFlex()) {
-          if(this.altDown) {
-            this.next(DragTrigger.DownWithFlex)
-          }
-          else {
-            this.next(DragTrigger.DownWithNode)
-          }
-        }else {
-          this.next(DragTrigger.DownWithNode)
-        }
+        this.next(DragTrigger.DownWithNode)
       }
     }
   }

@@ -16,15 +16,13 @@
 import { PropType, provide, reactive, toRefs } from 'vue'
 import classes from "./tab.module.scss"
 import Tab from "./Tab.vue"
+import { Bridge } from '@skedo/core'
+import { TabData } from './TabData'
 
-export type Tab = {
-	name : string,
-	title : string,
-	icon : string
-}
+
 export type TabsState = {
 	active : string,
-	tabs : Array<Tab>,
+	tabs : Array<TabData>,
 }
 export default {
 	props : {
@@ -32,11 +30,11 @@ export default {
 			type : Object
 		},
 		bridge : {
-			type : Object,
-			required : true
+			type : Bridge as PropType<Bridge>,
+			required : false 
 		},
 		tabs : {
-			type : Array as PropType<Array<Tab>>,
+			type : Array as PropType<Array<TabData>>,
 			default : [
 				{
 					name : "home",
@@ -67,11 +65,10 @@ export default {
 			tabs : props.tabs 
 		})
 
-
 		const {active, tabs} = toRefs(state)
 		provide('activeName', active)
 		provide('tabs', tabs)
-		provide("bridge", props.bridge)
+		provide("bridge", props.bridge || Bridge.getMockBridge())
 		console.log('setup tabs.vue, props is ', props)
 
 		const select = (name : string) => {

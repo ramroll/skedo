@@ -1,5 +1,5 @@
 import vue from 'rollup-plugin-vue'
-import typescript from 'rollup-plugin-typescript'
+import typescript from 'rollup-plugin-typescript2'
 import postcss from 'rollup-plugin-postcss'
 import resolve from '@rollup/plugin-node-resolve'
 import babel from '@rollup/plugin-babel'
@@ -12,20 +12,17 @@ export default [{
     name : "Tabs"
   },
   plugins : [
-
 		vue(),
-		typescript({
-			lib: ["es5", "es6", "dom"],
-			target: "es5", // 输出目标
-			noEmitOnError: true, // 运行时是否验证ts错误
+		typescript(),
+		resolve({ 
+			extensions : ['.js', '.ts', 'tsx', '.vue']
 		}),
-		resolve({ mainFields: ["module", "main", "browser"] }),
 		babel({
 			exclude: "node_modules/**",
-      extensions: [".js", ".jsx", ".vue"],
+      extensions: [".js", ".jsx",  ".tsx", ".ts"],
       babelHelpers: "bundled",
 			presets : [
-				["@babel/preset-env", { modules: false }]
+				["@babel/preset-env", { modules: false }, "@babel/preset-typescript"]
 			]
 		}),
 		postcss({
