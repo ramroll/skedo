@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es5",                          
+    "module": "commonjs",                    
+    "lib": ["es6", "dom"],                     
+    "allowJs": false,
+    "outDir": "build",                          
+    "rootDir": "src",
+    "strict": true,         
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "baseUrl": ".",
+    "paths": {
+      "@skedo/request" : ["node_modules/@skedo/request/src"]
+    }
+  }
+}

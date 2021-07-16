@@ -1,0 +1,51 @@
+{
+  "name": "@skedo/cli",
+  "version": "1.0.18",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "skedo": "./src/main.ts"
+  },
+  "private": false,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-typescript": "^8.2.1",
+    "@types/express": "^4.17.13",
+    "@types/figlet": "^1.5.4",
+    "@types/js-yaml": "^4.0.1",
+    "@types/markdown-it": "^12.0.3",
+    "@types/node": "^15.12.4",
+    "@types/node-fetch": "^2.5.10",
+    "@types/rollup": "^0.54.0",
+    "@types/rollup-plugin-node-resolve": "^4.1.0",
+    "@types/yargs": "^17.0.0",
+    "@vue/compiler-sfc": "^3.1.4",
+    "chalk": "^4.1.1",
+    "express": "^4.17.1",
+    "figlet": "^1.5.0",
+    "form-data": "^4.0.0",
+    "js-yaml": "^4.1.0",
+    "markdown-it": "^12.1.0",
+    "node-fetch": "^2.6.1",
+    "node-html-parser": "^4.0.0",
+    "postcss": "^8.3.5",
+    "rollup": "^2.53.0",
+    "rollup-plugin-postcss": "^4.0.0",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "rollup-plugin-vue": "^6.0.0",
+    "sass": "^1.35.2",
+    "tslib": "^2.3.0",
+    "typescript": "^4.3.5",
+    "vue": "^3.1.4",
+    "yargs": "^17.0.1"
+  }
+}
