@@ -1,0 +1,9 @@
+{
+  "plugins": [
+		["babel-plugin-closure-id",
+			{
+				"names" : ["foo", "bar", "effect"]
+			}
+		]
+	]
+}
