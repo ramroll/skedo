@@ -10,6 +10,8 @@ import { MountPoint } from "./MountPoint"
 import { Cord } from "./Cord"
 import { Bridge } from "../Bridge"
 
+// reactive / hooks
+// meta (immutable, data-flow, virtualdom)
 export declare type NodeData = ImmutableMap<string, any>
 
 class InstanceData extends Emiter<Topic> {

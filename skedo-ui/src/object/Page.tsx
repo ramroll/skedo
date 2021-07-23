@@ -64,6 +64,9 @@ export default class Page extends Emiter<Topic>{
     // @ts-ignore
     // 调试用
     window["root"] = this.root
+
+    // @ts-ignore
+    window["page"] = this
     // @ts-ignore
     window["pageHistory"] = this.history
 
