@@ -7,7 +7,7 @@ import AssistLineSVG from './AssistLineSVG';
 import { NodeType } from '@skedo/core'
 import SelectionFrame from './SelectionFrame'
 import styles from '../style/core.module.scss'
-import renderItem from './renderItem'
+import renderItem from './renderItem.tsx.old'
 import EditorModel from '../object/EditorModel';
 import Page from '../object/Page'
 

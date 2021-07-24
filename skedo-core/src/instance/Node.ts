@@ -41,6 +41,40 @@ class InstanceData extends Emiter<Topic> {
   public getData(){
     return this.data
   }
+
+  
+  getBox() : BoxDescriptor{
+    return this.data.get('box').toJS()
+  }
+
+  getType() {
+    return this.data.get("type")
+  }
+
+  getName(){
+    return this.data.get('name')
+  }
+
+  isFlex() {
+    return this.getStyle("display") === "flex"
+  }
+
+  getParent(): Node {
+    return this.data.get("parent")
+  }
+
+  getStyle(key: string): any {
+    return this.data.getIn(["style", key])
+  }
+
+  isMoving(): boolean {
+    return this.data.get("isMoving")
+  }
+
+  getId(): number {
+    return this.data.get("id")
+  }
+
 }
 
 /**
@@ -80,32 +114,20 @@ export class Node extends InstanceData
   // #endregion
 
   // #region 访问器
-  getParent(): Node {
-    return this.data.get("parent")
-  }
-
-  getStyle(key: string): any {
-    return this.data.getIn(["style", key])
-  }
-
-  getReceiving() {
-    return this.receiving
-  }
-
-  isMoving(): boolean {
-    return this.data.get("isMoving")
-  }
-
-  getId(): number {
-    return this.data.get("id")
-  }
 
   getChildren(): Array<Node> {
     return this.data.get("children").concat()
   }
-
+  getReceiving() {
+    return this.receiving
+  }
   isContainer(): boolean {
     return this.data.get("isContainer")
+  }
+
+  isDraggable() {
+    const name = this.getName()
+    return name !== 'root' || name !== 'page'
   }
 
   getRect(): Rect {
@@ -123,21 +145,6 @@ export class Node extends InstanceData
     return this.mountPoint?.getRect()
   }
 
-  getBox() : BoxDescriptor{
-    return this.data.get('box').toJS()
-  }
-
-  getType() {
-    return this.data.get("type")
-  }
-
-  getName(){
-    return this.data.get('name')
-  }
-
-  isFlex() {
-    return this.getStyle("display") === "flex"
-  }
 
   getStyleObject(){
     return this.data.get("style").toJS()

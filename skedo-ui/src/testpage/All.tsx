@@ -84,6 +84,7 @@ const All = () => {
     <TitleBar />
     <div className={style.container}>
 			<ComponentList editor={editor} />
+      <NodeRender
       <ComponentTreeRoot
         node={editor.page.root}
         editor={editor}
