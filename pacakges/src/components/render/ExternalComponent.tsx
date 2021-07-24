@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 // import {Component as VueComponent, createApp} from 'vue'
 import {Bridge, Node} from '@skedo/core'
-import styles from '../style/core.module.scss'
+import styles from './render.module.scss'
 import { componentRemote } from '@skedo/request'
 const vue = require('vue')
 

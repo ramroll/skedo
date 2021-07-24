@@ -1,6 +1,6 @@
 import EditorModel from '../object/EditorModel'
 import { Node } from '@skedo/core'
-import ComponentTreeNode from "./ComponentTreeNode"
+import ComponentTreeNode from "./ComponentTreeNode.tsx.old"
 type InjectComponentProps = {
 	node : Node,
 	editor : EditorModel

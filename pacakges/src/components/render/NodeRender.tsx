@@ -1,4 +1,3 @@
-import { ItemRender } from 'antd/lib/upload/interface'
 import React, { FC } from 'react'
 import { Bridge } from '@skedo/core'
 import ComponentsLoader from '../../object/ComponentsLoader'

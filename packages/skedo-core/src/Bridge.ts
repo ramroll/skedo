@@ -36,9 +36,9 @@ export class Bridge {
     return this.page.createFromJSON(json)
   }
 
-  public renderExternal(node : Node, elem :Element) {
-    this.page.renderExternal(node, elem)
-  }
+  // public renderExternal(node : Node, elem :Element) {
+  //   this.page.renderExternal(node, elem)
+  // }
 
   static getMockBridge(){
     const node : unknown = new Emiter<Topic>()

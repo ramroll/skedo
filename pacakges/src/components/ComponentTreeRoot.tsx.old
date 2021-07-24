@@ -2,7 +2,7 @@ import  { useEffect,  RefObject } from 'react';
 import { NodeType } from '@skedo/core'
 import styles from '../style/core.module.scss'
 import useBound from '../hooks/useBound'
-import ComponentTreeNode from './ComponentTreeNode'
+import ComponentTreeNode from './ComponentTreeNode.tsx.old'
 import EditorModel from '../object/EditorModel';
 
 

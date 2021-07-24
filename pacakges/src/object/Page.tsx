@@ -20,7 +20,6 @@ import { History } from "./History";
 import PageExporter from "./PageExporter";
 import {fileRemote, pageRemote, compose} from "@skedo/request"
 import {fromJS} from 'immutable'
-import InjectComponent from "../components/InjectComponent";
 import NodeStyleHelper from "../components/NodeStyleHelper";
 
 
@@ -206,9 +205,9 @@ export default class Page extends Emiter<Topic>{
   }
 
 
-  renderExternal(node : NodeType, elem: HTMLElement) {
-    const component = <InjectComponent node={node} editor={this.editor} />
-    this.logger.log("render external", elem, component)
-    ReactDOM.render(component, elem)
-  }
+  // renderExternal(node : NodeType, elem: HTMLElement) {
+  //   const component = <InjectComponent node={node} editor={this.editor} />
+  //   this.logger.log("render external", elem, component)
+  //   ReactDOM.render(component, elem)
+  // }
 }

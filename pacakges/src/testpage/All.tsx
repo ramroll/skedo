@@ -1,4 +1,3 @@
-import ComponentTreeRoot from '../components/ComponentTreeRoot'
 import EditorModel from '../object/EditorModel'
 import style from  "../style/core.module.scss"
 import PropEditor from '../components/propeditor/ComponentPropEditor'
@@ -7,8 +6,8 @@ import {useEffect, useMemo} from 'react'
 
 import {Tabs} from 'antd'
 import React from 'react'
-import { useParams } from 'react-router-dom'
 import useEditor from '../hooks/useEditor'
+import NodeRender from '../components/render/NodeRender'
 
 const { TabPane } = Tabs
 
@@ -84,11 +83,7 @@ const All = () => {
     <TitleBar />
     <div className={style.container}>
 			<ComponentList editor={editor} />
-      <NodeRender
-      <ComponentTreeRoot
-        node={editor.page.root}
-        editor={editor}
-      />
+      <NodeRender node={editor.page.root} editor={editor} />
       <div className={style["right"]}>
         <RightTabs editor={editor} />
       </div>

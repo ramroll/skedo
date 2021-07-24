@@ -1,6 +1,15 @@
 {
-  "dependencies": {
-    "@types/rollup": "^0.54.0",
-    "rollup": "^2.53.0"
-  }
+  "name": "@skedo/project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@code.aliyun.com:skedo/skedo-01class.git"
+  },
+  "author": "",
+  "license": "ISC"
 }
