@@ -15,5 +15,8 @@ export enum Topic {
   PropertyEditorUpdated,
   PropertyChanged,
   AssistLinesChanged,
-  EditMode
+  EditMode,
+
+  // New Event System
+  NewNodeAdded
 }

@@ -91,7 +91,7 @@
     "yaml-loader": "^0.6.0"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "types": "npx typescript ./src/core/useDragging.ts --declaration --allowJs --emitDeclarationOnly --outDir src/types --downlevelIteration"

@@ -4,5 +4,6 @@ export interface ConfigAttributes {
 	dbType : string,
 	dbName : string,
 	uname : string,
-	passwd : string 
+	passwd : string,
+	storage : string
 }

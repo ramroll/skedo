@@ -7,22 +7,10 @@ import {useEffect, useMemo} from 'react'
 import {Tabs} from 'antd'
 import React from 'react'
 import useEditor from '../hooks/useEditor'
+import Panel from '../components/render/Panel'
 import NodeRender from '../components/render/NodeRender'
 
 const { TabPane } = Tabs
-
-const json = {
-  type : "page",
-  group : "basic",
-  rect : [(3200-414)/2, 40, 414, 736],
-  children : [
-  ],
-  style : {
-    border : "1px solid #eee",
-    backgroundColor : 'white'
-  }
-}
-
 
 interface RouteProps {
   src : string,
@@ -83,7 +71,9 @@ const All = () => {
     <TitleBar />
     <div className={style.container}>
 			<ComponentList editor={editor} />
-      <NodeRender node={editor.page.root} editor={editor} />
+      <Panel editor={editor}>
+        <NodeRender node={editor.page.root} />
+      </Panel>
       <div className={style["right"]}>
         <RightTabs editor={editor} />
       </div>

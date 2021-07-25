@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { EditorModel } from '../object/EditorModel'
+import { EditorModel, UIEvents } from '../object/EditorModel'
 import {Topic, ComponentMeta} from '@skedo/core'
 import ComponentsLoader from '../object/ComponentsLoader'
 import style from '../style/core.module.scss'
@@ -41,16 +41,18 @@ const ComponentList = ({editor} : ComponentListProps) => {
                 draggable
                 onDragStart={(event) => {
 
-                  let div = document.getElementById('dragimage')
-                  if(!div) {
-                    div = document.createElement("div")
-                    div.setAttribute("id", "dragimage")
-                    div.style.width = "1px" 
-                    div.style.height = "1px"
-                    document.body.append(div)
-                  }
-                  event.dataTransfer.setDragImage(div, 1, 1)
-                  editor.onDragStart(compConf)
+                  event.preventDefault()
+                  // let div = document.getElementById('dragimage')
+                  // if(!div) {
+                  //   div = document.createElement("div")
+                  //   div.setAttribute("id", "dragimage")
+                  //   div.style.width = "1px" 
+                  //   div.style.height = "1px"
+                  // }
+                  // event.dataTransfer.setData("text" ,"111")
+                  editor.dispatch(UIEvents.EvtStartDragAdd, compConf)
+                  console.log('start drag', event.target)
+                  // editor.onDragStart(compConf)
                 }}
                 className={style["component-list-item"]}
               >

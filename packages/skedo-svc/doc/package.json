@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --watch ./src/**/*.ts --exec ts-node src/index.ts"
+    "dev": "nodemon --watch ./src/**/*.ts --exec ts-node src/index.ts"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +19,7 @@
     "express": "^4.17.1",
     "mysql2": "^2.2.5",
     "nodemon": "^2.0.10",
-    "sequelize": "^6.6.5"
+    "sequelize": "^6.6.5",
+    "sqlite3": "^5.0.2"
   }
 }

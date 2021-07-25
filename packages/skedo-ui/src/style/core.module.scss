@@ -78,7 +78,6 @@
   border : 1px solid #eee;
   margin : -1px 0px 0px -1px;
   background : #ececec;
-  
 }
 
 .element {
@@ -108,15 +107,7 @@
 
 }
 
-.root-w {
-  position : relative;
-  overflow :scroll;
-  align-items: center;
-  justify-content: center;
-  border-left : 2px solid #e0e0e0;
-  box-shadow : -1px -1px 1px #f1f1f1
 
-}
 
 .root-w::-webkit-scrollbar {
   width: 10px;

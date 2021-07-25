@@ -2,6 +2,7 @@ group : basic
 name : page 
 imageUrl : https://voice-static.oss-accelerate.aliyuncs.com//img/5aee98f58f9584472592617cdd4182391f59820d.png
 title : 矩形容器
+url : local.Page
 box :
   width : 414 
   height : 736 

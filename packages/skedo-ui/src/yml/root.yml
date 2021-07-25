@@ -2,6 +2,7 @@ group : basic
 name : root 
 imageUrl : https://voice-static.oss-accelerate.aliyuncs.com//img/5aee98f58f9584472592617cdd4182391f59820d.png
 title : 矩形容器
+url : local.Root
 box : 
   width : 3200
   height : 3200

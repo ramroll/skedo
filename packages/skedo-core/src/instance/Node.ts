@@ -55,6 +55,10 @@ class InstanceData extends Emiter<Topic> {
     return this.data.get('name')
   }
 
+  getGroup(){
+    return this.data.get('group')
+  }
+
   isFlex() {
     return this.getStyle("display") === "flex"
   }
@@ -154,7 +158,7 @@ export class Node extends InstanceData
     return this.data.get("editMode")
   }
 
-  getPassProps(): any {
+  getPassProps(): ImmutableMap<string, any> {
     return this.data.get("passProps")
   }
 

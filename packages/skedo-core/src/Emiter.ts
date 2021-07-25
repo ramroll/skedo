@@ -10,16 +10,44 @@ export class Emiter<Topic extends number> {
     this.observers = new Array(20) 
   }
 
-  on(topic : Topic) : Observable<any> {
+  addObserver(topic : Topic, observer : Subscriber<any>){
+    if(!this.observers[topic]) {
+      this.observers[topic] = []
+    }
+    const list = this.observers[topic]
+    list.push(observer)
+  }
+
+  removeObserver(topic : Topic, observer : Subscriber<any>) {
+    const list = this.observers[topic]
+    if(list && list.length > 0) {
+      this.observers[topic] = list.filter(x => x !== observer)
+    }
+  }
+
+
+  on(topic : Topic | Topic[]) : Observable<any> {
+
     return new Observable<any>(observer => {
-      if(!this.observers[topic]) {
-        this.observers[topic] = []
+
+      const addedObservers : Array<[Topic, Subscriber<any>]> = []
+      if(Array.isArray(topic)) {
+        topic.forEach(t => {
+          this.addObserver(t, observer)
+          addedObservers.push([t,observer])
+        })
+      } else {
+        this.addObserver(topic, observer)
+        addedObservers.push([topic, observer])
       }
-      const list = this.observers[topic]
-      list.push(observer)
+
+
       return {
         unsubscribe: () => {
-          this.observers[topic] = list.filter(o => o !== observer)
+          addedObservers.forEach(
+            x => this.removeObserver(x[0], x[1])
+          )
+          
         },
       }
     })

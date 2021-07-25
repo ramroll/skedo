@@ -1,15 +1,13 @@
 import { Topic } from './Topic'
 import { Node } from './instance/Node'
 import { Emiter } from './Emiter'
-import { NodeJsonStructure } from './NodeJsonStructure'
 import { Page } from './Page'
 
 export class Bridge {
   node : Node 
-  page : Page 
-  constructor(node : Node, page : Page){
+  renderForReact ? : (node : Node, key ? : any) => JSX.Element
+  constructor(node : Node){
     this.node = node
-    this.page = page
   }
 
   public setEditMode(mode :boolean){
@@ -28,44 +26,32 @@ export class Bridge {
   }
 
 
-  public addChild(child: Node) {
-    this.node.add(child)
-  }
-
-  public createNode(json : NodeJsonStructure) : Node{
-    return this.page.createFromJSON(json)
-  }
-
-  // public renderExternal(node : Node, elem :Element) {
-  //   this.page.renderExternal(node, elem)
-  // }
-
   static getMockBridge(){
     const node : unknown = new Emiter<Topic>()
-    const page : unknown = new Emiter<Topic>()
     
-    // @ts-ignore
-    page.createFromJSON = () => {
-    }
-    // @ts-ignore
-    page.renderExternal = () => {
-    }
-
-    const bridge = new Bridge(node as Node, page as Page)
+    const bridge = new Bridge(node as Node)
 
     return bridge
 
   }
 
 
-  static of(node : Node, page : Page) {
+  static of(node : Node) {
     let bridge = node.bridgeCache
     if(!bridge) {
-      bridge = new Bridge(node, page)
+      bridge = new Bridge(node)
       node.bridgeCache = bridge
     }
     return bridge
 
+  }
+
+  renderAsReact(node : Node, key? : any) : JSX.Element {
+    return this.renderForReact!(node, key)
+  }
+
+  renderAsVue(){
+    
   }
 
 }

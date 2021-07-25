@@ -1,5 +1,9 @@
-import EditorModel from "../../object/EditorModel";
-import {Bridge, Node} from '@skedo/core'
+import { Bridge } from "./Bridge";
+
+
+export type SkedoComponentProps = {
+	bridge : Bridge
+}
 
 export type NodeRenderProps = {
 	node : Node,

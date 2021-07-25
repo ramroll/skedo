@@ -65,7 +65,6 @@ class SelectedNode{
       p = this.page.pageNode
     }
     return p || null
-    
   }
 
   select(

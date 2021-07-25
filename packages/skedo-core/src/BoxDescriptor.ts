@@ -16,6 +16,11 @@ export type BoxDescriptorInput = {
 	mode : string 
 }
 
+export function sizeUnitToString(unit : SizeUnit){
+	return unit.isAuto ? 
+		"" : unit.value + unit.unit
+}
+
 export function sizeUnitToNumber(key : string, size : SizeUnit, maxWidth : number, maxHeight : number) : number {
 	if(size.isAuto) {
 		return 0

@@ -112,6 +112,29 @@ export default class Page extends Emiter<Topic>{
     return this.fromJson(json)
   }
 
+  createFromMetaNew(
+    meta : ComponentMeta,
+    position : [number, number]
+  ) {
+    const box = meta.box
+    const ipt = boxDescriptor({ 
+      left : position[0],
+      top : position[1],
+      width : box.width.isAuto ? '' : box.width.value + box.width.unit,
+      height : box.height.isAuto ? '' : box.height.value + box.height.unit,
+      mode : box.mode
+    })
+
+    const id = this.createId()
+    const nodeData = meta.createData(id, ipt)
+    const node = new Node(
+      meta,
+      nodeData
+    )
+    this.linkPage(node)
+    return node 
+  }
+
   createFromMeta(
     meta :ComponentMeta 
   ) {

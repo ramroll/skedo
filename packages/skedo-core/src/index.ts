@@ -18,4 +18,6 @@ export * from './JsonWidgetTree'
 export * from "./BoxDescriptor"
 export * from './NodeJsonStructure'
 export * from "./NodeType"
+export * from './standard.types'
+export * from './instance/Cord.new'
 

@@ -13,61 +13,45 @@ import {
   Node,
   NodeJsonStructure,
 } from "@skedo/core"
+import { NodeSelector } from './NodeSelector'
 
-enum EditorState{
+export enum UIStates{
   Start,
-  StartDragMove,
-  FlexDrag,
-  FlexMoving,
-  FlexDrop,
-  DragSelect,
-  Selected,
-  Moving,
-  StartResize,
-  Resize,
-  DragInsertStart,
-  DragInsertMoving,
-  
-  
+  StartAdd,
+  Adding,
+  Added,
+  Selected
 }
 
-enum DragTrigger {
-  DownWithNode,
-  DownWithFlex,
-  DownWithNothing,
-  DownWithBar,
-  Up,
-  Move,
-  CtrlDown,
-  AltDown,
-  DragStart,
-  DragOver,
-  DragLeave,
-  DragEnd
+export enum UIEvents {
+  AUTO,
+  EvtStartDragAdd,
+  EvtAddDraging,
+  EvtDrop,
+
 }
 
 
-export class EditorModel extends StateMachine<EditorState, DragTrigger> {
+export class EditorModel extends StateMachine<UIStates, UIEvents> {
 
   ctrlDown : boolean 
   altDown : boolean
   mouseDown : boolean
   root : Node
-  startX : number
-  startY : number
   startSelVer : number 
   selection : Selection
   resizer : Resizer
   propertyEditor : PropertyEditor
   page : Page
   dropCompoentMeta : ComponentMeta | null = null
+  dropComponentPosition : [number, number] = [0, 0]
   dropNode?: Node | null
   logger : Logger
   copyList : Array<Node> = []
   cord : Cord
 
   constructor(json : NodeJsonStructure, pageName : string){
-    super(EditorState.Start)
+    super(UIStates.Start)
     this.selection = new Selection(this)
     this.resizer = new Resizer()
 
@@ -78,166 +62,158 @@ export class EditorModel extends StateMachine<EditorState, DragTrigger> {
     this.mouseDown = false
     this.altDown = false
     this.startSelVer = 0
-    this.startX = 0
-    this.startY = 0
     this.logger = new Logger("editor-model")
     this.cord = new Cord(this.page.root.getRect())
 
+    this.register(UIStates.Start, UIStates.StartAdd, UIEvents.EvtStartDragAdd, (meta : ComponentMeta) => {
+      this.dropCompoentMeta = meta
+    })
 
-    // drag & move
-    this.addRule(EditorState.Start, DragTrigger.DownWithNode, this.startDrag)
-    this.addRule(EditorState.StartDragMove, DragTrigger.Move, this.prepareDragMove)
-    this.addRule(EditorState.Moving, DragTrigger.Move, this.dragMove)
-    this.addRule(EditorState.Moving, DragTrigger.Up, this.endMove)
-    this.addRule(EditorState.StartDragMove, DragTrigger.Up, this.endMove)
+    this.register(UIStates.Selected, UIStates.StartAdd, UIEvents.EvtStartDragAdd, (meta : ComponentMeta) => {
+      this.dropCompoentMeta = meta
+    })
+
+    this.register([UIStates.StartAdd, UIStates.Adding], UIStates.Adding, UIEvents.EvtAddDraging, (position) => {
+      this.dropComponentPosition = position
+    })
+   
     
-    // select more
-    this.addRule(EditorState.Selected, DragTrigger.DownWithNode, this.startDrag)
-    this.addRule(EditorState.Selected, DragTrigger.CtrlDown, this.waitSelectMore)
-    this.addRule(EditorState.Selected, DragTrigger.Up, this.waitSelect)
-    this.addRule(EditorState.Selected, DragTrigger.DownWithNothing, this.cancelSelect)
+    this.register([UIStates.StartAdd, UIStates.Adding], UIStates.Added, UIEvents.EvtDrop, () => {
+      const position = this.dropComponentPosition
+      const node = this.page.createFromMetaNew(this.dropCompoentMeta!, position)
+      const receiver = NodeSelector.select(this.root, position, null)
+      receiver?.add(node)
+      receiver?.emit(Topic.NewNodeAdded)
+      this.dropCompoentMeta = null
+    })
+    
+    this.register(UIStates.Added, UIStates.Selected, UIEvents.AUTO, () => {
+    })
 
-    // resize 
-    this.addRule(EditorState.Selected, DragTrigger.DownWithBar, this.startResize)
-    this.addRule(EditorState.StartResize, DragTrigger.Move, this.resizing)
-    this.addRule(EditorState.Resize, DragTrigger.Move, this.resizing)
-    this.addRule(EditorState.Resize, DragTrigger.Up, this.endResizing)
 
-    // drag insert
-    this.addRule(EditorState.Start, DragTrigger.DragStart, this.startCreateByDrag)
-    this.addRule(EditorState.Selected, DragTrigger.DragStart, this.startCreateByDrag)
-    this.addRule(EditorState.DragInsertStart, DragTrigger.DragOver, this.dragInsertOver)
-    this.addRule(EditorState.DragInsertMoving, DragTrigger.DragOver, this.dragInsertOver)
-    this.addRule(EditorState.DragInsertMoving, DragTrigger.DragLeave, this.addDragLeave)
-    this.addRule(EditorState.DragInsertMoving, DragTrigger.DragEnd, this.dropAndCreate)
-
-    this.dragInsertOver = throttle(this.dragInsertOver,13,EditorState.DragInsertMoving)
-    this.logger.debug("constructor")
-
-    this.onMouseMove = throttle(this.onMouseMove, 26)
 
     // For debug 
     // @ts-ignore
     window.editor = this
   }
 
-  startCreateByDrag = () => {
-    if(!this.dropCompoentMeta) {
-      return EditorState.Start
-    }
+  // startCreateByDrag = () => {
+  //   if(!this.dropCompoentMeta) {
+  //     return UIStates.Start
+  //   }
 
-    return EditorState.DragInsertStart
-  }
+  //   return UIStates.DragInsertStart
+  // }
 
-  dragInsertOver = () => {
-    if(!this.dropCompoentMeta) {
-      return EditorState.Start
-    }
-    if(!this.dropNode) {
-      const node = this.page.createFromMeta(this.dropCompoentMeta)
-      this.selection.clear()
-      this.selection.add(node)
-      this.dropNode = node
-      this.selection.startDrag()
-    }
-
-
-    this.selection.move()
-    return EditorState.DragInsertMoving
-  }
-
-  addDragLeave = () => {
-    return EditorState.DragInsertStart
-  }
-
-  /**
-   * 拖拽新增组件
-   */
-  dropAndCreate = () => {
-    if(!this.dropCompoentMeta) {
-      this.emit(Topic.DragEnd)
-      return EditorState.Start
-    }
-    this.emit(Topic.DragEnd)
-    this.dropCompoentMeta = null
-    this.dropNode = null
-    this.selection.endDrag()
-    this.page.history.commit()
-    return EditorState.Selected
-  }
+  // dragInsertOver = () => {
+  //   if(!this.dropCompoentMeta) {
+  //     return UIStates.Start
+  //   }
+  //   if(!this.dropNode) {
+  //     const node = this.page.createFromMeta(this.dropCompoentMeta)
+  //     this.selection.clear()
+  //     this.selection.add(node)
+  //     this.dropNode = node
+  //     this.selection.startDrag()
+  //   }
 
 
-  startDrag = () =>{
-    const node = this.page.nodeByCord(this.cord)
+  //   this.selection.move()
+  //   return UIStates.DragInsertMoving
+  // }
 
-    if (node?.getEditMode()) {
-      this.selection.clear()
-      return EditorState.Start
-    }
-    if(!node) {
-      return EditorState.Start
-    }
+  // addDragLeave = () => {
+  //   return UIStates.DragInsertStart
+  // }
 
-    if(!this.selection.contains(node)) {
-      this.selection.replace(node)
-    }
-
-    return EditorState.StartDragMove
-
-  }
-
-  prepareDragMove = () => {
-
-    this.selection.startDrag()
-    return EditorState.Moving
-  }
-
-  cancelSelect = () => {
-    this.selection.clear()
-    return EditorState.Start
-  }
+  // /**
+  //  * 拖拽新增组件
+  //  */
+  // dropAndCreate = () => {
+  //   if(!this.dropCompoentMeta) {
+  //     this.emit(Topic.DragEnd)
+  //     return UIStates.Start
+  //   }
+  //   this.emit(Topic.DragEnd)
+  //   this.dropCompoentMeta = null
+  //   this.dropNode = null
+  //   this.selection.endDrag()
+  //   this.page.history.commit()
+  //   return UIStates.Selected
+  // }
 
 
-  dragMove = () => {
-    this.selection.move()
-    return EditorState.Moving
-  }
+  // startDrag = () =>{
+  //   const node = this.page.nodeByCord(this.cord)
 
-  endMove = () => {
-    this.selection.endDrag()
-    this.page.history.commit()
-    return EditorState.Selected
-  }
+  //   if (node?.getEditMode()) {
+  //     this.selection.clear()
+  //     return UIStates.Start
+  //   }
+  //   if(!node) {
+  //     return UIStates.Start
+  //   }
 
-  waitSelect = () => {
-    return EditorState.Selected
-  }
+  //   if(!this.selection.contains(node)) {
+  //     this.selection.replace(node)
+  //   }
 
-  waitSelectMore = () => {
+  //   return UIStates.StartDragMove
+
+  // }
+
+  // prepareDragMove = () => {
+
+  //   this.selection.startDrag()
+  //   return UIStates.Moving
+  // }
+
+  // cancelSelect = () => {
+  //   this.selection.clear()
+  //   return UIStates.Start
+  // }
+
+
+  // dragMove = () => {
+  //   this.selection.move()
+  //   return UIStates.Moving
+  // }
+
+  // endMove = () => {
+  //   this.selection.endDrag()
+  //   this.page.history.commit()
+  //   return UIStates.Selected
+  // }
+
+  // waitSelect = () => {
+  //   return UIStates.Selected
+  // }
+
+  // waitSelectMore = () => {
     
-    const node = this.page.nodeByCord(this.cord)
-    if(!node) {
-      this.selection.clear()
-      return EditorState.Start
-    }
-    this.selection.add(node)
-    return EditorState.Selected
-  }
+  //   const node = this.page.nodeByCord(this.cord)
+  //   if(!node) {
+  //     this.selection.clear()
+  //     return UIStates.Start
+  //   }
+  //   this.selection.add(node)
+  //   return UIStates.Selected
+  // }
 
-  startResize = () => {
-    this.resizer.startResizing(this.cord)
-    return EditorState.StartResize
-  }
-  resizing = () => {
-    this.resizer.resizing(this.cord)
-    return EditorState.Resize
-  }
+  // startResize = () => {
+  //   this.resizer.startResizing(this.cord)
+  //   return UIStates.StartResize
+  // }
+  // resizing = () => {
+  //   this.resizer.resizing(this.cord)
+  //   return UIStates.Resize
+  // }
 
-  endResizing = () => {
-    this.resizer.resized()
-    this.page.history.commit()
-    return EditorState.Selected
-  }
+  // endResizing = () => {
+  //   this.resizer.resized()
+  //   this.page.history.commit()
+  //   return UIStates.Selected
+  // }
 
 
   onKeyDown = (e : KeyboardEvent) => {
@@ -294,103 +270,103 @@ export class EditorModel extends StateMachine<EditorState, DragTrigger> {
     return this.cord.updateClient(e.clientX, e.clientY)
   }
 
-  onDragStart(meta : ComponentMeta) {
-    this.dropCompoentMeta = meta 
-    this.next(DragTrigger.DragStart)
-  }
+  // onDragStart(meta : ComponentMeta) {
+  //   this.dropCompoentMeta = meta 
+  //   this.next(UIEvents.DragStart)
+  // }
 
-  onDragOver(x :number, y : number){
-    if(this.dropCompoentMeta) {
-      if(this.cord.updateClient(x, y)){
-        this.next(DragTrigger.DragOver)
-      }
-    }
-  }
+  // onDragOver(x :number, y : number){
+  //   if(this.dropCompoentMeta) {
+  //     if(this.cord.updateClient(x, y)){
+  //       this.next(UIEvents.DragOver)
+  //     }
+  //   }
+  // }
 
-  onDragLeave(){
-    this.next(DragTrigger.DragLeave)
-  }
+  // onDragLeave(){
+  //   this.next(UIEvents.DragLeave)
+  // }
 
-  onDragDrop(){
-    this.next(DragTrigger.DragEnd)
-  }
+  // onDragDrop(){
+  //   this.next(UIEvents.DragEnd)
+  // }
 
-  onMouseDown = (e : ReactMouseEvent) => {
-    e.preventDefault()
-    this.saveMovePosition(e)
-    this.startX = this.cord.clientX
-    this.startY = this.cord.clientY
-    this.startSelVer = this.selection.ver
+  // onMouseDown = (e : ReactMouseEvent) => {
+  //   e.preventDefault()
+  //   this.saveMovePosition(e)
+  //   this.startX = this.cord.clientX
+  //   this.startY = this.cord.clientY
+  //   this.startSelVer = this.selection.ver
 
-    this.mouseDown = true
-    if(this.ctrlDown) {
-      this.next(DragTrigger.CtrlDown)
-      return
-    } 
+  //   this.mouseDown = true
+  //   if(this.ctrlDown) {
+  //     this.next(UIEvents.CtrlDown)
+  //     return
+  //   } 
 
-    const target = e.target as Element
-    const cubeType = target.getAttribute("data-cube")
+  //   const target = e.target as Element
+  //   const cubeType = target.getAttribute("data-cube")
 
-    if (cubeType) {
-      const nodeId = target.parentElement?.id
-      const id  = nodeId?.split('-').pop()
-      if(!id) {
-        return
-      }
+  //   if (cubeType) {
+  //     const nodeId = target.parentElement?.id
+  //     const id  = nodeId?.split('-').pop()
+  //     if(!id) {
+  //       return
+  //     }
 
-      const node = this.page.nodes[Number.parseInt(id)]
-      if(node.getType()=== 'page' && cubeType !== '6') {
-        return
-      }
+  //     const node = this.page.nodes[Number.parseInt(id)]
+  //     if(node.getType()=== 'page' && cubeType !== '6') {
+  //       return
+  //     }
 
-      this.resizer.setCubeType(Number.parseInt(cubeType))
-      this.resizer.setNode(node)
-      this.next(DragTrigger.DownWithBar)
-    } else {
+  //     this.resizer.setCubeType(Number.parseInt(cubeType))
+  //     this.resizer.setNode(node)
+  //     this.next(UIEvents.DownWithBar)
+  //   } else {
 
-      const node = this.page.nodeByCord(this.cord)
-      if (!node || !node.getParent()) {
-        this.next(DragTrigger.DownWithNothing)
-      } else {
-        // 父级元素有Flex状态触发Flex布局
-        this.next(DragTrigger.DownWithNode)
-      }
-    }
-  }
+  //     const node = this.page.nodeByCord(this.cord)
+  //     if (!node || !node.getParent()) {
+  //       this.next(UIEvents.DownWithNothing)
+  //     } else {
+  //       // 父级元素有Flex状态触发Flex布局
+  //       this.next(UIEvents.DownWithNode)
+  //     }
+  //   }
+  // }
 
   
 
-  onMouseMove = (e : ReactMouseEvent) => {
-    if (this.mouseDown) {
-      if(this.saveMovePosition(e)) {
-        this.next(DragTrigger.Move)
-      }
-    }
-  }
-  onMouseUp = (e : MouseEvent) => {
-    this.mouseDown = false
-    this.saveMovePosition(e)
-    this.next(DragTrigger.Up)
-  }
+  // onMouseMove = (e : ReactMouseEvent) => {
+  //   if (this.mouseDown) {
+  //     if(this.saveMovePosition(e)) {
+  //       this.next(UIEvents.Move)
+  //     }
+  //   }
+  // }
+  // onMouseUp = (e : MouseEvent) => {
+  //   this.mouseDown = false
+  //   this.saveMovePosition(e)
+  //   this.next(UIEvents.Up)
+  // }
 
 
-  onClickCapture = (e : ReactMouseEvent) => {
+  // onClickCapture = (e : ReactMouseEvent) => {
     
-    const distance = Math.abs(this.cord.clientX - this.startX) + Math.abs(this.cord.clientY - this.startY)
-    if(this.ctrlDown || this.altDown) {
-      e.preventDefault()
-      e.stopPropagation()
-    }
-    if(this.selection.ver !== this.startSelVer || distance > 1) {
-      e.preventDefault()
-      e.stopPropagation()
-    }
-  }
+  //   const distance = Math.abs(this.cord.clientX - this.startX) + Math.abs(this.cord.clientY - this.startY)
+  //   if(this.ctrlDown || this.altDown) {
+  //     e.preventDefault()
+  //     e.stopPropagation()
+  //   }
+  //   if(this.selection.ver !== this.startSelVer || distance > 1) {
+  //     e.preventDefault()
+  //     e.stopPropagation()
+  //   }
+  // }
 
-  onScroll = (e : UIEvent<HTMLElement>) => {
-    const element = e.target as Element
-    this.cord.updateScroll(element.scrollLeft, element.scrollTop)
-  }
+  // onScroll = (e : UIEvent<HTMLElement>) => {
+  //   const element = e.target as Element
+  //   this.cord.updateScroll(element.scrollLeft, element.scrollTop)
+  // }
 
 
 }

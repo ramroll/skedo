@@ -11,6 +11,7 @@ export default class DB{
 			console.log(config)
 			DB.sequelize = new Sequelize(config.dbName, config.uname, config.passwd,  {
 				host : config.dbHost,
+				storage : config.storage,
 				dialect : config.dbType as Dialect
 			})
 		}
