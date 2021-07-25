@@ -7,12 +7,14 @@ export default ({meta, position} : {meta : ComponentMeta | null, position : [num
 	if(!meta) {
 		return null
 	}
-  console.log(context.worldX(position[0]), context.worldY(position[1]))
+  console.log(context.cord.worldX(position[0]), context.cord.worldY(position[1]))
 	return (
     <div
       className={classes.shadow}
       style={{
-        transform: `translate(${context.worldX(position[0])}px, ${context.worldY(position[1])}px)`,
+        transform: `translate(${context.cord.worldX(
+          position[0]
+        )}px, ${context.cord.worldY(position[1])}px)`,
         width: sizeUnitToString(meta.box.width),
         height: sizeUnitToString(meta.box.height),
       }}

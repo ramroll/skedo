@@ -2,7 +2,6 @@ export enum Topic {
   Updated,
   Moved,
   Loaded,
-  SelectionChanged,
   SelectionMoving,
   SelectionMoved,
   Resizing,
@@ -18,5 +17,6 @@ export enum Topic {
   EditMode,
 
   // New Event System
-  NewNodeAdded
+  NewNodeAdded,
+  SelectionChanged,
 }

@@ -52,15 +52,6 @@ const All = () => {
       return
     }
 
-    document.addEventListener("keydown", editor.onKeyDown)
-    document.addEventListener("keyup", editor.onKeyUp)
-
-    return () => {
-
-      document.removeEventListener("keydown", editor.onKeyDown)
-      document.removeEventListener("keyup", editor.onKeyUp)
-    }
-
   }, [editor])
 
   if(!editor) {

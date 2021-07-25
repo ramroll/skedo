@@ -1,6 +1,5 @@
 import { MouseEvent as ReactMouseEvent,  UIEvent } from 'react'
 import StateMachine from './StateMachine'
-import Selection from './Selection'
 import Resizer from './Resizer'
 import PropertyEditor from './PropertyEditor'
 import Page from './Page'
@@ -14,6 +13,7 @@ import {
   NodeJsonStructure,
 } from "@skedo/core"
 import { NodeSelector } from './NodeSelector'
+import SelectionNew from './Selection.new'
 
 export enum UIStates{
   Start,
@@ -29,6 +29,9 @@ export enum UIEvents {
   EvtAddDraging,
   EvtDrop,
 
+  EvtSelected,
+  EvtCancelSelect
+
 }
 
 
@@ -39,7 +42,7 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
   mouseDown : boolean
   root : Node
   startSelVer : number 
-  selection : Selection
+  selection : SelectionNew 
   resizer : Resizer
   propertyEditor : PropertyEditor
   page : Page
@@ -52,7 +55,7 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
 
   constructor(json : NodeJsonStructure, pageName : string){
     super(UIStates.Start)
-    this.selection = new Selection(this)
+    this.selection = new SelectionNew()
     this.resizer = new Resizer()
 
     this.propertyEditor = new PropertyEditor(this)
@@ -76,6 +79,19 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
     this.register([UIStates.StartAdd, UIStates.Adding], UIStates.Adding, UIEvents.EvtAddDraging, (position) => {
       this.dropComponentPosition = position
     })
+
+    this.register([UIStates.Start, UIStates.Selected], UIStates.Selected, UIEvents.EvtSelected, (node : Node) => {
+      this.selection.replace(node)
+      this.emit(Topic.SelectionChanged)
+      
+    })
+
+    this.register(UIStates.Selected, UIStates.Start, UIEvents.EvtCancelSelect, (node : Node) => {
+      this.selection.remove(node)
+      this.emit(Topic.SelectionChanged)
+      
+    })
+
    
     
     this.register([UIStates.StartAdd, UIStates.Adding], UIStates.Added, UIEvents.EvtDrop, () => {
@@ -85,6 +101,8 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
       receiver?.add(node)
       receiver?.emit(Topic.NewNodeAdded)
       this.dropCompoentMeta = null
+      this.selection.replace(node)
+      this.emit(Topic.SelectionChanged)
     })
     
     this.register(UIStates.Added, UIStates.Selected, UIEvents.AUTO, () => {
@@ -216,55 +234,55 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
   // }
 
 
-  onKeyDown = (e : KeyboardEvent) => {
+  // onKeyDown = (e : KeyboardEvent) => {
 
-    if(this.ctrlDown && e.key === 'z') {
-        this.logger.debug("keydown ctrl+z")
-        this.page.history.backward()
-        return
-    }
+  //   if(this.ctrlDown && e.key === 'z') {
+  //       this.logger.debug("keydown ctrl+z")
+  //       this.page.history.backward()
+  //       return
+  //   }
 
-    if(e.key === 'F2' && this.selection.nodes().length === 1) {
-      for(let node of this.selection.nodes()) {
-        node.setEditMode(true)
-      }
-    }
+  //   if(e.key === 'F2' && this.selection.nodes().length === 1) {
+  //     for(let node of this.selection.nodes()) {
+  //       node.setEditMode(true)
+  //     }
+  //   }
 
-    if(e.ctrlKey) {
-        this.ctrlDown = true
-    }
-    if(e.altKey) {
-        this.altDown = true
-    }
+  //   if(e.ctrlKey) {
+  //       this.ctrlDown = true
+  //   }
+  //   if(e.altKey) {
+  //       this.altDown = true
+  //   }
 
-  }
+  // }
 
-  onKeyUp = (e : KeyboardEvent) => {
-    if(this.ctrlDown && e.key === 'c') {
-      this.copyList = this.selection.nodes()
-      return  
-    }
-    else if(this.ctrlDown && e.key === 'v') {
-      for(let node of this.copyList) {
-        const copyNode = this.page.copy(node)
-        node.getParent().add(copyNode)
-        node.getParent().emit(Topic.Updated)
-      }
-      return  
-    }
-    else if(e.key === 'Delete') {
-      this.selection.nodes().forEach(item => {
-        item.getParent().remove(item)
-        item.getParent().emit(Topic.Updated)
-      })
-      this.selection.clear()
+  // onKeyUp = (e : KeyboardEvent) => {
+  //   if(this.ctrlDown && e.key === 'c') {
+  //     this.copyList = this.selection.nodes()
+  //     return  
+  //   }
+  //   else if(this.ctrlDown && e.key === 'v') {
+  //     for(let node of this.copyList) {
+  //       const copyNode = this.page.copy(node)
+  //       node.getParent().add(copyNode)
+  //       node.getParent().emit(Topic.Updated)
+  //     }
+  //     return  
+  //   }
+  //   else if(e.key === 'Delete') {
+  //     this.selection.nodes().forEach(item => {
+  //       item.getParent().remove(item)
+  //       item.getParent().emit(Topic.Updated)
+  //     })
+  //     this.selection.clear()
 
-    }
-    if(this.ctrlDown)
-      this.ctrlDown = false
-    if(this.altDown)
-      this.altDown = false
-  }
+  //   }
+  //   if(this.ctrlDown)
+  //     this.ctrlDown = false
+  //   if(this.altDown)
+  //     this.altDown = false
+  // }
 
   saveMovePosition = (e : ReactMouseEvent | MouseEvent) : boolean => {
     return this.cord.updateClient(e.clientX, e.clientY)

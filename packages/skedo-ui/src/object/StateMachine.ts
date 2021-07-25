@@ -1,13 +1,16 @@
+import { Emiter, Topic } from "@skedo/core"
+
 type StateTransferFunction = (...args : Array<any>) => void 
 /**
  * S : 状态 
  * A : Action
  */
-export default class StateMachine<S extends number, A extends number> {
+export default class StateMachine<S extends number, A extends number> extends Emiter<Topic> {
 
 	s : S
 	table : Map<S, Map<A, [StateTransferFunction, S]>>
 	constructor(initialState : S){
+		super()
 		this.s = initialState
 		this.table = new Map()
 	}

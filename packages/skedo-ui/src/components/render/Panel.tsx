@@ -1,5 +1,5 @@
 import { useEffect, DragEvent, useMemo, useRef, useState, useContext } from 'react'
-import { Rect } from '@skedo/core'
+import { Rect, sizeUnitToNumber } from '@skedo/core'
 import useBound from '../../hooks/useBound'
 import RenderContext from './RenderContext'
 import Shadow from './Shadow'
@@ -39,14 +39,16 @@ export default ({children, editor} : {children : JSX.Element, editor : EditorMod
 	const [rect, ref] = useBound()
 	const [position, setPosition] = useThrottledState<[number, number]>([0, 0], 5)
 	const renderContext = useContext(RenderContext)
-	
+	useMemo(() => {
+		renderContext.editor = editor
+	},[])
 
 	useEffect(() => {
 		if(rect !== Rect.ZERO) {
 			const childRect = ref.current!.children[0].getBoundingClientRect()
 			const scrollLeft = (childRect.width - rect.width)/2
 			ref.current!.scrollTo(scrollLeft, 0)
-			renderContext.setViewPort(rect)
+			renderContext.cord.setViewPort(rect)
 		}
 	}, [rect])
 
@@ -57,21 +59,33 @@ export default ({children, editor} : {children : JSX.Element, editor : EditorMod
         className={classes.panel}
         ref={ref}
         onScroll={(e) => {
-          renderContext.updateScroll(
+          renderContext.cord.updateScroll(
             ref.current!.scrollLeft,
             ref.current!.scrollTop
           )
         }}
         onMouseMove={(e) => {
           e.preventDefault()
-          setPosition([e.clientX, e.clientY])
-					const position = [renderContext.worldX(e.clientX), renderContext.worldY(e.clientY)]
+					
+					const meta = editor.dropCompoentMeta
+					if(!meta) {
+						return
+					}
+					const box = meta.box
+
+
+					const [maxW, maxH] = editor.page.pageNode.getWH()
+					const w = sizeUnitToNumber('width', box.width, maxW, maxH)
+					const h = sizeUnitToNumber('height', box.height, maxW, maxH)
+          setPosition([e.clientX - w/2, e.clientY-h/2])
+					const position = [renderContext.cord.worldX(e.clientX) - w/2, renderContext.cord.worldY(e.clientY) - h/2]
 					editor.dispatch(UIEvents.EvtAddDraging, position)
 
         }}
         onMouseUp={(e) => {
 					e.preventDefault()
 					editor.dispatch(UIEvents.EvtDrop)
+					setPosition([0, 0])
 				}}
       >
         <Shadow
