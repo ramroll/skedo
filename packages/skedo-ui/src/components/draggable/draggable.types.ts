@@ -10,8 +10,8 @@ export type DragData = {
 	diffY : number
 }
 export type RawDragEvents = {
-	onDragstart ? : (e  : DragEvent) => void,
-	onDragend ? : (e : DragEvent) => void,
+	onDragStart ? : (e  : DragEvent) => void,
+	onDragEnd ? : (e : DragEvent) => void,
 	onDrag? : (e : DragEvent) => void,
 }
 

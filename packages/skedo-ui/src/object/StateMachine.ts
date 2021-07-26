@@ -15,11 +15,12 @@ export default class StateMachine<S extends number, A extends number> extends Em
 		this.table = new Map()
 	}
 
-	hash(s : S, a : A) {
+	private hash(s : S, a : A) {
 		return s + 10000 * a
 	}
 
-	register(from : S | S[], to : S, action : A, fn : StateTransferFunction){
+
+	public register(from : S | S[], to : S, action : A, fn : StateTransferFunction){
 
 		if(Array.isArray(from)) {
 			from.forEach(f => {
@@ -34,7 +35,7 @@ export default class StateMachine<S extends number, A extends number> extends Em
 		adjTable.set(action, [fn, to])
 	}
 
-	dispatch(action : A, ...data : Array<any>) {
+	public dispatch(action : A, ...data : Array<any>) {
 		const adjTable = this.table.get(this.s)
 		if(!adjTable) {
 			return false

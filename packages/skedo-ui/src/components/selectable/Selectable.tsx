@@ -1,16 +1,18 @@
 
-import  { MouseEvent, useRef, useMemo, useEffect} from "react"
+import  { MouseEvent, useRef, useMemo, useEffect, MouseEventHandler} from "react"
 import ResizerNew from '../../object/Resizer.new'
 import styles from './selectable.module.scss'
 
 type SelectionProps = {
 	selected : boolean,
 	children : JSX.Element,
-  onSelectChanged : (selected : boolean) => void 
+  onSelectChanged : (selected : boolean) => void ,
+  onMouseDown? : MouseEventHandler,
+  onMouseUp? : MouseEventHandler,
 
 }
 
-const Selectable = ({selected ,children, onSelectChanged } : SelectionProps) => {
+const Selectable = ({selected ,children, onSelectChanged, onMouseDown, onMouseUp } : SelectionProps) => {
 
   const selectionValue = useRef(selected)
 
@@ -31,16 +33,18 @@ const Selectable = ({selected ,children, onSelectChanged } : SelectionProps) => 
           selectionValue.current = true
           onSelectChanged(true)
         }
+        onMouseDown && onMouseDown(e)
+        
       },
       
       onMouseUp : (e : MouseEvent) => {
 
-        e.stopPropagation()
         const moved = e.clientX !== startX || e.clientY !== startY
         if(startSelected && !moved) {
           onSelectChanged(false)
           selectionValue.current = false
         }
+        onMouseUp&& onMouseUp(e)
       }
     }
   },[])

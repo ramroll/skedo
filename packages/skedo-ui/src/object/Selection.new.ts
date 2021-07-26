@@ -19,4 +19,10 @@ export default class SelectionNew {
 		this.sel.clear()
 		this.sel.add(node)
 	}
+	
+	public forEach(fn : (node:Node) => void) {
+		for(let node of this.sel.values()) {
+			fn(node)
+		}
+	}
 }

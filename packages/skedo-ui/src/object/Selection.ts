@@ -168,7 +168,7 @@ export default class Selection extends Emiter<Topic> {
     this.startX = this.editor.cord.worldX() 
     this.startY = this.editor.cord.worldY() 
     if(this.items.size === 1) {
-      this.assistLine.start(this.first())
+      // this.assistLine.start(this.first())
     }
     for(let node of this.nodes() ){
       const defaultContainer =node.isFlex() ? this.editor.page.pageNode : this.editor.root
@@ -195,7 +195,7 @@ export default class Selection extends Emiter<Topic> {
     const item = this.items.values().next().value
     const receiver = (item as SelectedNode).receiver
     if(receiver) {
-      this.assistLine.move(receiver)
+      // this.assistLine.move(receiver)
     }
   }
 
@@ -205,7 +205,7 @@ export default class Selection extends Emiter<Topic> {
     }
     this.dragStarted = false
     if(this.items.size === 1) {
-      this.assistLine.endMove()
+      // this.assistLine.endMove()
     }
     for(let item of this.items.values()) {
       item.end()

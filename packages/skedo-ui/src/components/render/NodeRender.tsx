@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Bridge, Node, sizeUnitToString, Topic } from '@skedo/core'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { Bridge, CordNew, Node, sizeUnitToNumber, sizeUnitToString, Topic } from '@skedo/core'
 import ComponentsLoader from '../../object/ComponentsLoader'
 import ExternalComponent from './ExternalComponent'
 import { NodeRenderProps, RenderedComponentProps } from './render.types'
@@ -16,26 +16,53 @@ function __render(node : Node, key ? : any){
 function Styled({
   node,
   children,
-  style
+  style,
+  draggable = false,
+  dragHandlers,
 }: {
   node : Node,
   children: JSX.Element,
-  style? : any 
+  style? : any ,
+  draggable ? : boolean,
+  dragHandlers? : any,
 }) {
   const box = node.getBox()
+  const ref = useRef<HTMLDivElement>(null)
+  const context = useContext(RenderContext)
+
+  useEffect(() => {
+    node.mount(ref.current!, context.cord)
+  },[])
+
+  useSubscribe([node, Topic.MouseMoveEventPass], (e : MouseEvent) => {
+    dragHandlers&& dragHandlers.onMouseMove && dragHandlers.onMouseMove(e)
+  })
+
+  useSubscribe([node, Topic.MouseUpEventPass], (e : MouseEvent) => {
+    dragHandlers&& dragHandlers.onMouseUp && dragHandlers.onMouseUp(e)
+  })
+
+
+
+  
 
   return (
     <div
+      ref={ref}
+      draggable={draggable}
       style={{
         left: sizeUnitToString(box.left),
         top: sizeUnitToString(box.top),
         width: sizeUnitToString(box.width),
         height: sizeUnitToString(box.height),
         ...style,
-        ...node.getStyleObject()
+        ...node.getStyleObject(),
       }}
     >
-      {children}
+      {React.cloneElement(children, {
+        ...children.props, 
+        onMouseDown : dragHandlers?.onMouseDown,
+      })}
     </div>
   )
 }
@@ -49,11 +76,9 @@ function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
 
   const [ver, setVer] = useState(0)
 
-
-  useSubscribe(editor, Topic.SelectionChanged, () => {
+  useSubscribe([[editor, Topic.SelectionChanged], [node, Topic.NodeMoved]], () => {
     setVer(x => x + 1)
   })
-
   function selectionChangeHandler(selected : boolean) {
     if(selected) {
       editor.dispatch(UIEvents.EvtSelected, node)
@@ -61,37 +86,35 @@ function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
       editor.dispatch(UIEvents.EvtCancelSelect, node)
     }
   }
-  if(node.isDraggable()) {
-    const box = node.getBox()
-    return (
-      <Draggable
-        initialPosition={[box.left.value, box.top.value]}
-      >
-        <Styled
-          node={node}
-          style={{ position: "absolute" }}
-        >
-          <Selectable
-            selected={editor.selection.contains(node)}
-            onSelectChanged={selectionChangeHandler}
-          >
-            <C bridge={bridge} {...passProps} />
-          </Selectable>
-        </Styled>
-      </Draggable>
-    )
-  }
 
+  const box = node.getBox() 
+  console.log(box, node.getName())
   return (
-    <Styled node={node} style={{ position: "relative" }}>
-      <Selectable
-        onSelectChanged={selectionChangeHandler}
-        selected={editor.selection.contains(node)}
+    <Draggable
+      enabled={node.isDraggable()}
+      initialPosition={[box.left.value + box.left.unit, box.top.value + box.top.unit]}
+      onDrag={e => {
+        editor.dispatch(UIEvents.EvtNodeSyncMoving, node, [e.diffX, e.diffY])
+      }}
+      onDragEnd={e => {
+        editor.dispatch(UIEvents.EvtNodeMoved, node, [e.diffX, e.diffY])
+      }}
+    >
+      <Styled
+        node={node}
+        style={{ position: "absolute" }}
       >
-        <C bridge={bridge} {...passProps} />
-      </Selectable>
-    </Styled>
+        <Selectable
+          selected={editor.selection.contains(node)}
+          onSelectChanged={selectionChangeHandler}
+        >
+          <C bridge={bridge} {...passProps} />
+        </Selectable>
+      </Styled>
+    </Draggable>
   )
+
+
 } 
 
 const NodeRender = ({node } : NodeRenderProps) => {

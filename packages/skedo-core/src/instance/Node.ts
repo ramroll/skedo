@@ -9,6 +9,7 @@ import { Map as ImmutableMap, fromJS } from "immutable"
 import { MountPoint } from "./MountPoint"
 import { Cord } from "./Cord"
 import { Bridge } from "../Bridge"
+import { CordNew } from "./Cord.new"
 
 // reactive / hooks
 // meta (immutable, data-flow, virtualdom)
@@ -43,47 +44,90 @@ class InstanceData extends Emiter<Topic> {
   }
 
   
-  getBox() : BoxDescriptor{
+  public getBox() : BoxDescriptor{
     return this.data.get('box').toJS()
   }
 
-  getType() {
+  public getType() {
     return this.data.get("type")
   }
 
-  getName(){
+  public getName(){
     return this.data.get('name')
   }
 
-  getGroup(){
+  public getGroup(){
     return this.data.get('group')
   }
 
-  isFlex() {
+  public isFlex() {
     return this.getStyle("display") === "flex"
   }
 
-  getParent(): Node {
+  public getParent(): Node {
     return this.data.get("parent")
   }
 
-  getStyle(key: string): any {
+  public getStyle(key: string): any {
     return this.data.getIn(["style", key])
   }
 
-  isMoving(): boolean {
+  public isMoving(): boolean {
     return this.data.get("isMoving")
   }
 
-  getId(): number {
+  public getId(): number {
     return this.data.get("id")
   }
 
-  getWH() : [number, number]{
+  public getWH() : [number, number]{
     const box = this.getBox()
     return [box.width.value, box.height.value]
   }
 
+
+
+
+  public setXY = (x: number, y: number) => {
+    this.updateBoxValue('left', x)
+    this.updateBoxValue('top', y)
+  }
+
+  public setXYWH = (x : number, y : number, w : number, h : number) => {
+    this.updateBoxValue('left', x)
+    this.updateBoxValue("width", w)
+    this.updateBoxValue("height", h)
+    this.updateBoxValue("top", y)
+  }
+
+  public setWH = (w : number, h : number) => {
+    this.updateBoxValue("width", w)
+    this.updateBoxValue("height",h)
+  }
+
+  private updateBoxValue(key : string, value : number) {
+    this.updateInstanceData('box', box => {
+      const item = box.get(key)
+      if(!item.get) {
+        debugger
+      }
+      const unit = item.get('unit')
+      if(unit === 'px') {
+        box = box.setIn([key, 'value'], value)
+      }
+      else if(unit === '%') {
+        const prect = this.getParent().getRect()
+        const parentWidth = prect.width
+        const parentHeight = prect.height
+        if(['marginTop', 'marginBottom', 'top', 'height'].indexOf(key) !== -1) {
+          box = box.setIn([key, 'value'], (value / parentHeight))
+        } else {
+          box = box.setIn([key, 'value'], (value / parentWidth))
+        }
+      }
+      return box
+    })
+  }
 }
 
 /**
@@ -117,7 +161,7 @@ export class Node extends InstanceData
     return this.mountPoint
   }
 
-  mount(ele: HTMLElement, cord :Cord) {
+  mount(ele: HTMLElement, cord :CordNew) {
     this.mountPoint = new MountPoint(ele, this, cord)
   }
   // #endregion
@@ -136,7 +180,7 @@ export class Node extends InstanceData
 
   isDraggable() {
     const name = this.getName()
-    return name !== 'root' || name !== 'page'
+    return name !== 'root' && name !== 'page'
   }
 
   getRect(): Rect {
@@ -267,6 +311,27 @@ export class Node extends InstanceData
     this.setInstanceData('parent', node)
   }
 
+  public setXYByVec(vec : [number, number]){
+    const parent = this.getParent()
+    const rect = parent.getRect()
+
+    const box = this.getBox()
+    const x = sizeUnitToNumber('left', box.left, rect.width, rect.height)
+    const y = sizeUnitToNumber('top', box.top, rect.width, rect.height)
+    return this.setXY(x + vec[0], y + vec[1])
+  }
+
+  public getXYByVec(vec : [number, number]) : [number, number]{
+    const parent = this.getParent()
+    const rect = parent.getRect()
+
+    const box = this.getBox()
+    const x = sizeUnitToNumber('left', box.left, rect.width, rect.height)
+    const y = sizeUnitToNumber('top', box.left, rect.width, rect.height)
+    return [x + vec[0], y + vec[1]]
+  }
+
+
   setMoving = (isMoving: boolean) => {
     this.setInstanceData('isMoving', isMoving)
   }
@@ -318,46 +383,8 @@ export class Node extends InstanceData
   }
 
 
-  private updateBoxValue(key : string, value : number) {
-    this.updateInstanceData('box', box => {
-      const item = box.get(key)
-      if(!item.get) {
-        debugger
-      }
-      const unit = item.get('unit')
-      if(unit === 'px') {
-        box = box.setIn([key, 'value'], value)
-      }
-      else if(unit === '%') {
-        const prect = this.getParent().getRect()
-        const parentWidth = prect.width
-        const parentHeight = prect.height
-        if(['marginTop', 'marginBottom', 'top', 'height'].indexOf(key) !== -1) {
-          box = box.setIn([key, 'value'], (value / parentHeight))
-        } else {
-          box = box.setIn([key, 'value'], (value / parentWidth))
-        }
-      }
-      return box
-    })
-  }
 
-  public setXY = (x: number, y: number) => {
-    this.updateBoxValue('left', x)
-    this.updateBoxValue('top', y)
-  }
 
-  setXYWH = (x : number, y : number, w : number, h : number) => {
-    this.updateBoxValue('left', x)
-    this.updateBoxValue("width", w)
-    this.updateBoxValue("height", h)
-    this.updateBoxValue("top", y)
-  }
-
-  setWH = (w : number, h : number) => {
-    this.updateBoxValue("width", w)
-    this.updateBoxValue("height",h)
-  }
 
   static moveA2B = (a: Node, b: Node) => {
     if (b === a.getParent()) {

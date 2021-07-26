@@ -3,6 +3,7 @@ import StateMachine from './StateMachine'
 import Resizer from './Resizer'
 import PropertyEditor from './PropertyEditor'
 import Page from './Page'
+import { AssistLine } from './AssistLine'
 import {
   ComponentMeta,
   Logger,
@@ -11,6 +12,7 @@ import {
   Cord,
   Node,
   NodeJsonStructure,
+  Rect,
 } from "@skedo/core"
 import { NodeSelector } from './NodeSelector'
 import SelectionNew from './Selection.new'
@@ -20,7 +22,9 @@ export enum UIStates{
   StartAdd,
   Adding,
   Added,
-  Selected
+  Selected,
+  Moving,
+  Moved,
 }
 
 export enum UIEvents {
@@ -30,13 +34,16 @@ export enum UIEvents {
   EvtDrop,
 
   EvtSelected,
-  EvtCancelSelect
+  EvtCancelSelect,
+  EvtNodeMoved,
+  EvtNodeSyncMoving
 
 }
 
 
 export class EditorModel extends StateMachine<UIStates, UIEvents> {
 
+  assistLine : AssistLine
   ctrlDown : boolean 
   altDown : boolean
   mouseDown : boolean
@@ -67,6 +74,7 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
     this.startSelVer = 0
     this.logger = new Logger("editor-model")
     this.cord = new Cord(this.page.root.getRect())
+    this.assistLine = new AssistLine()
 
     this.register(UIStates.Start, UIStates.StartAdd, UIEvents.EvtStartDragAdd, (meta : ComponentMeta) => {
       this.dropCompoentMeta = meta
@@ -83,15 +91,39 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
     this.register([UIStates.Start, UIStates.Selected], UIStates.Selected, UIEvents.EvtSelected, (node : Node) => {
       this.selection.replace(node)
       this.emit(Topic.SelectionChanged)
-      
+    })
+
+    const handlerSyncMoving = throttle((node : Node, vec : [number, number]) => {
+      const absRect = node.absRect()
+      // absRect.left += vec[0]
+      // absRect.top += vec[0]
+      const receiver = NodeSelector.select(this.root, [absRect.left , absRect.top ], node)
+      console.log(absRect)
+      const lines = this.assistLine.calculateLines(absRect, node, receiver!)
+      this.emit(Topic.AssistLinesChanged,  {lines : lines, show : true})
+    }, 30)
+
+    this.register([UIStates.Selected, UIStates.Moving], UIStates.Moving, UIEvents.EvtNodeSyncMoving, (node : Node, vec : [number, number]) => {
+      handlerSyncMoving(node, vec)
+    })
+    
+    this.register([UIStates.Start, UIStates.Selected, UIStates.Moving], UIStates.Moved, UIEvents.EvtNodeMoved, (node : Node, vec : [number, number]) => {
+      console.log('vec', vec)
+      node.setXYByVec(vec) 
+      node.emit(Topic.NodeMoved)
+      this.emit(Topic.AssistLinesChanged, {lines : [], show : false})
+    })
+
+    this.register(UIStates.Moved, UIStates.Selected, UIEvents.AUTO, () => {
     })
 
     this.register(UIStates.Selected, UIStates.Start, UIEvents.EvtCancelSelect, (node : Node) => {
       this.selection.remove(node)
       this.emit(Topic.SelectionChanged)
-      
     })
 
+
+   
    
     
     this.register([UIStates.StartAdd, UIStates.Adding], UIStates.Added, UIEvents.EvtDrop, () => {
@@ -113,6 +145,10 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
     // For debug 
     // @ts-ignore
     window.editor = this
+  }
+
+  public getStateDesc(){
+    return UIStates[this.s]
   }
 
   // startCreateByDrag = () => {

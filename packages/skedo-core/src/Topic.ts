@@ -13,10 +13,13 @@ export enum Topic {
   EndMove,
   PropertyEditorUpdated,
   PropertyChanged,
-  AssistLinesChanged,
   EditMode,
 
   // New Event System
   NewNodeAdded,
+  NodeMoved,
   SelectionChanged,
+  AssistLinesChanged,
+  MouseUpEventPass,
+  MouseMoveEventPass
 }

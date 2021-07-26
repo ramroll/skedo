@@ -13,7 +13,7 @@ export class NodeSelector {
 
 		for(let child of container.getChildren()) {
 			const nodeRect = container.getRect()
-			const result = this.select(child, [x-nodeRect.left, y-nodeRect.top], exclude)
+			const result = NodeSelector.select(child, [x-nodeRect.left, y-nodeRect.top], exclude)
 			if(result) {
 				return result
 			}

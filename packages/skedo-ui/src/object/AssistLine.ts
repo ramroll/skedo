@@ -1,4 +1,4 @@
-import { Node, Emiter, Logger, Topic } from "@skedo/core"
+import { Node, Emiter, Logger, Topic, Rect } from "@skedo/core"
 
 const THROTTLE = 10
 
@@ -10,19 +10,13 @@ export interface LineDescriptor {
 }
 
 export class AssistLine extends Emiter<Topic> {
-  node?: Node
   logger: Logger = new Logger("assist")
 
-  start(node: Node) {
-    this.node = node
-  }
-
-  calculateLines(node: Node, receiver: Node) {
+  calculateLines(nodeRect : Rect, node : Node, receiver: Node) {
     // node.parent: 水平中心，垂直中心
     let lines: Array<LineDescriptor> = []
     const parent = node.getParent()
 
-    const nodeRect = node.absRect()
     if (parent) {
       // 0 : 水平线  1：垂直线
       const parentRect = parent.absRect()
@@ -54,6 +48,7 @@ export class AssistLine extends Emiter<Topic> {
         }
 
         const childRect = child.absRect()
+        console.log(childRect)
         lines.push({
           dir: 0,
           type: 1,
@@ -68,6 +63,8 @@ export class AssistLine extends Emiter<Topic> {
             nodeRect.bottom() - childRect.bottom()
           ),
         })
+
+        console.log(nodeRect.left, childRect.left)
         lines.push({
           dir: 1,
           type: 1,
@@ -112,19 +109,8 @@ export class AssistLine extends Emiter<Topic> {
       lines = lines.slice(0, 2)
     }
 
+    console.log(lines)
     return lines
   }
 
-  move(receiver: Node) {
-    if (this.node) {
-      this.emit(
-        Topic.AssistLinesChanged,
-        this.calculateLines(this.node, receiver)
-      )
-    }
-  }
-
-  endMove() {
-    this.emit(Topic.AssistLinesChanged, [])
-  }
 }

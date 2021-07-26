@@ -1,13 +1,14 @@
 import { Cord } from './Cord'
 import { Node } from './Node'
 import { Rect } from '../Rect'
+import { CordNew } from './Cord.new'
 
 export class MountPoint {
 	ele : HTMLElement
 	node : Node
-	cord : Cord
+	cord : CordNew
 
-	constructor(ele : HTMLElement, node : Node, cord : Cord) {
+	constructor(ele : HTMLElement, node : Node, cord : CordNew) {
 		this.ele = ele
 		this.cord = cord
 		this.node = node

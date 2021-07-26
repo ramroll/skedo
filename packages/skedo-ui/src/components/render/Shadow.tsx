@@ -7,7 +7,6 @@ export default ({meta, position} : {meta : ComponentMeta | null, position : [num
 	if(!meta) {
 		return null
 	}
-  console.log(context.cord.worldX(position[0]), context.cord.worldY(position[1]))
 	return (
     <div
       className={classes.shadow}
