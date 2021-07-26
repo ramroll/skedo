@@ -1,4 +1,4 @@
-import { sizeUnitToString, SkedoComponentProps, Topic } from '@skedo/core'
+import { SkedoComponentProps, Topic } from '@skedo/core'
 import { useEffect, useState } from 'react'
 export default ({bridge, className} : SkedoComponentProps & {className : string}) => {
 	const node = bridge.node

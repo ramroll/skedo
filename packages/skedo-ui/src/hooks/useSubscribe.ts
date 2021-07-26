@@ -1,4 +1,4 @@
-import {Subscriber, Subscription} from 'rxjs'
+import { Subscription} from 'rxjs'
 import { Emiter, Topic } from "@skedo/core"
 import { useEffect } from 'react'
 type SubscribeGroup = [emiter : Emiter<Topic>, topic : Topic | Topic[]]

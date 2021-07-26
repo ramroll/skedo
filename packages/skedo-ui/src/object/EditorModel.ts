@@ -1,6 +1,5 @@
-import { MouseEvent as ReactMouseEvent,  UIEvent } from 'react'
+import { MouseEvent as ReactMouseEvent } from 'react'
 import StateMachine from './StateMachine'
-import Resizer from './Resizer'
 import PropertyEditor from './PropertyEditor'
 import Page from './Page'
 import { AssistLine } from './AssistLine'
@@ -55,7 +54,6 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
   root : Node
   startSelVer : number 
   selection : SelectionNew 
-  resizer : Resizer
   propertyEditor : PropertyEditor
   page : Page
   dropCompoentMeta : ComponentMeta | null = null
@@ -68,7 +66,6 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
   constructor(json : NodeJsonStructure, pageName : string){
     super(UIStates.Start)
     this.selection = new SelectionNew()
-    this.resizer = new Resizer()
 
     this.propertyEditor = new PropertyEditor(this)
     this.page = new Page(pageName, this, json)
@@ -103,7 +100,6 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
       // absRect.left += vec[0]
       // absRect.top += vec[0]
       const receiver = NodeSelector.select(this.root, [absRect.left , absRect.top ], node)
-      console.log(absRect)
       const lines = this.assistLine.calculateLines(absRect, node, receiver!)
       this.emit(Topic.AssistLinesChanged,  {lines : lines, show : true})
     }, 30)
@@ -113,7 +109,6 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
     })
     
     this.register([UIStates.Start, UIStates.Selected, UIStates.Moving], UIStates.Moved, UIEvents.EvtNodeMoved, (node : Node, vec : [number, number]) => {
-      console.log('vec', vec)
       node.setXYByVec(vec) 
       node.emit(Topic.NodeMoved)
       this.emit(Topic.NodeMoved)

@@ -1,4 +1,4 @@
-import {Emiter, Topic, Rect, Cord, NodeType as Node} from '@skedo/core'
+import {Rect} from '@skedo/core'
 
 export default class ResizerNew{ 
   cubeType : number

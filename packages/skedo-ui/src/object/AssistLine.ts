@@ -48,7 +48,6 @@ export class AssistLine extends Emiter<Topic> {
         }
 
         const childRect = child.absRect()
-        console.log(childRect)
         lines.push({
           dir: 0,
           type: 1,
@@ -64,7 +63,6 @@ export class AssistLine extends Emiter<Topic> {
           ),
         })
 
-        console.log(nodeRect.left, childRect.left)
         lines.push({
           dir: 1,
           type: 1,
@@ -109,7 +107,6 @@ export class AssistLine extends Emiter<Topic> {
       lines = lines.slice(0, 2)
     }
 
-    console.log(lines)
     return lines
   }
 

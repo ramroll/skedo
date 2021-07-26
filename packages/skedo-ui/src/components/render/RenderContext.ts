@@ -1,4 +1,4 @@
-import { Cord, CordNew, Rect } from '@skedo/core'
+import { CordNew, Rect } from '@skedo/core'
 import React from 'react'
 import EditorModel from '../../object/EditorModel'
 

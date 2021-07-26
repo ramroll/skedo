@@ -2,7 +2,7 @@ import EditorModel from '../object/EditorModel'
 import style from  "../style/core.module.scss"
 import PropEditor from '../components/propeditor/ComponentPropEditor'
 import ComponentList from '../components/ComponentList'
-import {useEffect, useMemo} from 'react'
+import {useEffect } from 'react'
 
 import {Tabs} from 'antd'
 import React from 'react'

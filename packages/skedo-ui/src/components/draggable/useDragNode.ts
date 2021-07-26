@@ -1,10 +1,10 @@
 import DragNode from "./DragNode";
-import { DragEvents, RawDragEvents } from "./draggable.types";
+import { DragEvents } from "./draggable.types";
 import { useEffect, useMemo, useState } from "react";
 
 
 // <Draggable onDragStart... />
-export function useDragNode(props : DragEvents, initialPosition : [string, string]) : [DragNode, any] {
+export function useDragNode(props : DragEvents ) : [DragNode, any] {
 	const node = useMemo<DragNode>(() => new DragNode(), [])
 	const [ver, setVer] = useState(0)
 

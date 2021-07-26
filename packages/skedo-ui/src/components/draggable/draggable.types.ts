@@ -20,7 +20,5 @@ export type DragEvents = {
 	onDragEnd ? : (e : DragNode) => void,
 	onDrag? : (e : DragNode) => void,
 }
-export type DraggableProps = {
-	initialPosition : [number, number]
-} & DragEvents
+export type DraggableProps = DragEvents
 

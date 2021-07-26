@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom'
 import {
   Emiter,
   Topic,
@@ -20,7 +19,6 @@ import { History } from "./History";
 import PageExporter from "./PageExporter";
 import {fileRemote, pageRemote, compose} from "@skedo/request"
 import {fromJS} from 'immutable'
-import NodeStyleHelper from "../components/NodeStyleHelper";
 
 
 
@@ -33,7 +31,6 @@ export default class Page extends Emiter<Topic>{
   name : string
   logger : Logger = new Logger('page')
   editor : EditorModel
-  styleHelper : NodeStyleHelper
 
   constructor(name : string, editor :EditorModel,  json : NodeJsonStructure){
     super()
@@ -43,7 +40,6 @@ export default class Page extends Emiter<Topic>{
     this.id_base = 1
     this.nodes = []
     editor.page = this
-    this.styleHelper = new NodeStyleHelper()
 
     const box = boxDescriptor({
       left : 0,

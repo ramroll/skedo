@@ -23,7 +23,7 @@ const json : NodeJsonStructure = {
   },
 }
 
-export default () : [EditorModel | null] => {
+const useEditor = () : [EditorModel | null] => {
 	const {page : pageName} = useParams<{[key : string] : string}>()
 	const [editor, setEditor] = useState<EditorModel | null>(null)
 
@@ -54,3 +54,5 @@ export default () : [EditorModel | null] => {
 	return [editor]
 
 }
+
+export default useEditor

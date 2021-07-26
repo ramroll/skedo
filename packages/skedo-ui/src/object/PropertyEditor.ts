@@ -1,7 +1,5 @@
 import { NodeType as Node, Emiter, GroupMeta, Topic } from "@skedo/core"
 import SelectionNew from './Selection.new'
-import {throttle, mergeWith } from 'rxjs/operators'
-import {interval} from 'rxjs'
 import { EditorModel } from "./EditorModel"
 import PropItem from './PropItem'
 
