@@ -21,5 +21,6 @@ export enum Topic {
   SelectionChanged,
   AssistLinesChanged,
   MouseUpEventPass,
-  MouseMoveEventPass
+  MouseMoveEventPass,
+  NodePropUpdated
 }

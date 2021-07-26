@@ -71,9 +71,15 @@ function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
 
   const [ver, setVer] = useState(0)
 
-  useSubscribe([[editor, Topic.SelectionChanged], [node, [Topic.Resized, Topic.NodeMoved ]]], () => {
-    setVer(x => x + 1)
-  })
+  useSubscribe(
+    [
+      [editor, Topic.SelectionChanged],
+      [node, [Topic.Resized, Topic.NodeMoved, Topic.NodePropUpdated]],
+    ],
+    () => {
+      setVer((x) => x + 1)
+    }
+  )
   function selectionChangeHandler(selected : boolean) {
     if(selected) {
       editor.dispatch(UIEvents.EvtSelected, node)

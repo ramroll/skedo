@@ -36,7 +36,7 @@ class InstanceData extends Emiter<Topic> {
       this.data,
       value
     )
-    this.emit(Topic.Updated)
+    this.emit(Topic.NodePropUpdated)
   }
 
   public getData(){
