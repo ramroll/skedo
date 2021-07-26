@@ -16,6 +16,7 @@ import {
 } from "@skedo/core"
 import { NodeSelector } from './NodeSelector'
 import SelectionNew from './Selection.new'
+import ResizerNew from './Resizer.new'
 
 export enum UIStates{
   Start,
@@ -25,6 +26,9 @@ export enum UIStates{
   Selected,
   Moving,
   Moved,
+  StartResize,
+  Resizing,
+  Resized
 }
 
 export enum UIEvents {
@@ -32,11 +36,12 @@ export enum UIEvents {
   EvtStartDragAdd,
   EvtAddDraging,
   EvtDrop,
-
+  EvtMoving,
   EvtSelected,
   EvtCancelSelect,
   EvtNodeMoved,
-  EvtNodeSyncMoving
+  EvtNodeSyncMoving,
+  EvtStartResize
 
 }
 
@@ -140,6 +145,64 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
     this.register(UIStates.Added, UIStates.Selected, UIEvents.AUTO, () => {
     })
 
+
+
+    this.describe("大家好！我是小师叔！这里是调整大小的交互逻辑", register => {
+
+      let resizeNode : Node | null = null
+      let startRect :Rect | null= null
+      let resizer : ResizerNew | null = null 
+      let vecStart : [number, number] = [0, 0] 
+      register(
+        [UIStates.Start, UIStates.Selected],
+        UIStates.StartResize,
+        UIEvents.EvtStartResize,
+        (cubeType : number, clientVec : [number, number], node : Node) => {
+          resizeNode = node
+          resizer = new ResizerNew(cubeType)
+          startRect = node.absRect()
+          vecStart = clientVec
+        } 
+      )
+
+      register(
+        [UIStates.StartResize, UIStates.Resizing],
+        UIStates.Resizing,
+        UIEvents.EvtMoving,
+        (vecClient) => {
+          const vec : [number, number] = [vecClient[0] - vecStart[0], vecClient[1] - vecStart[1]]
+
+          if(resizeNode) {
+            const nextRect = resizer!.nextRect(startRect!, vec)
+
+            const parentRect = resizeNode.getParent().getRect()
+            console.log(nextRect.top - parentRect.top)
+
+            resizeNode.setXYWH(
+              nextRect.left - parentRect.left,
+              nextRect.top - parentRect.top,
+              nextRect.width,
+              nextRect.height
+            )
+
+            resizeNode.emit(Topic.Resized)
+          }
+        } 
+      )
+
+      register(
+        UIStates.Resizing, UIStates.Resized, UIEvents.EvtDrop,
+        () => {
+          resizeNode = null
+        }
+      )
+
+      register(
+        UIStates.Resized, UIStates.Selected, UIEvents.AUTO,
+        () => {
+        }
+      )
+    })
 
 
     // For debug 

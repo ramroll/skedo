@@ -51,7 +51,6 @@ const ComponentList = ({editor} : ComponentListProps) => {
                   // }
                   // event.dataTransfer.setData("text" ,"111")
                   editor.dispatch(UIEvents.EvtStartDragAdd, compConf)
-                  console.log('start drag', event.target)
                   // editor.onDragStart(compConf)
                 }}
                 className={style["component-list-item"]}

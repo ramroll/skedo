@@ -1,11 +1,13 @@
 import {Emiter, Topic, Rect, Cord, NodeType as Node} from '@skedo/core'
 
-export default class ResizerNew extends Emiter<Topic> {
-
-  cubeType? : number
+export default class ResizerNew{ 
+  cubeType : number
   x : number = 0
   y : number = 0
-  cache? : Rect 
+
+  constructor(cubeType : number) {
+    this.cubeType = cubeType 
+  }
 
   static resizerData = [
     ["topleft", 1, [1, 1, -1, -1]],
@@ -18,26 +20,13 @@ export default class ResizerNew extends Emiter<Topic> {
     ["middleleft", 8, [1, 0, -1, 0]],
   ]
 
-  setCubeType(type : number) {
-    this.cubeType = type
-  }
 
-  startResizing(node : Node, worldX : number, worldY : number) {
-    this.cache = node.getRect()
-    this.x = worldX 
-    this.y = worldY 
-  }
+  public nextRect(rect : Rect, vec : [number, number]) {
 
+    const type : number = this.cubeType - 1
+    const nvec = ResizerNew.resizerData[type][2] as Array<number>
 
-  resizing(node : Node, worldX : number, worldY : number) {
-    if(!this.cubeType){return}
-    if(!this.cache) {return}
-
-    const dx = worldX - this.x
-    const dy = worldY - this.y
-    const type : number = this.cubeType
-    const nvec = ResizerNew.resizerData[type-1][2] as Array<number>
-
+    const [dx, dy] = vec
     const vec4 = [
       nvec[0] * dx,
       nvec[1] * dy,
@@ -45,12 +34,11 @@ export default class ResizerNew extends Emiter<Topic> {
       nvec[3] * dy,
     ]
 
-    const left = vec4[0] + this.cache.left
-    const top = vec4[1] + this.cache.top
-    const width = vec4[2] + this.cache.width
-    const height = vec4[3] + this.cache.height
+    const left = vec4[0] + rect.left
+    const top = vec4[1] + rect.top
+    const width = vec4[2] + rect.width
+    const height = vec4[3] + rect.height
 
-    
-    node.setXYWH(left, top, width, height)
+    return new Rect(left, top, width, height)
   }
 }

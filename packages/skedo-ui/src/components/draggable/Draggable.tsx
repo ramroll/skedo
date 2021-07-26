@@ -1,8 +1,9 @@
 import { useDragNode } from "./useDragNode"
-import DragNode from "./DragNode"
 import { DragEvents } from "./draggable.types"
-import React from "react"
+import React, { useState } from "react"
 import { mergeDeepLeft } from 'ramda'
+import { useSubscribe } from "../../hooks/useSubscribe"
+import { Topic } from "@skedo/core"
 
 type DraggableProps = {
 	initialPosition : [string, string],
@@ -13,6 +14,7 @@ type DraggableProps = {
 
 const Draggable = (props : DraggableProps) : JSX.Element => {
 	const [node, handlers] = useDragNode(props, props.initialPosition)
+
 
 	const children = props.children
 	const childrenProps = children.props

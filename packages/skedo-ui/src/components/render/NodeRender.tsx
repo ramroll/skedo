@@ -43,16 +43,11 @@ function Styled({
   })
 
 
-
-  
-
   return (
     <div
       ref={ref}
       draggable={draggable}
       style={{
-        left: sizeUnitToString(box.left),
-        top: sizeUnitToString(box.top),
         width: sizeUnitToString(box.width),
         height: sizeUnitToString(box.height),
         ...style,
@@ -76,7 +71,7 @@ function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
 
   const [ver, setVer] = useState(0)
 
-  useSubscribe([[editor, Topic.SelectionChanged], [node, Topic.NodeMoved]], () => {
+  useSubscribe([[editor, Topic.SelectionChanged], [node, [Topic.Resized, Topic.NodeMoved ]]], () => {
     setVer(x => x + 1)
   })
   function selectionChangeHandler(selected : boolean) {
@@ -88,7 +83,6 @@ function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
   }
 
   const box = node.getBox() 
-  console.log(box, node.getName())
   return (
     <Draggable
       enabled={node.isDraggable()}
@@ -107,6 +101,7 @@ function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
         <Selectable
           selected={editor.selection.contains(node)}
           onSelectChanged={selectionChangeHandler}
+          node={node}
         >
           <C bridge={bridge} {...passProps} />
         </Selectable>

@@ -38,6 +38,10 @@ function useThrottledState<T>(initialState : T, interval = 16) : [T, (val : (T|(
 
 }
 
+
+type VecRef = {
+  vec : [number, number] | null
+}
 export default ({
   children,
   editor,
@@ -46,6 +50,12 @@ export default ({
   editor: EditorModel
 }) => {
   const [rect, ref] = useBound()
+  const vec = useRef<VecRef>({
+    vec : null 
+  })
+  const vecStart = useRef<VecRef>({
+    vec : null
+  })
   const [position, setPosition] = useThrottledState<
     [number, number]
   >([0, 0], 5)
@@ -89,9 +99,11 @@ export default ({
             node.emit(Topic.MouseMoveEventPass, e)
           })
 
+          editor.dispatch(UIEvents.EvtMoving, [e.clientX, e.clientY])
           // Hanlde drop insert
           const meta = editor.dropCompoentMeta
           if (!meta) {
+            // common moving
             return
           }
           const box = meta.box
@@ -120,12 +132,12 @@ export default ({
           editor.dispatch(UIEvents.EvtAddDraging, position)
         }}
         onMouseUp={(e) => {
-          console.log('mouse up')
           e.preventDefault()
+          vec.current.vec = null
+          vecStart.current.vec = null
           editor.selection.forEach((node) => {
             node.emit(Topic.MouseUpEventPass, e)
           })
-          console.log(editor.getStateDesc())
           editor.dispatch(UIEvents.EvtDrop)
           setPosition([0, 0])
         }}

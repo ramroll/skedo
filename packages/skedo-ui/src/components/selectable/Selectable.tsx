@@ -1,6 +1,9 @@
 
-import  { MouseEvent, useRef, useMemo, useEffect, MouseEventHandler} from "react"
+import  { MouseEvent, useRef, useMemo, useEffect, MouseEventHandler, useContext} from "react"
+import {Node} from '@skedo/core'
+import { UIEvents } from "../../object/EditorModel"
 import ResizerNew from '../../object/Resizer.new'
+import RenderContext from "../render/RenderContext"
 import styles from './selectable.module.scss'
 
 type SelectionProps = {
@@ -9,11 +12,18 @@ type SelectionProps = {
   onSelectChanged : (selected : boolean) => void ,
   onMouseDown? : MouseEventHandler,
   onMouseUp? : MouseEventHandler,
+  node : Node
 
 }
 
-const Selectable = ({selected ,children, onSelectChanged, onMouseDown, onMouseUp } : SelectionProps) => {
-
+const Selectable = ({
+  selected,
+  children,
+  onSelectChanged,
+  onMouseDown,
+  onMouseUp,
+  node
+}: SelectionProps) => {
   const selectionValue = useRef(selected)
 
   useEffect(() => {
@@ -22,38 +32,37 @@ const Selectable = ({selected ,children, onSelectChanged, onMouseDown, onMouseUp
 
   const handlers = useMemo(() => {
     let startSelected = false
-    let startX = 0, startY = 0
+    let startX = 0,
+      startY = 0
     return {
-      onMouseDown  : (e : MouseEvent) => {
+      onMouseDown: (e: MouseEvent) => {
         e.stopPropagation()
         startSelected = selectionValue.current
         startX = e.clientX
         startY = e.clientY
-        if(!selectionValue.current) {
+        if (!selectionValue.current) {
           selectionValue.current = true
           onSelectChanged(true)
         }
         onMouseDown && onMouseDown(e)
-        
       },
-      
-      onMouseUp : (e : MouseEvent) => {
 
-        const moved = e.clientX !== startX || e.clientY !== startY
-        if(startSelected && !moved) {
+      onMouseUp: (e: MouseEvent) => {
+        const moved =
+          e.clientX !== startX || e.clientY !== startY
+        if (startSelected && !moved) {
           onSelectChanged(false)
           selectionValue.current = false
         }
-        onMouseUp&& onMouseUp(e)
-      }
+        onMouseUp && onMouseUp(e)
+      },
     }
-  },[])
+  }, [])
+
+  const context = useContext(RenderContext)
 
   return (
-    <div
-      className={styles.selectable}
-      {...handlers}
-    >
+    <div className={styles.selectable} {...handlers}>
       <div
         className={styles.selection_frame}
         style={{
@@ -66,6 +75,16 @@ const Selectable = ({selected ,children, onSelectChanged, onMouseDown, onMouseUp
           return (
             <div
               key={name + ""}
+              onMouseDown={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                context.editor!.dispatch(
+                  UIEvents.EvtStartResize,
+                  type,
+                  [e.clientX, e.clientY],
+                  node
+                )
+              }}
               data-cube={type}
               className={`${styles.cube} ${
                 styles["cube_" + name]
