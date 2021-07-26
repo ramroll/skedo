@@ -16,27 +16,20 @@ export default class PropertyEditor extends Emiter<Topic>{
     this.groups = [] 
     this.props = {}
     this.selection = editor.selection
-    // this.selection.on(Topic.SelectionChanged)
-    //   .subscribe(() => {
-    //     this.handleSelectionChange(this.selection)
-    //     this.emit(Topic.PropertyEditorUpdated)
-    //     this.getProps().forEach(prop => {
-    //       prop.update()
-    //     })
-    //   })
+    editor.on(Topic.SelectionChanged)
+      .subscribe(() => {
+        this.handleSelectionChange(this.selection)
+        this.emit(Topic.PropertyEditorUpdated)
+        this.getProps().forEach(prop => {
+          prop.update()
+        })
+      })
 
-    // const a1 = this.selection.on(Topic.SelectionMoving) 
-    // const a2 = this.selection.on(Topic.SelectionMoved) 
-    const a3 = editor.resizer.on(Topic.Resizing)
-      .pipe(throttle(() => interval(200)))
-
-    // a1.pipe(mergeWith(a2, a3))
-    //   .pipe(throttle(() => interval(200)))
-    //   .subscribe(() => {
-    //     this.getProps().forEach(prop => {
-    //       prop.update()
-    //     })
-    //   })
+    editor.on([Topic.Resized, Topic.NodeMoved]).subscribe(() => {
+      this.getProps().forEach((prop) => {
+        prop.update()
+      })
+    })
     
   }
 
@@ -69,12 +62,12 @@ export default class PropertyEditor extends Emiter<Topic>{
     }
   }
 
-  handleSelectionChange = (selection : Selection) => {
+  handleSelectionChange = (selection : SelectionNew) => {
     this.groups = []
     this.props = {}
-    // for(let node of selection.nodes()) {
-    //   this.addNode(node)
-    // }
+    selection.forEach(node => {
+      this.addNode(node)
+    })
   }
 
 }

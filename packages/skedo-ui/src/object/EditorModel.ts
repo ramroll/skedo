@@ -116,6 +116,7 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
       console.log('vec', vec)
       node.setXYByVec(vec) 
       node.emit(Topic.NodeMoved)
+      this.emit(Topic.NodeMoved)
       this.emit(Topic.AssistLinesChanged, {lines : [], show : false})
     })
 
@@ -200,6 +201,7 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
       register(
         UIStates.Resized, UIStates.Selected, UIEvents.AUTO,
         () => {
+          this.emit(Topic.Resized)
         }
       )
     })
