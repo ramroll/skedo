@@ -2,7 +2,8 @@
 import {GroupMeta} from './GroupMeta'
 import {PropMeta} from './PropMeta'
 import {Map as ImmutableMap, fromJS} from 'immutable'
-import { boxDescriptor, BoxDescriptor, BoxDescriptorInput } from '../BoxDescriptor'
+import { boxDescriptor } from '../BoxDescriptor'
+import { BoxDescriptor, BoxDescriptorInput } from '../standard.types'
 
 
 export interface PropConfig {

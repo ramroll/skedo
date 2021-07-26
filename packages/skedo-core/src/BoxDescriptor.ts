@@ -1,20 +1,5 @@
-import { fromJS, Map } from 'immutable'
-export type SizeUnit = {
-	value : number,
-	unit : 'px' | '%',
-	isAuto : boolean 
-}
-export type BoxDescriptorInput = {
-	left? : number | string  
-	top? :  number | string
-	width :  number | string
-	height :  number | string
-	marginLeft? :  number | string
-	marginTop? :  number | string
-	marginRight? :  number | string
-	marginBottom? :  number | string,
-	mode : string 
-}
+import { BoxDescriptorInput, SizeUnit } from "./standard.types"
+
 
 export function sizeUnitToString(unit : SizeUnit){
 	return unit.isAuto ? 
@@ -40,7 +25,7 @@ export function sizeUnitToNumber(key : string, size : SizeUnit, maxWidth : numbe
 	throw new Error("invalid sizeunit.")
 }
 
-export function parseSizeUnit(ipt : string | number | undefined) : SizeUnit {
+export function parseSizeUnit(ipt : string | number | undefined) : SizeUnit{
 	if(typeof ipt === 'undefined' || ipt === '' || ipt === 'px') {
 		return {
 			value : 0,
@@ -83,17 +68,6 @@ export function parseSizeUnit(ipt : string | number | undefined) : SizeUnit {
 
 	}
 	throw new Error("Unrecognizable size input:" + ipt)
-}
-export type BoxDescriptor = {
-	mode : string,
-	left : SizeUnit  
-	top :  SizeUnit 
-	width :  SizeUnit 
-	height :  SizeUnit 
-	marginLeft:  SizeUnit 
-	marginTop : SizeUnit 
-	marginRight :  SizeUnit 
-	marginBottom :  SizeUnit 
 }
 
 

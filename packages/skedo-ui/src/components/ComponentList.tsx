@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { EditorModel, UIEvents } from '../object/EditorModel'
-import {Topic, ComponentMeta} from '@skedo/core'
-import ComponentsLoader from '../object/ComponentsLoader'
-import style from '../style/core.module.scss'
+import {Topic, ComponentMeta, ComponentsLoader} from '@skedo/core'
+import style from './compo-list.module.scss'
 import { groupBy } from 'ramda'
 
 interface ComponentListProps {

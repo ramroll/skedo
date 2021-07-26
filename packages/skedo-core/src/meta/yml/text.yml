@@ -1,0 +1,52 @@
+group : basic
+name : "text"
+imageUrl : "https://voice-static.oss-accelerate.aliyuncs.com//img/9a0e8542a8728d8034f351ed6a46e5deb3fddedb.png"
+title : "文本"
+box :
+  width : 75
+  height : 24
+defaultProps : {
+  text : "请输入文本"
+}
+url : local.Text
+editor : 
+  groups:
+  - name : font
+    title : 字体
+    props : 
+    - name : font-size
+      type : integer
+      range : [6, 72] 
+      props : 
+        suffix : 号
+        style:
+          width : 80
+      default : 14 
+      row : 1
+      path : passProps.fontSize
+    - name : font-family
+      title : 字体
+      type : font-family
+      default : Microsofot YaHei
+      row : 1
+      path : passProps.fontFamily
+    - name : font-style
+      title : 样式
+      type : font-style
+      row : 2
+      path : passProps.fontStyle
+    - name : align 
+      title : 文本对齐
+      type : font-align
+      default : left
+      row : 2
+      path : passProps.align
+    - name : color
+      title : 颜色
+      type : color
+      default : #000 
+      row : 2
+      path : passProps.color
+
+
+    

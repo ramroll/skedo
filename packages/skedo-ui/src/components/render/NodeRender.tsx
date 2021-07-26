@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Bridge, CordNew, Node, sizeUnitToNumber, sizeUnitToString, Topic } from '@skedo/core'
-import ComponentsLoader from '../../object/ComponentsLoader'
+import { Bridge, Node, sizeUnitToString, Topic, ComponentsLoader } from '@skedo/core'
 import ExternalComponent from './ExternalComponent'
 import { NodeRenderProps, RenderedComponentProps } from './render.types'
 import Draggable from '../draggable/Draggable'
@@ -8,6 +7,7 @@ import Selectable from '../selectable/Selectable'
 import RenderContext from './RenderContext'
 import { UIEvents } from '../../object/EditorModel'
 import { useSubscribe } from '../../hooks/useSubscribe'
+import getLocalComponentByURL from './getLocalComponentByURL'
 
 function __render(node : Node, key ? : any){
   return <NodeRender node={node} key={key} />
@@ -121,7 +121,7 @@ function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
 const NodeRender = ({node } : NodeRenderProps) => {
 
   if(node.meta.url) {
-    const localComponent = ComponentsLoader.getLocalComponentByURL(node.meta.url)
+    const localComponent = getLocalComponentByURL(node.meta.url)
     if(localComponent) {
       return <InnerRender C={localComponent} node={node}  />
     }

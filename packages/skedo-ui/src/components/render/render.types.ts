@@ -5,7 +5,6 @@ export type NodeRenderProps = {
 	node : Node,
 }
 
-
 export type RenderedComponentProps = {
 	bridge : Bridge
 }

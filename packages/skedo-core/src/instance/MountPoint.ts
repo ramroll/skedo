@@ -1,4 +1,3 @@
-import { Cord } from './Cord'
 import { Node } from './Node'
 import { Rect } from '../Rect'
 import { CordNew } from './Cord.new'

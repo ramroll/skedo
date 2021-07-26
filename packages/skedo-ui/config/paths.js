@@ -61,6 +61,8 @@ module.exports = {
   appSrc: resolveApp('src'),
   coreSrc: resolveApp('../skedo-core/src'),
   requestSrc: resolveApp('../skedo-request/src'),
+  renderSrc : resolveApp('../skedo-render/src'),
+
   appTsConfig: resolveApp('tsconfig.json'),
   appJsConfig: resolveApp('jsconfig.json'),
   yarnLockFile: resolveApp('yarn.lock'),

@@ -160,6 +160,7 @@ module.exports = function (webpackEnv) {
 
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
+    
     // Stop compilation early in production
     bail: isEnvProduction,
     devtool: isEnvProduction
@@ -393,7 +394,8 @@ module.exports = function (webpackEnv) {
             // The preset includes JSX, Flow, TypeScript, and some ESnext features.
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
-              include: [paths.appSrc, paths.coreSrc, paths.requestSrc],
+              // exclude : /node_modules\/(?!@skedo)/,
+              include: [paths.appSrc, paths.coreSrc, paths.requestSrc, paths.renderSrc],
               loader: require.resolve('babel-loader'),
               options: {
                 customize: require.resolve(
@@ -435,7 +437,7 @@ module.exports = function (webpackEnv) {
             },
             {
               test : /\.(ya?ml)$/,
-              exclude: /node_modules/,
+              exclude: /node_modules\/(?!@skedo)/,
               type : "json",
               loader: "yaml-loader"
             },

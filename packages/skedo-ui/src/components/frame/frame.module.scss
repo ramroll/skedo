@@ -1,0 +1,43 @@
+
+/** 标题/结尾栏目 **/
+.titlebar {
+  display : flex;
+  align-items: center;
+  height : 48px;
+  padding-left : 10px;
+  background:#456;
+  h2 {
+    margin : 0;   
+    font-family: sans-serif;
+    color : white;
+    letter-spacing: 3px;
+  }
+  .router {
+    margin-left : 40px; 
+    display: flex;
+    flex-direction: row;
+  }
+
+  
+
+  .btn {
+    width : 36px;
+    height : 36px;
+    background-color: #467;
+    margin-right: 3px;
+    display : flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 1px 2px 3px black;
+    cursor : pointer;
+
+    img {
+      width : 18px;
+    }
+
+    &.active {
+      background-color:orange
+
+    }
+  }
+}

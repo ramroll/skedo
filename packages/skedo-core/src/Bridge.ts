@@ -1,7 +1,6 @@
 import { Topic } from './Topic'
 import { Node } from './instance/Node'
 import { Emiter } from './Emiter'
-import { Page } from './Page'
 
 export class Bridge {
   node : Node 

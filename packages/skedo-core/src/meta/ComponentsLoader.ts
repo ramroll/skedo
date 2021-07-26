@@ -1,5 +1,6 @@
-import React from "react"
-import {Emiter, ComponentMetaConfig, ComponentMeta, Topic} from "@skedo/core"
+import { Emiter  } from "../Emiter"
+import { ComponentMetaConfig, ComponentMeta } from "./ComponentMeta" 
+import { Topic } from "../Topic"
 import * as R from 'ramda'
 import yaml from 'js-yaml'
 
@@ -8,38 +9,26 @@ import {componentRemote} from '@skedo/request'
 
 const metas: {[key:string] : ComponentMeta} = {}  
 const ymls: {[key:string] : ComponentMetaConfig} = {}  
-const localComponentsMap : {[key:string] : React.ComponentClass} = {}  
-
-
 
 // @ts-ignore
-require.context('../components/localComponents', true, /\.tsx$/)
-	.keys()
-	.forEach( (key : string) => {
-		key = key.replace('./', '')
-		const [a,] = key.split('.')
-		localComponentsMap['local.' + a] = require(`../components/localComponents/${key}`).default
-	})
-
-// @ts-ignore
-require.context('../', true, /\.yml$/)
+require.context('./', true, /\.yml$/)
 	.keys()
 	.forEach( (key : string) => {
 		key = key.replace('./', '')
 		const [a,] = key.split('.')
 		const n = a.split('/').pop()
 		if(n && n !== 'default') {
-			const config : ComponentMetaConfig = require(`../${key}`)
+			const config : ComponentMetaConfig = require(`./${key}`)
 			ymls[config.group + '.' + config.name] = config 
-		}
+  }
 	})
 
 
-export default class ComponentsLoader extends Emiter<Topic> {
+export class ComponentsLoader extends Emiter<Topic> {
 
 	static inst : ComponentsLoader  = new ComponentsLoader() 
 
-	static defaultProps : ComponentMetaConfig = require('../yml/default.yml')
+	static defaultProps : ComponentMetaConfig = require('./yml/default.yml')
 	state : number = 0
 	list : Array<ComponentMeta> = []
 
@@ -62,9 +51,6 @@ export default class ComponentsLoader extends Emiter<Topic> {
     return metas[key]
 	}
 
-	static getLocalComponentByURL(url: string) : React.ComponentClass {
-		return localComponentsMap[url] || null
-	}
 
 	static get() {
 		return ComponentsLoader.inst

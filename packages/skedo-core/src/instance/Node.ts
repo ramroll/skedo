@@ -4,16 +4,15 @@ import { ComponentMeta } from "../meta/ComponentMeta"
 import { Logger } from '../Logger'
 import { PropMeta } from '../meta/PropMeta'
 import { Topic } from "../Topic"
-import { BoxDescriptor, sizeUnitToNumber } from "../BoxDescriptor"
+import { BoxDescriptor, NodeData} from "../standard.types"
+import { sizeUnitToNumber } from "../BoxDescriptor"
 import { Map as ImmutableMap, fromJS } from "immutable"
 import { MountPoint } from "./MountPoint"
-import { Cord } from "./Cord"
 import { Bridge } from "../Bridge"
 import { CordNew } from "./Cord.new"
 
 // reactive / hooks
 // meta (immutable, data-flow, virtualdom)
-export declare type NodeData = ImmutableMap<string, any>
 
 class InstanceData extends Emiter<Topic> {
   protected data: NodeData

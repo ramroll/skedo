@@ -1,0 +1,86 @@
+// #region 选择框
+
+// #endregion
+
+// #region 元素
+.element-root{
+  position: relative;
+  border : 1px solid #eee;
+  margin : -1px 0px 0px -1px;
+  background : #ececec;
+}
+
+.element {
+  position : absolute;
+  img {
+    pointer-events: none;
+  }
+  
+}
+
+.element-inner {
+  transition : background-color .2s ease;
+  width : 100%;
+  height : 100%;
+}
+
+
+
+// #endregion
+
+
+.container {
+  display : flex;
+  flex : 1;
+  overflow : hidden;
+  height : 100%;
+
+}
+
+
+
+.root-w::-webkit-scrollbar {
+  width: 10px;
+  height : 10px; 
+}
+
+.root-w::-webkit-scrollbar-track {
+  background-color: #f2f3f4;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,.3);
+  outline: 1px solid slategrey;
+}
+
+
+
+
+.footer {
+  display : flex;
+  align-items: center;
+  height : 18px;
+  padding-left : 10px;
+  background:black;
+  h2 {
+    margin : 0;   
+    font-family: sans-serif;
+    color : white;
+    letter-spacing: 3px;
+  }
+}
+
+/** 右侧整体 **/
+
+.right {
+  width : 300px;  
+  flex-shrink: 0;
+}
+
+/** 属性编辑器 **/
+
+.prop-editor {
+  width :300px;
+  min-height: 600px;
+}
+

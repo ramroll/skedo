@@ -1,0 +1,130 @@
+name : ""
+type : ""
+group : ""
+editor : 
+  groups:
+  - name: shape
+    title : 形状
+    props:
+    - name : left
+      type : size 
+      props : 
+        suffix : X
+      path : box.left
+      row : 0
+    - name : top 
+      type : size 
+      props : 
+        suffix : Y
+      row : 0
+      path : box.top
+    - name : width 
+      type : size 
+      props :
+        suffix : W
+      row : 0
+      path : box.width
+    - name : height 
+      type : size 
+      props :
+        suffix : H
+      row : 0
+      path : box.height
+    - name : margin-top
+      type : size 
+      rowLabel : 外边距
+      props : 
+        suffix : 上
+      row : 1
+      path : box.marginTop
+    - name : margin-right 
+      type : size 
+      props : 
+        suffix : 右 
+      path : box.marginRight
+      row : 1
+    - name : margin-bottom 
+      type : size 
+      props : 
+        suffix : 下 
+      row : 1
+      path : box.marginBottom
+    - name : margin-left
+      type : size 
+      props : 
+        suffix : 左 
+      row : 1
+      path : box.marginLeft
+  - name : border
+    title : 边框
+    props : 
+    - name : border-width
+      type : integer
+      default: 0
+      props : 
+        suffix : 大小 
+      path : style.borderWidth
+      row : 0
+    - name : border-color
+      type : color 
+      default: 0
+      props : 
+        suffix : 大小 
+      path : style.borderColor
+      row : 0
+    - name : border-style
+      type : select
+      selections :
+        - value : solid
+          text : 实线 
+        - value : dashed
+          text : 虚线
+      default : solid
+      path : style.borderStyle
+      row : 0
+    - name : border-top-left-radius
+      type : integer
+      props :
+        suffix : 左上 
+      path : style.borderTopLeftRadius
+      row : 1
+      rowLabel : 圆角设置
+    - name : border-top-right-radius
+      type : integer
+      props :
+        suffix : 右上 
+      path : style.borderTopRightRadius
+      row : 1
+    - name : border-bottom-right-radius
+      type : integer
+      props :
+        suffix : 右下 
+      path : style.borderBottomRightRadius
+      row : 1
+    - name : border-bottom-left-radius
+      type : integer
+      props :
+        suffix : 左下 
+      path : style.borderBottomLeftRadius
+      row : 1
+  - name : background
+    title : 背景
+    props :
+    - name : background-color
+      type : color
+      path : style.backgroundColor
+
+  - name: basic
+    title : Codeless 
+    props :
+      - name : name
+        label : name
+        type : name 
+        path : name
+
+
+
+
+
+
+
