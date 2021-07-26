@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { Bridge, Node, sizeUnitToString, NodeRenderProps, RenderedComponentProps } from '@skedo/core'
 import ExternalComponent from './ExternalComponent'
 import RenderContext from './RenderContext'
@@ -30,6 +30,8 @@ function Styled({
     <div
       ref={ref}
       style={{
+        left : sizeUnitToString(box.left),
+        top : sizeUnitToString(box.top),
         width: sizeUnitToString(box.width),
         height: sizeUnitToString(box.height),
         ...style,
@@ -47,9 +49,6 @@ function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
   const bridge = new Bridge(node)
   bridge.renderForReact = __render
   const passProps = node.getPassProps().toJS()
-  const context = useContext(RenderContext)
-
-  const [ver, setVer] = useState(0)
 
 
   const box = node.getBox() 
@@ -66,6 +65,11 @@ function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
 } 
 
 export const NodeRender = ({ node }: NodeRenderProps) => {
+  if(node.getName() === 'root') {
+    node = node.getChildren()[0]
+    node.setXY(0, 0)
+  }
+  
   if (node.meta.url) {
     const localComponent = getLocalComponentByURL(
       node.meta.url

@@ -3,7 +3,7 @@ import { Rect, sizeUnitToNumber, Topic } from '@skedo/core'
 import useBound from '../../hooks/useBound'
 import RenderContext from './RenderContext'
 import Shadow from './Shadow'
-import EditorModel, { UIEvents } from '../../object/EditorModel'
+import UIModel, { UIEvents } from '../../object/UIModel'
 import classes from './render.module.scss'
 import {throttle} from '@skedo/core'
 import AssistLineSVG from '../assistline/AssistLineSVG'
@@ -47,7 +47,7 @@ export default ({
   editor,
 }: {
   children: JSX.Element
-  editor: EditorModel
+  editor: UIModel
 }) => {
   const [rect, ref] = useBound()
   const vec = useRef<VecRef>({

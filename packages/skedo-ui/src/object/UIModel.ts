@@ -1,4 +1,3 @@
-import { MouseEvent as ReactMouseEvent } from 'react'
 import StateMachine from './StateMachine'
 import PropertyEditor from './PropertyEditor'
 import { AssistLine } from './AssistLine'
@@ -46,7 +45,7 @@ export enum UIEvents {
 }
 
 
-export class EditorModel extends StateMachine<UIStates, UIEvents> {
+export class UIModel extends StateMachine<UIStates, UIEvents> {
 
   assistLine : AssistLine
   ctrlDown : boolean 
@@ -77,6 +76,10 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
     this.logger = new Logger("editor-model")
     this.assistLine = new AssistLine()
 
+
+    setInterval(() => {
+      this.save()
+    }, 2000)
     // @ts-ignore
     // 调试用
     window["ui"] = this
@@ -93,7 +96,7 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
       register([UIStates.StartAdd, UIStates.Adding], UIStates.Adding, UIEvents.EvtAddDraging, (position) => {
         this.dropComponentPosition = position
       })
-      this.register([UIStates.StartAdd, UIStates.Adding], UIStates.Added, UIEvents.EvtDrop, () => {
+      register([UIStates.StartAdd, UIStates.Adding], UIStates.Added, UIEvents.EvtDrop, () => {
         const position = this.dropComponentPosition
         const node = this.page.createFromMetaNew(this.dropCompoentMeta!, position)
         const receiver = NodeSelector.select(this.root, position, null)
@@ -105,18 +108,18 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
       })
           
 
-      this.register(UIStates.Added, UIStates.Selected, UIEvents.AUTO, () => {
+      register(UIStates.Added, UIStates.Selected, UIEvents.AUTO, () => {
       })
 
  
     })
 
     this.describe("大家好！我是小师叔，这里在处理选中的逻辑", register => {
-      this.register([UIStates.Start, UIStates.Selected], UIStates.Selected, UIEvents.EvtSelected, (node : Node) => {
+      register([UIStates.Start, UIStates.Selected], UIStates.Selected, UIEvents.EvtSelected, (node : Node) => {
         this.selection.replace(node)
         this.emit(Topic.SelectionChanged)
       })
-      this.register(UIStates.Selected, UIStates.Start, UIEvents.EvtCancelSelect, (node : Node) => {
+      register(UIStates.Selected, UIStates.Start, UIEvents.EvtCancelSelect, (node : Node) => {
         this.selection.remove(node)
         this.emit(Topic.SelectionChanged)
       })
@@ -132,18 +135,18 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
         this.emit(Topic.AssistLinesChanged,  {lines : lines, show : true})
       }, 30)
   
-      this.register([UIStates.Selected, UIStates.Moving], UIStates.Moving, UIEvents.EvtNodeSyncMoving, (node : Node, vec : [number, number]) => {
+      register([UIStates.Selected, UIStates.Moving], UIStates.Moving, UIEvents.EvtNodeSyncMoving, (node : Node, vec : [number, number]) => {
         handlerSyncMoving(node, vec)
       })
       
-      this.register([UIStates.Start, UIStates.Selected, UIStates.Moving], UIStates.Moved, UIEvents.EvtNodeMoved, (node : Node, vec : [number, number]) => {
+      register([UIStates.Start, UIStates.Selected, UIStates.Moving], UIStates.Moved, UIEvents.EvtNodeMoved, (node : Node, vec : [number, number]) => {
         node.setXYByVec(vec) 
         node.emit(Topic.NodeMoved)
         this.emit(Topic.NodeMoved)
         this.emit(Topic.AssistLinesChanged, {lines : [], show : false})
       })
   
-      this.register(UIStates.Moved, UIStates.Selected, UIEvents.AUTO, () => {
+      register(UIStates.Moved, UIStates.Selected, UIEvents.AUTO, () => {
       })
   
     })
@@ -218,6 +221,7 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
     return UIStates[this.s]
   }
 
+
   public async save() {
     const exporter = new PageExporter()
     const json = exporter.exportToJSON(this.page.pageNode)
@@ -229,7 +233,6 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
 
     const result = await composedRemoteCall("/page", "test.json", "1.0.0", text)
     this.logger.log('save', json)
-
   }
 
 }
@@ -237,4 +240,4 @@ export class EditorModel extends StateMachine<UIStates, UIEvents> {
 
 
 
-export default EditorModel 
+export default UIModel 

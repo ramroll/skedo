@@ -1,4 +1,4 @@
-import EditorModel from '../object/EditorModel'
+import UIModel from '../object/UIModel'
 import style from  "./ui.module.scss"
 import PropEditor from '../components/propeditor/ComponentPropEditor'
 import ComponentList from '../components/ComponentList'
@@ -54,7 +54,7 @@ const Skedo = () => {
 }
 
 interface RightTabsProps {
-  editor : EditorModel
+  editor : UIModel
 }
 const RightTabs = ({editor} : RightTabsProps) => {
   return <Tabs defaultActiveKey="1" type="card">

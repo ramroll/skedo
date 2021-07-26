@@ -7,7 +7,6 @@ require.context('./local', true, /\.tsx$/)
 	.forEach( (key : string) => {
 		key = key.replace('./', '')
 		const [a,] = key.split('.')
-		debugger
 		localComponentsMap['local.' + a] = require(`./local/${key}`).default
 	})
 

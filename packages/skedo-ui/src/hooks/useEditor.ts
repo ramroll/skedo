@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import EditorModel from "../object/EditorModel"
+import UIModel from "../object/UIModel"
 import {pageRemote, fileRemote, compose} from '@skedo/request'
 import { boxDescriptor, NodeJsonStructure } from "@skedo/core"
 
@@ -23,9 +23,9 @@ const json : NodeJsonStructure = {
   },
 }
 
-const useEditor = (pageName : string) : [EditorModel | null] => {
+const useEditor = (pageName : string) : [UIModel | null] => {
 	
-	const [editor, setEditor] = useState<EditorModel | null>(null)
+	const [editor, setEditor] = useState<UIModel | null>(null)
 
 	useEffect(() => {
 
@@ -39,10 +39,10 @@ const useEditor = (pageName : string) : [EditorModel | null] => {
 			const result = await svcCall(pageName)
 
 			if(!result.success) {
-				setEditor(new EditorModel(json, pageName))
+				setEditor(new UIModel(json, pageName))
 			} else {
 				const page = JSON.parse(result.data)
-				setEditor(new EditorModel(page, pageName))
+				setEditor(new UIModel(page, pageName))
 			}
 		}
 

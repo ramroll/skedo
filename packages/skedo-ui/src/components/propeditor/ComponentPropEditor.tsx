@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { EditorModel } from '../../object/EditorModel'
+import { UIModel } from '../../object/UIModel'
 import { Topic } from '@skedo/core'
 import style from './prop-editor.module.scss'
 import "./antd-patch.css"
@@ -9,7 +9,7 @@ import "./antd-patch.css"
 import PropertyGroup from './PropertyGroup'
 
 interface PropEditorProps {
-  editor : EditorModel,
+  editor : UIModel,
 }
 
 const ComponentPropEditor = ({editor} : PropEditorProps) => {

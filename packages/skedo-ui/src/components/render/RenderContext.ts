@@ -1,10 +1,10 @@
 import { CordNew, Rect } from '@skedo/core'
 import React from 'react'
-import EditorModel from '../../object/EditorModel'
+import UIModel from '../../object/UIModel'
 
 
 const RenderContext = React.createContext<{
-	editor? : EditorModel,
+	editor? : UIModel,
 	cord : CordNew
 }>({
 	cord : new CordNew(Rect.ZERO),

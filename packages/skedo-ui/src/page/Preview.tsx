@@ -18,7 +18,7 @@ const Preview = () => {
   return (
     <div>
       <TitleBar pageName={pageName} name={"preview"} />
-      <div className={style.container}>
+      <div className={style['preview-container']}>
         <NodeRender node={pageObj.root} />
       </div>
     </div>

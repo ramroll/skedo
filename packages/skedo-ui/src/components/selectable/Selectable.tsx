@@ -1,7 +1,7 @@
 
 import  { MouseEvent, useRef, useMemo, useEffect, MouseEventHandler, useContext} from "react"
 import {Node} from '@skedo/core'
-import { UIEvents } from "../../object/EditorModel"
+import { UIEvents } from "../../object/UIModel"
 import ResizerNew from '../../object/Resizer.new'
 import RenderContext from "../render/RenderContext"
 import styles from './selectable.module.scss'

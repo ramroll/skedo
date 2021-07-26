@@ -1,4 +1,5 @@
 import { ComponentClass } from 'react'
+// @ts-ignore
 import * as Icons from '@ant-design/icons'
 import style from './component.module.scss'
 

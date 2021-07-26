@@ -1,6 +1,6 @@
 import { NodeType as Node, Emiter, GroupMeta, Topic } from "@skedo/core"
 import SelectionNew from './Selection.new'
-import { EditorModel } from "./EditorModel"
+import { UIModel } from "./UIModel"
 import PropItem from './PropItem'
 
 
@@ -9,7 +9,7 @@ export default class PropertyEditor extends Emiter<Topic>{
   groups : Array<GroupMeta> 
   props : {[name : string] : PropItem}
   selection : SelectionNew
-  constructor(editor : EditorModel){
+  constructor(editor : UIModel){
     super()
     this.groups = [] 
     this.props = {}

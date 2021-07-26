@@ -1,4 +1,4 @@
-import EditorModel from "../../object/EditorModel";
+import UIModel from "../../object/UIModel";
 import {Bridge, Node} from '@skedo/core'
 
 export type NodeRenderProps = {

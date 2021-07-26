@@ -5,7 +5,7 @@ import { NodeRenderProps, RenderedComponentProps } from './render.types'
 import Draggable from '../draggable/Draggable'
 import Selectable from '../selectable/Selectable'
 import RenderContext from './RenderContext'
-import { UIEvents } from '../../object/EditorModel'
+import { UIEvents } from '../../object/UIModel'
 import { useSubscribe } from '../../hooks/useSubscribe'
 import getLocalComponentByURL from './getLocalComponentByURL'
 
