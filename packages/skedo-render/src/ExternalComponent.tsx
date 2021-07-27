@@ -93,7 +93,7 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 						})
 					} else {
 						/// TODO : normalize component type in meta config 
-						throw new Error("Unkonw component Type")
+						throw new Error("Unkonw component Type:" + node.getName())
 						
 					}
 				})()

@@ -122,6 +122,7 @@ const NodeRender = ({node } : NodeRenderProps) => {
 
   if(node.meta.url) {
     const localComponent = getLocalComponentByURL(node.meta.url)
+    console.log(node.meta.url)
     if(localComponent) {
       return <InnerRender C={localComponent} node={node}  />
     }

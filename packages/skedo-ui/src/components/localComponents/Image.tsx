@@ -3,12 +3,12 @@ import {Bridge} from '@skedo/core'
 import style from './component.module.scss'
 import { fileRemote } from '@skedo/request'
 
-interface ImageUPloaderProps {
+interface ImageProps {
   img : string,
   bridge : Bridge
 }
 
-const ImageUploader = ({img , bridge} : ImageUPloaderProps) => {
+const Image = ({img , bridge} : ImageProps) => {
 
   const [ver, setVer] = useState(0)
 
@@ -37,4 +37,4 @@ const ImageUploader = ({img , bridge} : ImageUPloaderProps) => {
   )
 }
 
-export default ImageUploader
+export default Image

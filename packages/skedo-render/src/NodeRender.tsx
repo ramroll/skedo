@@ -34,6 +34,7 @@ function Styled({
         top : sizeUnitToString(box.top),
         width: sizeUnitToString(box.width),
         height: sizeUnitToString(box.height),
+        overflow : "hidden",
         ...style,
         ...node.getStyleObject(),
       }}

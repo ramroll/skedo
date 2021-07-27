@@ -86,7 +86,11 @@ export class Page extends Emiter<Topic>{
       json.name
     )
     
+    if(json.id) {
+      this.id_base = Math.max(this.id_base, json.id + 1)
+    }
     const id = json.id || this.createId() 
+    
     const instanceData = json.id ? 
       fromJS(json) : meta.createData(id, json.box as BoxDescriptor) 
     const node = new Node(meta, instanceData as NodeData)
