@@ -18,6 +18,7 @@ export enum Topic {
   // New Event System
   NewNodeAdded,
   NodeMoved,
+  NodeChildrenChanged,
   SelectionChanged,
   AssistLinesChanged,
   MouseUpEventPass,

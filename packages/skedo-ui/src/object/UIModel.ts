@@ -128,6 +128,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
 
 
     this.describe("大家好！我是小师叔，这里在处理拖拽的逻辑", (register) => {
+
       const handlerSyncMoving = throttle((node : Node, vec : [number, number]) => {
         const absRect = node.absRect()
         const receiver = NodeSelector.select(this.root, [absRect.left , absRect.top ], node)
@@ -147,6 +148,19 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
       })
   
       register(UIStates.Moved, UIStates.Selected, UIEvents.AUTO, () => {
+        this.selection.forEach(node => {
+
+          const absRect = node.absRect()
+          const position : [number, number] = [absRect.centerX(), absRect.centerY()] 
+          const receiver = NodeSelector.select(this.root, position, node)
+          const nodeParent = node.getParent()
+          if(receiver !== nodeParent) {
+            console.log('receiver', receiver)
+            receiver!.add(node)
+            nodeParent.emit(Topic.NodeChildrenChanged)
+            receiver?.emit(Topic.NodeChildrenChanged)
+          }
+        })
       })
   
     })

@@ -355,7 +355,6 @@ export class Node extends InstanceData
     if (node.getParent()) {
       const p = node.getParent()
       p.remove(node)
-      p.emit(Topic.Updated)
     }
 
     node.setParent(this)
@@ -373,7 +372,6 @@ export class Node extends InstanceData
         return children
       }
     )
-    this.emit(Topic.Updated)
   }
 
 
@@ -382,28 +380,6 @@ export class Node extends InstanceData
   }
 
 
-
-
-
-  static moveA2B = (a: Node, b: Node) => {
-    if (b === a.getParent()) {
-      return
-    }
-    const [x, y] = a.absPosition()
-    const [sx, sy] = b.absPosition()
-    console.debug(
-      "[node]",
-      "moveA2B",
-      `x=${x},y=${y},sx=${sx}, sy=${sy}`
-    )
-    a.setXY(x - sx, y - sy)
-    if (a.getParent()) {
-      const p = a.getParent()
-      a.getParent().remove(a)
-      p.emit(Topic.Updated)
-    }
-    b.add(a)
-  }
 
   public remove (node: Node) {
     this.updateInstanceData(

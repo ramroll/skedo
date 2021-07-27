@@ -1,1 +1,1 @@
-export * from "./NodeRender"
+export * from "./component/NodeRender"

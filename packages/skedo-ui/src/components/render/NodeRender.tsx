@@ -74,7 +74,7 @@ function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
   useSubscribe(
     [
       [editor, Topic.SelectionChanged],
-      [node, [Topic.Resized, Topic.NodeMoved, Topic.NodePropUpdated]],
+      [node, [Topic.Resized, Topic.NodeMoved, Topic.NodePropUpdated, Topic.NodeChildrenChanged]],
     ],
     () => {
       setVer((x) => x + 1)

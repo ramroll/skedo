@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react'
 import { Bridge, Node, sizeUnitToString, NodeRenderProps, RenderedComponentProps } from '@skedo/core'
 import ExternalComponent from './ExternalComponent'
 import RenderContext from './RenderContext'
-import getLocalComponentByURL from './getLocalComponentByURL'
+import getLocalComponentByURL from '../getLocalComponentByURL'
 
 function __render(node : Node, key ? : any){
   return <NodeRender node={node} key={key} />
