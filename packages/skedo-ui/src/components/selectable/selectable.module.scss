@@ -1,0 +1,74 @@
+.selectable {
+  width :100%;
+  height : 100%;
+}
+.selection_frame{
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  box-sizing: content-box;
+  border : 1px solid #999;
+  top : 0;
+  left : 0;
+  z-index: -1;
+}
+
+
+.cube{
+  width : 9px;
+  height : 9px;
+  background-color : white;
+  position : absolute;
+  border : 1px solid #999;
+  z-index:100
+}
+
+.cube_topleft {
+  top : -5px; 
+  left : -5px;
+  cursor : nw-resize;
+}
+
+.cube_topmiddle{
+  top : -5px; 
+  left : calc(50% - 5px);
+  cursor : n-resize;
+}
+
+.cube_topright{
+  top : -5px; 
+  left : calc(100% - 4px);
+  cursor : ne-resize;
+}
+
+.cube_middleright{
+  top : calc(50% - 5px); 
+  left : calc(100% - 4px);
+  cursor : w-resize;
+
+}
+
+.cube_bottomright{
+  top : calc(100% - 4px); 
+  left : calc(100% - 4px);
+  cursor : nw-resize;
+}
+
+.cube_bottommiddle{
+  top : calc(100% - 4px); 
+  left : calc(50% - 4px);
+  cursor : n-resize;
+}
+
+.cube_bottomleft{
+  top : calc(100% - 4px); 
+  left : -5px;
+  cursor : sw-resize;
+
+}
+
+.cube_middleleft{
+  top : calc(50% - 5px); 
+  left : -5px;
+  cursor: w-resize;
+}

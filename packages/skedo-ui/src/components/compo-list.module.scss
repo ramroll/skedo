@@ -1,0 +1,55 @@
+
+
+/** 左侧组件选择器  */
+.component-list {
+  background : #ececec;
+  width : 162px; 
+  min-height: 600px;
+  flex-shrink: 0;
+  position: relative;
+  height : 100%;
+  .component-list-inner {
+    position : relative;
+    h2{
+      margin : 0;
+      font-size: 14px;
+      padding : 2px 5px;
+    }
+  } 
+
+  .component-list-group {
+    background : white;
+    margin-top : 10px;
+  }
+}
+.component-list-item:nth-child(odd) {
+  margin-right : 0
+}
+
+.component-list-item {
+  width : 80px;
+  margin-right : 2px;
+  margin-bottom : 1px;
+  height : 90px;
+  border : 1px solid #eee;
+  float : left;
+  display : flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: white;
+  ::after { 
+    clear : both;
+  }
+  img {
+    margin-top : 10px;
+    max-width: 40px;
+    max-height: 40px;
+  }
+  .text {
+    height :30px;
+    line-height: 15px;
+    font-size :12px;
+  }
+}
+
