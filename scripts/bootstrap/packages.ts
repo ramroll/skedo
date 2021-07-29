@@ -88,7 +88,8 @@ class Packages {
 		const links = new Set()
 		this.packages.forEach(pkg => pkg.getDevLinks().forEach((link) => {
 			if(!links.has(link)) {
-				pkg.link()
+				const pkgToLink = this.find(link)
+				pkgToLink.link()
 			}
 			links.add(link)
 		}))
