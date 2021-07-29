@@ -1,6 +1,6 @@
 {
-  "name": "upload",
-  "version": "1.0.0",
+  "name": "@skedo/upload-service",
+  "version": "0.0.2",
   "description": "",
   "private": true,
   "egg": {
@@ -55,6 +55,13 @@
   "eslintIgnore": [
     "coverage"
   ],
+  "skedo" : {
+    "type" : "service",
+    "port" : 7001,
+    "devLinks" : [
+      "@skedo/svc-config"
+    ]
+  },
   "author": "",
   "license": "MIT"
 }

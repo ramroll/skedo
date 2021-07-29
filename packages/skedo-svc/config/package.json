@@ -1,6 +1,6 @@
 {
   "name": "@skedo/svc-config",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "",
   "main": "src/index.ts",
   "scripts": {
@@ -10,5 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^16.4.1"
+  },
+  "skedo" : {
+    "type" : "lib"
   }
 }

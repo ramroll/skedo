@@ -1,0 +1,8 @@
+{
+	"compilerOptions": {
+		"lib": ["DOM", "esnext"],
+		"esModuleInterop" : true,
+		"downlevelIteration": true,
+	},
+	"include": ["./scripts/**/*"]
+}
