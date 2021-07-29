@@ -30,9 +30,6 @@ class Packages {
 	}
 
 	public start(){
-		execSync("yarn install", {
-			cwd : path.resolve(__dirname, '../..')
-		})
 
 		if(!this.marks['installed']) {
 			this.reinstall()
@@ -132,7 +129,8 @@ class Packages {
 		this.packages.forEach(pkg => pkg.npmInstall())
 		this.installLinks()
 		this.packages.forEach(pkg => pkg.runBootstrapScript())
-
+		this.marks['installed'] = true
+		this.saveMark()
 	}
 
 
