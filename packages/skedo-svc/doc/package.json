@@ -1,6 +1,6 @@
 {
-  "name": "@skedo/svc-doc",
-  "version": "1.0.0",
+  "name": "@skedo/doc-service",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -21,5 +21,13 @@
     "nodemon": "^2.0.10",
     "sequelize": "^6.6.5",
     "sqlite3": "^5.0.2"
+  },
+  "skedo" : {
+    "type" : "service",
+    "port" : 7002,
+    "bootstrap" : "./src/scripts/force_build_db.ts",
+    "devLinks" : [
+      "@skedo/svc-config"
+    ]
   }
 }

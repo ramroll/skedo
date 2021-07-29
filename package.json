@@ -1,11 +1,17 @@
 {
   "name": "@skedo/project",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env FORCE_COLOR=1 pm2 start ./scripts/ecosystem.config.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "yarn && ts-node ./scripts/bootstrap/bootstrap.ts start",
+    "reinstall": "ts-node ./scripts/bootstrap/bootstrap.ts reinstall",
+    "install": "ts-node ./scripts/bootstrap/bootstrap.ts install",
+    "install-link" : "ts-node ./scripts/bootstrap/bootstrap.ts install-link",
+    "list" : "ts-node ./scripts/bootstrap/bootstrap.ts list",
+    "dev" : "ts-node ./scripts/bootstrap/bootstrap.ts dev",
+    "set-all-ver" : "ts-node ./scripts/bootstrap/bootstrap.ts set-all-ver",
+    "help" : "ts-node ./scripts/bootstrap/bootstrap.ts help"
   },
   "repository": {
     "type": "git",
@@ -14,8 +20,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/node": "^16.4.4",
+    "@types/yargs-parser": "^20.2.1",
     "chalk": "^4.1.1",
+    "charset-detector": "^0.0.2",
     "cross-env": "^7.0.3",
-    "pm2": "^5.1.0"
+    "inquirer": "^8.1.2",
+    "pm2": "^5.1.0",
+    "ramda": "^0.27.1",
+    "yargs-parser": "^20.2.9"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^7.3.3"
   }
 }
