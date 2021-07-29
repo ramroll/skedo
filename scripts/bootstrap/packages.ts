@@ -1,6 +1,7 @@
 import { Package } from "./package";
 import fs from 'fs'
 import path from "path";
+import { execSync } from "child_process";
 
 class Packages {
 
@@ -29,6 +30,10 @@ class Packages {
 	}
 
 	public start(){
+		execSync("yarn install", {
+			cwd : path.resolve(__dirname, '../..')
+		})
+
 		if(!this.marks['installed']) {
 			this.reinstall()
 		}
@@ -110,7 +115,7 @@ class Packages {
 
 	public loadMarks(){
 		try{
-			const content = fs.readFileSync(path.resolve(__dirname, "../../.skedo-mark"), 'utf8')
+			const content = fs.readFileSync(path.resolve(__dirname, "../../.skedo"), 'utf8')
 			const json = JSON.parse(content)
 			this.marks = json
 		} catch(ex){

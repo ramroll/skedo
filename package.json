@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "yarn && ts-node ./scripts/bootstrap/bootstrap.ts start",
+    "start": "ts-node ./scripts/bootstrap/bootstrap.ts start",
     "reinstall": "ts-node ./scripts/bootstrap/bootstrap.ts reinstall",
     "install": "ts-node ./scripts/bootstrap/bootstrap.ts install",
     "install-link" : "ts-node ./scripts/bootstrap/bootstrap.ts install-link",
