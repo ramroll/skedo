@@ -27,6 +27,9 @@ async function run() {
 		case "install-link":
 			projects.installLinks()
 			break
+		case "deps":
+			projects.deps()
+			break
     case "dev":
       let name = argv.name
       if (!name) {

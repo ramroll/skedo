@@ -11,6 +11,7 @@
     "list" : "ts-node ./scripts/bootstrap/bootstrap.ts list",
     "dev" : "ts-node ./scripts/bootstrap/bootstrap.ts dev",
     "set-all-ver" : "ts-node ./scripts/bootstrap/bootstrap.ts set-all-ver",
+    "deps" : "ts-node ./scripts/bootstrap/bootstrap.ts deps",
     "help" : "ts-node ./scripts/bootstrap/bootstrap.ts help"
   },
   "repository": {

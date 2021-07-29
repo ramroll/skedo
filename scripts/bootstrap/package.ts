@@ -12,7 +12,13 @@ interface PackageJSON{
 		type? : "service" | "app" | "lib" | "cli",
 		port? : number,
 		bootstrap ? : string
-	}
+	},
+	dependencies : {
+		[dep : string] : string
+	},
+	devDependencies: {
+		[dep : string] : string
+	},
 }
 export class Package{
 
@@ -88,9 +94,30 @@ export class Package{
 		console.log(chalk.cyanBright(`link ${this.getName()}`))
 		this.exec('yarn link')
 	}
+
+	public getDeps(){
+		return [this.json.dependencies,this.json.devDependencies]
+	} 
+
+	public updateDeps(mDeps : Map<string, [number, string]>, mDevDeps : Map<string, [number, string]>){
+		for(let key in this.json.dependencies) {
+			if(mDeps.get(key)[0] > 1) {
+				console.log('delete', key)
+				// delete this.json.dependencies[key]
+			}
+		}
+		for(let key in this.json.devDependencies) {
+			if(mDevDeps.get(key)[0] > 1) {
+				console.log('delete', key)
+				// delete this.json.dependencies[key]
+			}
+		}
+	}
+
 	public npmInstall(){
 		this.exec('yarn install')
 	}
+
 
 	public reNpmInstall(){
 		this.exec("pm2 stop all", true)

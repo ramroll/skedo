@@ -6,13 +6,14 @@ import { execSync } from "child_process";
 class Packages {
 
 	packages : Array<Package>
+	package : Package
 
 	ver : [number, number, number]
 	marks :any 
 
 	constructor(packages : Array<Package>){
 		this.packages = packages.filter((x) => ['service', 'app', 'lib', 'cli'].indexOf(x.getSkedoType()) !== -1)
-
+		this.package = new Package("package.json", path.resolve(__dirname, '../../')) 
 
 		// 版本号为最大的版本号
 		const vers = packages.map(x => x.getVer())
@@ -27,6 +28,48 @@ class Packages {
 		const ver : [number, number, number] = [...this.ver]
 		ver[1] ++
 		pkg.setVer(ver)
+	}
+
+	public deps(){
+
+		function depsCountMap(mDeps: Map<string,[number, string]>, deps : any){
+			Object.keys(deps || {}).map(dep => {
+				if(!mDeps.has(dep)) {
+					mDeps.set(dep, [1, deps[dep]])
+				} else {
+					const x = mDeps.get(dep)
+					mDeps.set(dep, [x[0] + 1, x[1]])
+				}
+			})
+			return mDeps
+		}
+
+		const mDeps = new Map<string, [number, string]>()
+		const mDevDeps = new Map<string, [number, string]>()
+		this.packages.forEach(pkg => {
+			const [deps, devDeps] = pkg.getDeps()
+			depsCountMap(mDeps, deps)
+			depsCountMap(mDevDeps, devDeps)
+		})
+
+		this.packages.forEach(pkg => {
+			pkg.updateDeps(mDeps, mDevDeps)
+		})
+
+		for (let key of mDeps.keys() ){
+			if ( mDeps.get(key)[0] > 0 ) {
+				const version = mDeps.get(key)[1]
+				// this.package.setDep(key, mDeps.get(key)[1])
+				console.log("extract dep", key, version)
+			}
+		}
+		for (let key of mDevDeps.keys() ){
+			if ( mDevDeps.get(key)[0] > 0 ) {
+				const version = mDevDeps.get(key)[1]
+				console.log("extract dev dep", key, version)
+			}
+		}
+
 	}
 
 	public start(){
