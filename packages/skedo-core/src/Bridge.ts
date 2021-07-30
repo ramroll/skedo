@@ -9,21 +9,11 @@ export class Bridge {
     this.node = node
   }
 
-  public setEditMode(mode :boolean){
-    this.node.setEditMode(mode)
-    this.node.emit(Topic.Updated)
-  }
-
   public setPropsValue(key : string, value : any)  {
     const passProps = this.node.getPassProps()
     this.node.setpassProps(passProps.set(key, value))
-    this.node.emit(Topic.Updated)
+    this.node.emit(Topic.NodePropUpdated)
   }
-
-  public triggerAutoResizing() {
-    this.node.emit(Topic.ResizeModelUpdated)
-  }
-
 
   static getMockBridge(){
     const node : unknown = new Emiter<Topic>()
@@ -43,6 +33,10 @@ export class Bridge {
     }
     return bridge
 
+  }
+
+  public getNode(){
+    return this.node
   }
 
   renderAsReact(node : Node, key? : any, childrenProps? : any) : JSX.Element {

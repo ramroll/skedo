@@ -7,6 +7,10 @@ export default class SelectionNew {
 		this.sel.add(node)
 	}
 
+	public size(){
+		return this.sel.size
+	}
+
 	public contains(node : Node) {
 		return this.sel.has(node)
 	}

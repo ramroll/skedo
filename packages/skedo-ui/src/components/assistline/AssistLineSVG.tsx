@@ -28,7 +28,6 @@ const AssistLineSVG =  ({lines, show} : AssistLinesProps) => {
       }
       if(line.dir === 0) {
         const relativePos = Number(line.pos)
-        console.log(context.cord.scrollX)
         return (
           <line
             style={style}
@@ -42,7 +41,6 @@ const AssistLineSVG =  ({lines, show} : AssistLinesProps) => {
       }
       else {
         const relativePos = Number(line.pos)
-        console.log(context.cord.scrollX)
         return (
           <line
             style={style}

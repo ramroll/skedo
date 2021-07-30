@@ -18,22 +18,12 @@ const Button = ({text, fontSize, fontStyle = new Set<string>(), align, color, fo
   const ref = useRef<HTMLButtonElement>(null)
   const iptRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    const sub = bridge.node.on(Topic.EditMode)
-      .subscribe((value) => {
-        setState(value ? 1 : 0)
-      })
-    return () => {
-      sub && sub.unsubscribe()
-    }
-  }, [bridge.node])
 
 
   useEffect(() => {
     if(state === 1) {
       iptRef.current?.focus()
     }
-    bridge.triggerAutoResizing()
   }, [state])
 
   useEffect(() => {
