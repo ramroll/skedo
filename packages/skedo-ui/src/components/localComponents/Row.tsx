@@ -1,9 +1,8 @@
 import { useContext, useEffect, useRef } from 'react'
-import { Bridge, CordNew, Topic } from '@skedo/core'
+import { Bridge, Topic } from '@skedo/core'
 import RenderContext from '../render/RenderContext'
 import classes from './component.module.scss'
 import ListRender from './ListRender'
-import useBound from '../../hooks/useBound'
 const Row = ({bridge} : {bridge : Bridge}) => {
 
 	const ctx = useContext(RenderContext)
