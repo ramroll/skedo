@@ -37,6 +37,7 @@ export type SkedoComponentProps = {
 
 export type NodeRenderProps = {
 	node : Node,
+	inheritProps? : any
 }
 
 

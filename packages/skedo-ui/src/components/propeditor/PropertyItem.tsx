@@ -11,6 +11,7 @@ import Integer from './Integer'
 import StringInput from './StringInput'
 import PropItem from '../../object/PropItem'
 import SizeInput from './SizeInput'
+import Flex from './Flex'
 
 const Option = Select.Option
 
@@ -21,6 +22,8 @@ interface PropItemProps {
 }
 function renderProp(prop : PropItem, disabled : boolean){
   switch(prop.meta.type) {
+    case 'flex':
+      return <Flex prop={prop} />
     case "name":
       return <StringInput regex={/^[a-zA-Z0-9]*$/} prop={prop} />
     case "integer":

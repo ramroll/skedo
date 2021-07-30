@@ -4,7 +4,7 @@ import { Emiter } from './Emiter'
 
 export class Bridge {
   node : Node 
-  renderForReact ? : (node : Node, key ? : any) => JSX.Element
+  renderForReact ? : (node : Node, key ? : any, childrenProps? : any) => JSX.Element
   constructor(node : Node){
     this.node = node
   }
@@ -45,8 +45,8 @@ export class Bridge {
 
   }
 
-  renderAsReact(node : Node, key? : any) : JSX.Element {
-    return this.renderForReact!(node, key)
+  renderAsReact(node : Node, key? : any, childrenProps? : any) : JSX.Element {
+    return this.renderForReact!(node, key, childrenProps)
   }
 
   renderAsVue(){

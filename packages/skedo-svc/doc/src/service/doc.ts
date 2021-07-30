@@ -29,6 +29,7 @@ export class DocService {
 
 
   public async put(values : any) {
+    console.log(values)
     const idx = this.idx() 
     const one = await Doc.findOne({
       where : {

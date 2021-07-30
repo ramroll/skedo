@@ -1,5 +1,6 @@
 group : basic
-name: "button"
+name: button
+componentType: react
 imageUrl : "https://voice-static.oss-accelerate.aliyuncs.com//img/70680ec911a742b4ff60b041308f1424dc701efc.png"
 title : "按钮"
 box : {

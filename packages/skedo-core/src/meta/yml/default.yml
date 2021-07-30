@@ -1,6 +1,8 @@
 name : ""
-type : ""
+componentType : ""
 group : ""
+imageUrl : ""
+title : ""
 editor : 
   groups:
   - name: shape
@@ -114,6 +116,13 @@ editor :
       type : color
       path : style.backgroundColor
 
+  - name: flex
+    title : 布局设置(flex)
+    props :
+    - name : flex
+      type : integer 
+      path : style.flex
+      label : flex
   - name: basic
     title : Codeless 
     props :

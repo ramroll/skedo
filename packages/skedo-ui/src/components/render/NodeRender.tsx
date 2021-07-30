@@ -9,8 +9,8 @@ import { UIEvents } from '../../object/UIModel'
 import { useSubscribe } from '../../hooks/useSubscribe'
 import getLocalComponentByURL from './getLocalComponentByURL'
 
-function __render(node : Node, key ? : any){
-  return <NodeRender node={node} key={key} />
+function __render(node : Node, key ? : any, childrenProps? : any){
+  return <NodeRender node={node} key={key} inheritProps={childrenProps} />
 }
 
 function Styled({
@@ -47,6 +47,7 @@ function Styled({
     <div
       ref={ref}
       draggable={draggable}
+      {...{"data-skedo-type" : node.getName()}}
       style={{
         width: sizeUnitToString(box.width),
         height: sizeUnitToString(box.height),
@@ -62,7 +63,7 @@ function Styled({
   )
 }
 
-function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
+function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.ElementType}){
   const bridge = new Bridge(node)
   bridge.renderForReact = __render
   const passProps = node.getPassProps().toJS()
@@ -91,6 +92,7 @@ function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
   const box = node.getBox() 
   return (
     <Draggable
+      style={inheritProps?.style}
       enabled={node.isDraggable()}
       initialPosition={[box.left.value + box.left.unit, box.top.value + box.top.unit]}
       onDrag={e => {
@@ -102,7 +104,6 @@ function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
     >
       <Styled
         node={node}
-        style={{ position: "absolute" }}
       >
         <Selectable
           selected={editor.selection.contains(node)}
@@ -118,13 +119,12 @@ function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
 
 } 
 
-const NodeRender = ({node } : NodeRenderProps) => {
+const NodeRender = ({node, inheritProps } : NodeRenderProps) => {
 
   if(node.meta.url) {
     const localComponent = getLocalComponentByURL(node.meta.url)
-    console.log(node.meta.url)
     if(localComponent) {
-      return <InnerRender C={localComponent} node={node}  />
+      return <InnerRender inheritProps={inheritProps} C={localComponent} node={node}  />
     }
 
     const C = (props: RenderedComponentProps) => (
@@ -134,7 +134,7 @@ const NodeRender = ({node } : NodeRenderProps) => {
         bridge={props.bridge}
       />
     )
-    return <InnerRender C={C} node={node} />
+    return <InnerRender C={C} node={node} inheritProps={inheritProps} />
   }
   throw new Error(`Component ${node.getGroup() + "." + node.getName()} not found.`)
 }

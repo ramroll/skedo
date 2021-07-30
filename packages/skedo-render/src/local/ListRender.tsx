@@ -1,5 +1,5 @@
 import { SkedoComponentProps, Topic } from '@skedo/core'
-export default ({bridge, className} : SkedoComponentProps & {className : string}) => {
+export default ({bridge} : SkedoComponentProps ) => {
 	const node = bridge.node
 	return <>
 		{node.getChildren().map(childNode => {

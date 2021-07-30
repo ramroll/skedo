@@ -11,7 +11,7 @@ function useValue<T>(initialValue : (() => T | T), prop : PropItem) : [T, React.
 	}, [prop.value])
 
 	useEffect(()=>{
-		if(value !== null && prop.value !== value) {
+		if(prop.value !== value) {
 			prop.set(value)
 		}
 	},[value])

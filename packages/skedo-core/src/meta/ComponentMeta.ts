@@ -5,7 +5,6 @@ import {Map as ImmutableMap, fromJS} from 'immutable'
 import { boxDescriptor } from '../BoxDescriptor'
 import { BoxDescriptor, BoxDescriptorInput } from '../standard.types'
 
-
 export interface PropConfig {
   name : string,
   props? : any
@@ -75,7 +74,10 @@ export class ComponentMeta {
   props : {[name : string] : PropMeta}
   groups : Array<GroupMeta>
 
+  
+
   constructor(config : ComponentMetaConfig) {
+    
     this.type = config.type
     this.name = config.name
     this.group = config.group
@@ -102,6 +104,7 @@ export class ComponentMeta {
       }
     }
   }
+
 
   createData(id : number, box : BoxDescriptor | null) {
 

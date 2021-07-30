@@ -32,6 +32,10 @@ const Skedo = () => {
       return
     }
 
+    setInterval(() => {
+      editor.save()
+    }, 2000)
+
   }, [editor])
 
   if(!editor) {

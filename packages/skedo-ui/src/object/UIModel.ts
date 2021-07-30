@@ -1,6 +1,7 @@
 import StateMachine from './StateMachine'
 import PropertyEditor from './PropertyEditor'
 import { AssistLine } from './AssistLine'
+import md5 from 'md5'
 import {
   ComponentMeta,
   Logger,
@@ -54,6 +55,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
   root : Node
   startSelVer : number 
   selection : SelectionNew 
+  contentHash : string
   propertyEditor : PropertyEditor
   page : Page
   dropCompoentMeta : ComponentMeta | null = null
@@ -75,11 +77,9 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
     this.startSelVer = 0
     this.logger = new Logger("editor-model")
     this.assistLine = new AssistLine()
+    this.contentHash = md5(JSON.stringify(json))
 
 
-    setInterval(() => {
-      this.save()
-    }, 2000)
     // @ts-ignore
     // 调试用
     window["ui"] = this
@@ -235,17 +235,25 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
     return UIStates[this.s]
   }
 
+  
 
   public async save() {
     const exporter = new PageExporter()
     const json = exporter.exportToJSON(this.page.pageNode)
     const text = JSON.stringify(json)
+    const contentHash = md5(text)
+    if(this.contentHash === contentHash) {
+      return
+    }
+    this.contentHash = contentHash
+    
     
     const composedRemoteCall  = compose(fileRemote.post1, pageRemote.put, (data) => {
       return [this.page.name, data]
     })
 
-    const result = await composedRemoteCall("/page", "test.json", "1.0.0", text)
+    const fileName = this.contentHash + '.json'
+    await composedRemoteCall("/page", fileName, "1.0.0", text)
     this.logger.log('save', json)
   }
 

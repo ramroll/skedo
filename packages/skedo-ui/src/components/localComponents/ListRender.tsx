@@ -1,6 +1,8 @@
 import { SkedoComponentProps, Topic } from '@skedo/core'
 import { useEffect, useState } from 'react'
-export default ({bridge, className} : SkedoComponentProps & {className : string}) => {
+export default ({bridge, childrenProps} : SkedoComponentProps & {
+	childrenProps? : any
+}) => {
 	const node = bridge.node
 	const [ver, setVer] = useState(0)
 
@@ -17,7 +19,7 @@ export default ({bridge, className} : SkedoComponentProps & {className : string}
 
 	return <>
 		{node.getChildren().map(childNode => {
-			return bridge.renderAsReact(childNode, childNode.getId())
+			return bridge.renderAsReact(childNode, childNode.getId(), childrenProps)
 		})}
 	</>
 }
