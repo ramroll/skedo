@@ -32,6 +32,10 @@ const Integer = ({ prop, disabled }: IntegerProps) => {
       value={value}
 			style={{width : 60}}
       onKeyDown={(e) => {
+				if(e.key === 'Backspace' || e.key === "Delete") {
+					return
+				}
+				
 				if(e.key === "ArrowUp") {
 					setValue( value => {
 						if(value === null) {return 1}
@@ -56,7 +60,11 @@ const Integer = ({ prop, disabled }: IntegerProps) => {
       }}
       onChange={(e) => {
         const value = e.target.value
-				setValue(parseInt(value))
+				if(value === "") {
+					setValue(null)
+				} else {
+					setValue(parseInt(value))
+				}
       }}
     />
   )

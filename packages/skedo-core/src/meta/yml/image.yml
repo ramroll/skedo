@@ -1,5 +1,6 @@
 group : basic
 name : "image"
+componentType: react
 imageUrl : https://voice-static.oss-accelerate.aliyuncs.com//img/e21bdefe4cb8a7ac9e7faa3b3ae6aec1e9b8b7bb.png
 title : 图片
 box : 

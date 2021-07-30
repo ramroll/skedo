@@ -1,5 +1,6 @@
 group : basic
 name: column 
+componentType: react
 imageUrl : https://voice-static.oss-accelerate.aliyuncs.com/img/4d10b18f29340958d103c152e9c8502e606ddba2.png
 title : 列容器 
 box :

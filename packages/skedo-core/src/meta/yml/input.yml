@@ -1,5 +1,6 @@
 group : basic
 name : input 
+componentType: react
 imageUrl : https://voice-static.oss-accelerate.aliyuncs.com//img/0806f4bf95c45186dbd4895ecb1c79544beff60d.png
 title : 输入框 
 box:

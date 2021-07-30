@@ -4,8 +4,8 @@ import ExternalComponent from './ExternalComponent'
 import RenderContext from './RenderContext'
 import getLocalComponentByURL from '../getLocalComponentByURL'
 
-function __render(node : Node, key ? : any){
-  return <NodeRender node={node} key={key} />
+function __render(node : Node, key ? : any, childrenProps? : any){
+  return <NodeRender node={node} key={key} inheritProps={childrenProps} />
 }
 
 function Styled({
@@ -46,17 +46,16 @@ function Styled({
   )
 }
 
-function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
+function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.ElementType}){
   const bridge = new Bridge(node)
   bridge.renderForReact = __render
   const passProps = node.getPassProps().toJS()
 
 
-  const box = node.getBox() 
   return (
       <Styled
         node={node}
-        style={{ position: "absolute" }}
+        style={{ position: "absolute", ...inheritProps?.style }}
       >
         <C bridge={bridge} {...passProps} />
       </Styled>
@@ -65,7 +64,7 @@ function InnerRender({node, C} : NodeRenderProps & {C : React.ElementType}){
 
 } 
 
-export const NodeRender = ({ node }: NodeRenderProps) => {
+export const NodeRender = ({ node, inheritProps }: NodeRenderProps) => {
   if(node.getName() === 'root') {
     node = node.getChildren()[0]
     node.setXY(0, 0)
@@ -86,7 +85,7 @@ export const NodeRender = ({ node }: NodeRenderProps) => {
         bridge={props.bridge}
       />
     )
-    return <InnerRender C={C} node={node} />
+    return <InnerRender C={C} node={node} inheritProps={inheritProps} />
   }
   throw new Error(
     `Component ${

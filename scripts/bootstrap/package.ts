@@ -149,7 +149,10 @@ export class Package{
 		switch (this.getSkedoType()) {
       case "app": {
 				const script = path.resolve(__dirname, './start-service.js')
-				this.exec(`pm2 start --name ${this.getName()} ${script}`, true)
+				this.exec(
+          `pm2 start --name ${this.getName()} --watch=true ${script}`,
+          true
+        )
 				// this.exec('npm run dev')
         break
 			}
@@ -159,7 +162,7 @@ export class Package{
 					break
 				}
 				const script = path.resolve(__dirname, './start-service.js')
-				this.exec(`pm2 start --name ${this.getName()} ${script}`, true, {
+				this.exec(`pm2 start --name ${this.getName()} --watch=true ${script}`, true, {
 					PORT : this.json.skedo.port
 				})
 				this.exec(`pm2 list`)

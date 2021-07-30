@@ -7,6 +7,7 @@ type DraggableProps = {
 	initialPosition : [string, string],
 	children : JSX.Element,
 	enabled : boolean,
+	style ? : any
 } & DragEvents 
 
 
@@ -23,13 +24,15 @@ const Draggable = (props : DraggableProps) : JSX.Element => {
 			position : 'absolute',
 			top : props.initialPosition[1] ,
 			left : props.initialPosition[0],
-			transform : `translate(${node.diffX}px, ${node.diffY}px)`
+			transform : `translate(${node.diffX}px, ${node.diffY}px)`,
+			...props.style
 		}
 	} : {
 		style : {
 			position : 'absolute',
 			top : props.initialPosition[1],
 			left : props.initialPosition[0],
+			...props.style
 		}
 	}
 

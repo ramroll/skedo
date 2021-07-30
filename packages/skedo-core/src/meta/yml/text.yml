@@ -1,5 +1,6 @@
 group : basic
 name : "text"
+componentType: react
 imageUrl : "https://voice-static.oss-accelerate.aliyuncs.com//img/9a0e8542a8728d8034f351ed6a46e5deb3fddedb.png"
 title : "文本"
 box :

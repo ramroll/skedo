@@ -6,10 +6,23 @@ import yaml from 'js-yaml'
 
 import {componentRemote} from '@skedo/request'
 
+import {Validator} from 'jsonschema'
+import metaSchema, {propMeta} from './metaSchema' 
+
 
 const metas: {[key:string] : ComponentMeta} = {}  
 const ymls: {[key:string] : ComponentMetaConfig} = {}  
 
+function validateConfig(file : string, config : ComponentMetaConfig) {
+  const v = new Validator()
+  const result = v.validate(config, metaSchema)
+
+  if(result.errors.length > 0) {
+    const error = result.errors[0]
+    throw new Error(`validate error in ${file}:` + error.stack)
+  }
+
+}
 // @ts-ignore
 require.context('./', true, /\.yml$/)
 	.keys()
@@ -23,12 +36,16 @@ require.context('./', true, /\.yml$/)
   }
 	})
 
+function loadDefault(){
+	const def : ComponentMetaConfig = require('./yml/default.yml')
+  return def
+}
 
 export class ComponentsLoader extends Emiter<Topic> {
 
 	static inst : ComponentsLoader  = new ComponentsLoader() 
 
-	static defaultProps : ComponentMetaConfig = require('./yml/default.yml')
+	static defaultProps : ComponentMetaConfig = loadDefault() 
 	state : number = 0
 	list : Array<ComponentMeta> = []
 
@@ -45,6 +62,7 @@ export class ComponentsLoader extends Emiter<Topic> {
       const customProps = ymls[key]
 
       const merged = mergeLeft(props, customProps)
+      validateConfig(key, merged)
       const meta = new ComponentMeta(merged)
       metas[key] = meta
     }

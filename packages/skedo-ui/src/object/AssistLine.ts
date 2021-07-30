@@ -104,7 +104,7 @@ export class AssistLine extends Emiter<Topic> {
     if (lines.length > 1) {
       // 根据距离最小原则选出少量的辅助线
       lines.sort((x, y) => x.distance - y.distance)
-      lines = lines.slice(0, 2)
+      lines = lines.slice(0, 1)
     }
 
     return lines
