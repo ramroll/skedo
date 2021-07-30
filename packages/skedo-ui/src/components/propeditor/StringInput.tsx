@@ -1,18 +1,17 @@
 import {Input} from 'antd'
-import PropItem from '../../object/PropItem'
+import { PropComponentProps } from './propeditor.types'
 import useValue from './useValue'
 interface IntegerProps {
-	prop : PropItem,
 	regex : RegExp
 }
 
 
-const StringInput = ({ regex, prop }: IntegerProps) => {
-  const [value, setValue] = useValue<string>(prop.value, prop)
+const StringInput = ({ regex, propValue, metaProps, onChange }: IntegerProps & PropComponentProps) => {
+  const [value, setValue] = useValue<string>(propValue, onChange)
   return (
     <Input
 			style={{width : 200}}
-      {...prop.meta.props}
+      {...metaProps}
       value={value}
       onKeyDown={(e) => {
         if (e.key === "Delete" || e.key === "Back") {

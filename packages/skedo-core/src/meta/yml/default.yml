@@ -76,11 +76,12 @@ editor :
       row : 0
     - name : border-style
       type : select
-      selections :
-        - value : solid
-          text : 实线 
-        - value : dashed
-          text : 虚线
+      props : 
+        selections :
+          - value : solid
+            text : 实线 
+          - value : dashed
+            text : 虚线
       default : solid
       path : style.borderStyle
       row : 0

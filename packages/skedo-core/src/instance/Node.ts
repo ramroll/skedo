@@ -107,9 +107,6 @@ class InstanceData extends Emiter<Topic> {
   private updateBoxValue(key : string, value : number) {
     this.updateInstanceData('box', box => {
       const item = box.get(key)
-      if(!item.get) {
-        debugger
-      }
       const unit = item.get('unit')
       if(unit === 'px') {
         box = box.setIn([key, 'value'], value)

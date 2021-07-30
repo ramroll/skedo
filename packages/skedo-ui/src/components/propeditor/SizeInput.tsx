@@ -3,13 +3,12 @@ import { debounce, parseSizeUnit, SizeUnit } from '@skedo/core'
 import PropItem from '../../object/PropItem'
 import useValue from './useValue'
 import { useEffect, useRef } from 'react'
+import { PropComponentProps } from './propeditor.types'
 interface SizeInputProps {
-	prop : PropItem,
-	disabled? : boolean
 }
 
-const SizeInput = ({ prop, disabled }: SizeInputProps) => {
-	const [value, setValue] = useValue<SizeUnit | null>(prop.value, prop)
+const SizeInput = ({ propValue, disabled, onChange, metaProps }: SizeInputProps & PropComponentProps) => {
+	const [value, setValue] = useValue<SizeUnit | null>(propValue, onChange)
 	const ref = useRef<any>(null)
 	const debouncedOnChange = debounce( (e) => {
 		const value = e.target.value
@@ -25,7 +24,7 @@ const SizeInput = ({ prop, disabled }: SizeInputProps) => {
   return (
     <Input
 			ref={ref}
-      {...prop.meta.props}
+      {...metaProps}
 			disabled={disabled}
       // initialValue={(value?.value || "") + (value?.unit || '')}
 			style={{width : 60}}
