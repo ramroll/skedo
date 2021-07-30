@@ -13,6 +13,7 @@ import metaSchema, {propMeta} from './metaSchema'
 const metas: {[key:string] : ComponentMeta} = {}  
 const ymls: {[key:string] : ComponentMetaConfig} = {}  
 
+
 function validateConfig(file : string, config : ComponentMetaConfig) {
   const v = new Validator()
   const result = v.validate(config, metaSchema)
@@ -23,6 +24,7 @@ function validateConfig(file : string, config : ComponentMetaConfig) {
   }
 
 }
+
 // @ts-ignore
 require.context('./', true, /\.yml$/)
 	.keys()
@@ -41,6 +43,9 @@ function loadDefault(){
   return def
 }
 
+/**
+ * 元数据的Repository
+ */
 export class ComponentsLoader extends Emiter<Topic> {
 
 	static inst : ComponentsLoader  = new ComponentsLoader() 

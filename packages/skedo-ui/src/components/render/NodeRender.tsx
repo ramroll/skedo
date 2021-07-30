@@ -9,6 +9,7 @@ import { UIEvents } from '../../object/UIModel'
 import { useSubscribe } from '../../hooks/useSubscribe'
 import getLocalComponentByURL from './getLocalComponentByURL'
 
+
 function __render(node : Node, key ? : any, childrenProps? : any){
   return <NodeRender node={node} key={key} inheritProps={childrenProps} />
 }

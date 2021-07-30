@@ -1,18 +1,23 @@
 import React, {useState, useEffect} from 'react'
-import PropItem from '../../object/PropItem'
 
-function useValue<T>(initialValue : (() => T | T), prop : PropItem) : [T, React.Dispatch<React.SetStateAction<T>>] {
+function useValue<T>(
+	initialValue : ((() => T) | T), 
+	onChange : ((v : T) => void)
+) : [T, React.Dispatch<React.SetStateAction<T>>] {
 
-	let ini : T = typeof initialValue === 'function' ? initialValue() : initialValue
-	const [value, setValue] = useState<T>(ini)
+	if(typeof initialValue === 'function') {
+		initialValue = (initialValue as Function)()
+	}
 
-	useEffect(() => {
-		setValue(prop.value)
-	}, [prop.value])
+	const [value, setValue] = useState<T>(initialValue)
+
+	// useEffect(() => {
+	// 	setValue(initialValue)
+	// }, [initialValue])
 
 	useEffect(()=>{
-		if(prop.value !== value) {
-			prop.set(value)
+		if(initialValue !== value) {
+			onChange(value)
 		}
 	},[value])
 

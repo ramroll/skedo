@@ -106,6 +106,12 @@ export class ComponentMeta {
   }
 
 
+  /**
+   * 创建实例数据
+   * @param id 
+   * @param box 
+   * @returns 
+   */
   createData(id : number, box : BoxDescriptor | null) {
 
     const isBoxDescritor = typeof box?.width === 'object'

@@ -11,7 +11,8 @@ import Integer from './Integer'
 import StringInput from './StringInput'
 import PropItem from '../../object/PropItem'
 import SizeInput from './SizeInput'
-import Flex from './Flex'
+import { PropComponentProps } from './propeditor.types'
+import List from './List'
 
 const Option = Select.Option
 
@@ -20,50 +21,60 @@ interface PropItemProps {
   disabled : boolean,
   prop : PropItem
 }
-function renderProp(prop : PropItem, disabled : boolean){
-  switch(prop.meta.type) {
-    case 'flex':
-      return <Flex prop={prop} />
+
+
+const ptnList = /^list<(.*)>$/
+function render(type : string, props : PropComponentProps) : (JSX.Element | null){
+
+  if(type.match(ptnList)) {
+    const listType = type.match(ptnList)![1]
+    return (
+      <List
+        minimum={props.metaProps.minimum}
+        {...props}
+        subItemRender={(props: PropComponentProps) =>
+          render(listType, props)
+        }
+      />
+    )
+  }
+
+  switch(type) {
     case "name":
-      return <StringInput regex={/^[a-zA-Z0-9]*$/} prop={prop} />
-    case "integer":
-      return (
-        <Integer
-          prop={prop}
-          disabled={disabled || prop.disabled}
-        />
-      )
-    case "color":
+      return <StringInput {...props} regex={/^[a-zA-Z0-9]*$/}  />
+    case 'integer':
+      return <Integer {...props} />
+    case 'color':
       return (
         <ColorPicker
-          disabled={disabled || prop.disabled}
-          defaultValue={prop.value}
-          onChange={(v) => prop.set(v)}
+          disabled={props.disabled}
+          defaultValue={props.propValue}
+          onChange={(v) => props.onChange(v)}
         />
       )
     case "select" :
       return (
         <Select
-          disabled={disabled || prop.disabled}
-          {...prop.meta.props}
-          onChange={(value) => prop.set(value)}
-          defaultValue={prop.value}
+          disabled={props.disabled}
+          {...props.metaProps}
+          onChange={(value) => props.onChange(value)}
+          defaultValue={props.propValue}
         >
-          {prop.meta.selections.map( (item: any) => {
+          {props.metaProps.selections.map( (item: any) => {
             return <Option key={item.value} value={item.value}>{item.text}</Option>
           })}
 
         </Select>
-      )
+      ) 
     case "size":
-      return <SizeInput prop={prop} {...prop.meta.props} disabled={disabled || prop.disabled} />
+      return <SizeInput {...props}  />
     case "font-family":
       return (
         <Select
-          {...prop.meta.props}
+          {...props.metaProps}
           defaultValue={"Microsoft Yahei"}
-          disabled={disabled || prop.disabled}
-          onChange={(value) => prop.set(value)}
+          disabled={props.disabled}
+          onChange={(value) => props.onChange(value)}
         >
           <Option value="Microsoft YaHei">微软雅黑</Option>
           <Option value="宋体">宋体</Option>
@@ -75,22 +86,37 @@ function renderProp(prop : PropItem, disabled : boolean){
     case "font-align":
       return (
         <TextAlignSelector
-          initialValue={prop.value}
-          onChange={(value) => prop.set(value)}
+          initialValue={props.propValue}
+          onChange={(value) => props.onChange(value)}
         />
       )
     case "font-style" :
       return (
         <FontStyleSelector
-          initialValue={prop.value}
+          initialValue={props.propValue}
           onChange={(value) => {
-            prop.set(value)
+            props.onChange(value)
           }}
         />
       )
     default:
       return null
   }
+
+}
+
+function renderProp(prop : PropItem, disabled : boolean){
+
+  return render(prop.meta.type, {
+    disabled : disabled || prop.disabled ,
+    onChange : (v : any) => {
+      prop.set(v)
+      return 
+    },
+    propValue : prop.value,
+    metaProps : prop.meta.props
+  })
+  
 }
 
 const PropertyItem = ({prop, disabled} :PropItemProps) => {

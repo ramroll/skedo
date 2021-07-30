@@ -1,5 +1,10 @@
 export enum Topic {
+  Loaded,
+  EditMode,
+  PropertyEditorUpdated,
   // New Event System
+  Resized,
+  PropertyChanged,
   GeneralMovingEvent,
   NewNodeAdded,
   NodeMoved,
@@ -8,5 +13,5 @@ export enum Topic {
   AssistLinesChanged,
   MouseUpEventPass,
   MouseMoveEventPass,
-  NodePropUpdated
+  NodePropUpdated,
 }

@@ -1,9 +1,8 @@
 import {Input} from 'antd'
 import PropItem from '../../object/PropItem'
+import { PropComponentProps } from './propeditor.types'
 import useValue from './useValue'
 interface IntegerProps {
-	prop : PropItem,
-	disabled? : boolean
 }
 
 function parseInt(value : string | number) : number | null {
@@ -23,12 +22,12 @@ function parseInt(value : string | number) : number | null {
 	}
 	return val
 }
-const Integer = ({ prop, disabled }: IntegerProps) => {
-	const [value, setValue] = useValue<number | null>(() => parseInt(prop.value), prop)
+const Integer = ({ onChange, propValue, metaProps , disabled }: IntegerProps  & PropComponentProps) => {
+	const [value, setValue] = useValue<number | null>(() => parseInt(propValue), onChange)
   return (
     <Input
-      {...prop.meta.props}
-			disabled={prop.disabled}
+      {...metaProps}
+			disabled={disabled}
       value={value}
 			style={{width : 60}}
       onKeyDown={(e) => {

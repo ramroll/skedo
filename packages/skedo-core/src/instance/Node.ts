@@ -107,9 +107,6 @@ class InstanceData extends Emiter<Topic> {
   private updateBoxValue(key : string, value : number) {
     this.updateInstanceData('box', box => {
       const item = box.get(key)
-      if(!item.get) {
-        debugger
-      }
       const unit = item.get('unit')
       if(unit === 'px') {
         box = box.setIn([key, 'value'], value)
@@ -402,10 +399,6 @@ export class Node extends InstanceData
     this.setInstanceData("allowDrag", allowDrag)
   }
 
-  public setEditMode = (mode: boolean) => {
-    this.setInstanceData("editMode", mode)
-    this.emit(Topic.EditMode, mode)
-  }
 
   /**
    * 
@@ -414,7 +407,7 @@ export class Node extends InstanceData
    */
   public updateData = (data: NodeData) => {
     this.data = data
-    this.emit(Topic.Updated)
+    this.emit(Topic.NodePropUpdated)
   }
 
   public autoResize() {
@@ -427,7 +420,7 @@ export class Node extends InstanceData
     this.logger.debug('set-receiving', node?.getType())
     if (this.receiving !== node) {
       this.receiving = node
-      this.emit(Topic.Updated)
+      this.emit(Topic.NodePropUpdated)
     }
   }
 
