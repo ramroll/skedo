@@ -5,15 +5,18 @@ function useValue<T>(
 	onChange : ((v : T) => void)
 ) : [T, React.Dispatch<React.SetStateAction<T>>] {
 
-	let ini : T = typeof initialValue === 'function' ? initialValue() : initialValue
-	const [value, setValue] = useState<T>(ini)
+	if(typeof initialValue === 'function') {
+		initialValue = (initialValue as Function)()
+	}
 
-	useEffect(() => {
-		setValue(initialValue)
-	}, [ini])
+	const [value, setValue] = useState<T>(initialValue)
+
+	// useEffect(() => {
+	// 	setValue(initialValue)
+	// }, [initialValue])
 
 	useEffect(()=>{
-		if(ini !== value) {
+		if(initialValue !== value) {
 			onChange(value)
 		}
 	},[value])

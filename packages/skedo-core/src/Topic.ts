@@ -1,4 +1,6 @@
 export enum Topic {
+  Loaded,
+  EditMode,
   PropertyEditorUpdated,
   // New Event System
   Resized,

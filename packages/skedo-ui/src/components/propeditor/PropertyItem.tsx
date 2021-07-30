@@ -11,8 +11,8 @@ import Integer from './Integer'
 import StringInput from './StringInput'
 import PropItem from '../../object/PropItem'
 import SizeInput from './SizeInput'
-import Flex from './Flex'
 import { PropComponentProps } from './propeditor.types'
+import List from './List'
 
 const Option = Select.Option
 
@@ -22,7 +22,23 @@ interface PropItemProps {
   prop : PropItem
 }
 
-function render(type : string, props : PropComponentProps){
+
+const ptnList = /^list<(.*)>$/
+function render(type : string, props : PropComponentProps) : (JSX.Element | null){
+
+  if(type.match(ptnList)) {
+    const listType = type.match(ptnList)![1]
+    return (
+      <List
+        minimum={props.metaProps.minimum}
+        {...props}
+        subItemRender={(props: PropComponentProps) =>
+          render(listType, props)
+        }
+      />
+    )
+  }
+
   switch(type) {
     case "name":
       return <StringInput {...props} regex={/^[a-zA-Z0-9]*$/}  />

@@ -11,3 +11,15 @@ isContainer : true
 style:
   border: "1px solid #eee"
   background : white
+editor:
+  groups:
+  - name : for-test 
+    title : 测试 
+    props :
+    - name : test1
+      type : list<integer>
+      props :
+        minimum : 5
+      label : 输入多个数字
+      path : passProps.numbers
+  

@@ -39,7 +39,7 @@ const Text : React.FC<TextProps> = ({text, fontSize, fontStyle = new Set<string>
     if(state === 1) {
       iptRef.current?.focus()
     }
-    bridge.triggerAutoResizing()
+    // bridge.triggerAutoResizing()
   }, [state])
 
   const style : any = {
