@@ -6,7 +6,8 @@ title : 行容器
 box:
   width : 200
   height : 200
-isContainer : true
+
+containerType : flexRow
 url : local.Row
 style:
   borderWidth : 1px

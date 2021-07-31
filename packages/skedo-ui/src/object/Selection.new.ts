@@ -11,6 +11,10 @@ export default class SelectionNew {
 		return this.sel.size
 	}
 
+	public first() : Node{
+		return this.sel.values().next().value
+	}
+
 	public contains(node : Node) {
 		return this.sel.has(node)
 	}

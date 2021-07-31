@@ -5,7 +5,7 @@ import { Logger } from '../Logger'
 import { PropMeta } from '../meta/PropMeta'
 import { Topic } from "../Topic"
 import { BoxDescriptor, NodeData} from "../standard.types"
-import { sizeUnitToNumber } from "../BoxDescriptor"
+import { boxDescriptor, sizeUnitToNumber } from "../BoxDescriptor"
 import { Map as ImmutableMap, fromJS } from "immutable"
 import { MountPoint } from "./MountPoint"
 import { Bridge } from "../Bridge"
@@ -59,9 +59,7 @@ class InstanceData extends Emiter<Topic> {
     return this.data.get('group')
   }
 
-  public isFlex() {
-    return this.getStyle("display") === "flex"
-  }
+
 
   public getParent(): Node {
     return this.data.get("parent")
@@ -104,7 +102,7 @@ class InstanceData extends Emiter<Topic> {
     this.updateBoxValue("height",h)
   }
 
-  private updateBoxValue(key : string, value : number) {
+  protected updateBoxValue(key : string, value : number) {
     this.updateInstanceData('box', box => {
       const item = box.get(key)
       const unit = item.get('unit')
@@ -165,13 +163,21 @@ export class Node extends InstanceData
   // #region 访问器
 
   getChildren(): Array<Node> {
-    return this.data.get("children").concat()
+    const containerType = this.getContainerType()
+    const children : Array<Node> = this.data.get("children").concat()
+    if(containerType === 'flexRow') {
+      children.sort((a, b) => a.absRect().left - b.absRect().left)
+    }
+    else if(containerType === 'flexColumn') {
+      children.sort((a, b) => a.absRect().top - b.absRect().top)
+    }
+    return children
   }
   getReceiving() {
     return this.receiving
   }
   isContainer(): boolean {
-    return this.data.get("isContainer")
+    return !!this.meta.containerType
   }
 
   isDraggable() {
@@ -194,6 +200,12 @@ export class Node extends InstanceData
     return this.mountPoint?.getRect()
   }
 
+  updateFromMount(){
+    const rect = this.getRect()
+    this.updateBoxValue('left', rect.left)
+    this.updateBoxValue('top', rect.top)
+  }
+
 
   getStyleObject(){
     return this.data.get("style").toJS()
@@ -207,14 +219,14 @@ export class Node extends InstanceData
     return this.data.get("passProps")
   }
 
-  allowDrag(): boolean {
-    return this.data.get("allowDrag")
-  }
-
-  getValueByPath(path: Array<string>) {
+  public getValueByPath(path: Array<string>) {
     return this.data.getIn(path)
   }
 
+  public isFlex() {
+    return this.meta.containerType === 'flexRow'
+      || this.meta.containerType === 'flexColumn'
+  }
   // #endregion
 
   //#region 计算
@@ -339,10 +351,10 @@ export class Node extends InstanceData
     }
     this.logger.debug(
       "add",
-      node.getType(),
+      node.getName(),
       node.absRect(),
       "to",
-      this.getType(),
+      this.getName(),
       this.getRect()
     )
     const [x, y] = node.absPosition()
@@ -415,6 +427,10 @@ export class Node extends InstanceData
     this.setWH(rect.width, rect.height)
   }
 
+
+  public getContainerType() {
+    return this.meta.containerType
+  }
 
   setReceiving(node: Node | null) {
     this.logger.debug('set-receiving', node?.getType())

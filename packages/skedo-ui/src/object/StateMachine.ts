@@ -69,4 +69,8 @@ export default class StateMachine<
 
     return true
   }
+
+  public underState(s : S) {
+    return this.s === s
+  }
 }

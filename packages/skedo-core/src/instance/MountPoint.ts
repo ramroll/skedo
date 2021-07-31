@@ -48,12 +48,20 @@ export class MountPoint {
 
 	positionDiff(node : Node){
 		const rect1 = this.ele.getBoundingClientRect()
-		const rect2 = node.getMountPoint()?.ele.getBoundingClientRect()
+
+		const parentEle = node.getMountPoint()!.ele
+		const rect2 = parentEle.getBoundingClientRect()
 		if(!rect2) {
 			throw new Error("You cannot call positiondiff on unmounted node.")
 		}
 
-		return [rect1.left - rect2.left, rect1.top - rect2.top]
+		const childRect = parentEle.children[0].getBoundingClientRect()
+
+		const dx = childRect.left - rect2.left
+		const dy = childRect.top - rect2.top
+
+
+		return [rect1.left - rect2.left - dx, rect1.top - rect2.top - dy]
 
 	}
 

@@ -17,6 +17,7 @@ import SelectionNew from './Selection.new'
 import ResizerNew from './Resizer.new'
 import PageExporter from './PageExporter'
 import { fileRemote, pageRemote, compose } from '@skedo/request'
+import { getFlexGap } from '../util/getFlexGap'
 
 export enum UIStates{
   Start,
@@ -99,7 +100,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
       register([UIStates.StartAdd, UIStates.Adding], UIStates.Added, UIEvents.EvtDrop, () => {
         const position = this.dropComponentPosition
         const node = this.page.createFromMetaNew(this.dropCompoentMeta!, position)
-        const receiver = NodeSelector.select(this.root, position, null)
+        const receiver = NodeSelector.selectForDrop(this.root, position, null)
         receiver?.add(node)
         receiver?.emit(Topic.NewNodeAdded)
         this.dropCompoentMeta = null
@@ -129,38 +130,82 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
 
     this.describe("大家好！我是小师叔，这里在处理拖拽的逻辑", (register) => {
 
+      let receiver : Node | null
       const handlerSyncMoving = throttle((node : Node, vec : [number, number]) => {
         const absRect = node.absRect()
-        const receiver = NodeSelector.select(this.root, [absRect.left , absRect.top ], node)
+        receiver = NodeSelector.selectForDrop(this.root, [absRect.centerX(), absRect.centerY()], node)
+        // 如果是flex布局，这里需要对children更换顺序
+
+        if(receiver && receiver.isFlex()) {
+          const children = receiver.getChildren()
+          let gapIndex
+          if (receiver.getContainerType() === "flexRow") {
+            gapIndex = getFlexGap(children, node, "row")
+          } else {
+            gapIndex = getFlexGap(children, node, "column")
+          }
+          receiver.emit(Topic.NodeGapIndexChanged, gapIndex)
+        } else {
+          if(receiver) {
+            receiver.emit(Topic.NodeGapIndexChanged, null)
+            receiver = null
+          } 
+        }
+
+        // 对齐线
         const lines = this.assistLine.calculateLines(absRect, node, receiver!)
         this.emit(Topic.AssistLinesChanged,  {lines : lines, show : true})
       }, 30)
   
-      register([UIStates.Selected, UIStates.Moving], UIStates.Moving, UIEvents.EvtNodeSyncMoving, (node : Node, vec : [number, number]) => {
+      register(UIStates.Selected, UIStates.Moving, UIEvents.EvtNodeSyncMoving, (node : Node, vec : [number, number]) => {
+      })
+
+      register(UIStates.Moving, UIStates.Moving, UIEvents.EvtNodeSyncMoving, (node : Node, vec : [number, number]) => {
         handlerSyncMoving(node, vec)
       })
       
       register([UIStates.Start, UIStates.Selected, UIStates.Moving], UIStates.Moved, UIEvents.EvtNodeMoved, (node : Node, vec : [number, number]) => {
-        node.setXYByVec(vec) 
-        node.emit(Topic.NodeMoved)
-        this.emit(Topic.NodeMoved)
-        this.emit(Topic.AssistLinesChanged, {lines : [], show : false})
+        if(vec[0] * vec[1] !== 0) {
+          node.setXYByVec(vec) 
+          console.log(vec)
+          node.emit(Topic.NodeMoved)
+          this.emit(Topic.NodeMoved)
+          this.emit(Topic.AssistLinesChanged, {lines : [], show : false})
+        }
       })
   
       register(UIStates.Moved, UIStates.Selected, UIEvents.AUTO, () => {
+        if(receiver) {
+          receiver.emit(Topic.NodeGapIndexChanged, null)
+          receiver = null
+        }
         this.selection.forEach(node => {
 
           const absRect = node.absRect()
           const position : [number, number] = [absRect.centerX(), absRect.centerY()] 
-          const receiver = NodeSelector.select(this.root, position, node)
+          const receiver = NodeSelector.selectForDrop(this.root, position, node)
           const nodeParent = node.getParent()
           if(receiver !== nodeParent) {
-            console.log('receiver', receiver)
             receiver!.add(node)
             nodeParent.emit(Topic.NodeChildrenChanged)
             receiver?.emit(Topic.NodeChildrenChanged)
           }
+
+          // 移动完成后从DOM上同步下结构
+          if(receiver?.isFlex()) {
+            setTimeout(() => {
+              receiver.getChildren().forEach(child => {
+                child.updateFromMount()
+                child.emit(Topic.NodeMoved)
+              })
+            })
+          }
+
+          // 收起对齐线
+          this.emit(Topic.AssistLinesChanged,  {lines : [], show : false})
         })
+
+
       })
   
     })
@@ -195,8 +240,8 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
           if(resizeNode) {
             const nextRect = resizer!.nextRect(startRect!, vec)
 
-            const parentRect = resizeNode.getParent().getRect()
-            console.log(nextRect.top - parentRect.top)
+            const parentRect = resizeNode.getParent().absRect()
+            // console.log(nextRect.top - parentRect.top)
 
             resizeNode.setXYWH(
               nextRect.left - parentRect.left,
@@ -235,7 +280,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
     return UIStates[this.s]
   }
 
-  
+ 
 
   public async save() {
     const exporter = new PageExporter()
@@ -257,6 +302,9 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
     this.logger.log('save', json)
   }
 
+  public getSelection(){
+    return this.selection
+  }
 }
 
 

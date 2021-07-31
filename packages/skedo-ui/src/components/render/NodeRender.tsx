@@ -97,10 +97,14 @@ function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.Elem
       enabled={node.isDraggable()}
       initialPosition={[box.left.value + box.left.unit, box.top.value + box.top.unit]}
       onDrag={e => {
-        editor.dispatch(UIEvents.EvtNodeSyncMoving, node, [e.diffX, e.diffY])
+        if(node.isDraggable()) {
+          editor.dispatch(UIEvents.EvtNodeSyncMoving, node, [e.diffX, e.diffY])
+        }
       }}
       onDragEnd={e => {
-        editor.dispatch(UIEvents.EvtNodeMoved, node, [e.diffX, e.diffY])
+        if(node.isDraggable()) {
+          editor.dispatch(UIEvents.EvtNodeMoved, node, [e.diffX, e.diffY])
+        }
       }}
     >
       <Styled
