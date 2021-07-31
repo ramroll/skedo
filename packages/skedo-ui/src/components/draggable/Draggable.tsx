@@ -17,23 +17,26 @@ const Draggable = (props : DraggableProps) : JSX.Element => {
 
 	const children = props.children
 	const childrenProps = children.props
-	const draggableProps : any = props.enabled ? {
-		draggable : true,
+
+	const style : any = {
+		position : 'absolute',
+		top : props.initialPosition[1] ,
+		left : props.initialPosition[0],
+		...props.style,
+	}
+
+	if(props.enabled) {
+		style.transform = `translate(${node.diffX}px, ${node.diffY}px)` 
+	}
+
+	if(node.dragging) {
+		style.position = 'absolute'
+	}
+	
+	const draggableProps : any = {
+		draggable : props.enabled,
 		dragHandlers : handlers,
-		style :{
-			position : 'absolute',
-			top : props.initialPosition[1] ,
-			left : props.initialPosition[0],
-			transform : `translate(${node.diffX}px, ${node.diffY}px)`,
-			...props.style
-		}
-	} : {
-		style : {
-			position : 'absolute',
-			top : props.initialPosition[1],
-			left : props.initialPosition[0],
-			...props.style
-		}
+		style
 	}
 
 	const finalProps = mergeDeepLeft(childrenProps, draggableProps) 

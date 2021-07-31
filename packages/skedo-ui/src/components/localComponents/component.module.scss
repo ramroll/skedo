@@ -89,10 +89,24 @@ svg {
 
 .row {
   display : flex;
+  height : 100%;
   flex-direction: row;
 }
 
 .column { 
+  width : 100%;
   display : flex;
   flex-direction: column;
+}
+
+.rowgap {
+  height : 100%;
+  width : 20px;
+  background-color :lightgrey 
+}
+
+.colgap {
+  width : 100%;
+  height : 20px;
+  background-color :lightgrey 
 }

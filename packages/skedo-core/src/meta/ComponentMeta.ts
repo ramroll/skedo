@@ -35,7 +35,7 @@ export interface ComponentMetaConfig {
   name : string,
   image : string,
   title : string,
-  isContainer : boolean,
+  containerType : 'flexRow' | 'absolute' | 'flexColumn',
   box : BoxDescriptorInput,
   editor : PropsEditorConfigure,
   description : string,
@@ -62,7 +62,7 @@ export class ComponentMeta {
   group : string
   image : string
   title : string
-  isContainer : boolean
+  containerType : "flexRow" | 'flexColumn' | "absolute" 
   box : BoxDescriptor
   editor : PropsEditorConfigure
   intrinsic? :  boolean
@@ -83,7 +83,7 @@ export class ComponentMeta {
     this.group = config.group
     this.image = config.image
     this.title = config.title
-    this.isContainer = config.isContainer
+    this.containerType = config.containerType
     this.box = boxDescriptor(config.box)
     this.intrinsic = config.intrinsic
     this.url = config.url
@@ -128,7 +128,7 @@ export class ComponentMeta {
       isMoving: false,
       editMode: false,
       passProps: fromJS(this.defaultProps || {}),
-      isContainer: this.isContainer,
+      containerType: this.containerType,
       box : fromJS(box)
     })
 

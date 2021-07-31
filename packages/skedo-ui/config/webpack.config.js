@@ -394,8 +394,8 @@ module.exports = function (webpackEnv) {
             // The preset includes JSX, Flow, TypeScript, and some ESnext features.
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
-              // exclude : /node_modules\/(?!@skedo)/,
-              include: [paths.appSrc, paths.coreSrc, paths.requestSrc, paths.renderSrc],
+              exclude : /node_modules\/(?!@skedo)/,
+              // include: [paths.appSrc, paths.coreSrc, paths.requestSrc, paths.renderSrc],
               loader: require.resolve('babel-loader'),
               options: {
                 customize: require.resolve(

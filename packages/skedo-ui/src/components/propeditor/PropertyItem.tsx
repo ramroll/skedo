@@ -27,7 +27,7 @@ const ptnList = /^list<(.*)>$/
 function render(type : string, props : PropComponentProps) : (JSX.Element | null){
 
   if(type.match(ptnList)) {
-    const listType = type.match(ptnList)![1]
+    const listType = type.match(ptnList)![1] 
     return (
       <List
         minimum={props.metaProps.minimum}

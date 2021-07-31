@@ -7,7 +7,7 @@ url : local.Page
 box :
   width : 414 
   height : 736 
-isContainer : true
+containerType : absolutee
 intrinsic : true
 style:
   borderWidth : 1

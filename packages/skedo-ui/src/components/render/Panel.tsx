@@ -99,7 +99,7 @@ export default ({
             node.emit(Topic.MouseMoveEventPass, e)
           })
 
-          editor.emit(Topic.GeneralMovingEvent, [e.clientX, e.clientY])
+          editor.emit(Topic.GeneralMovingEvent, {clientX : e.clientX, clientY: e.clientY, target : e.target})
           editor.dispatch(UIEvents.EvtMoving, [e.clientX, e.clientY])
           // Hanlde drop insert
           const meta = editor.dropCompoentMeta
@@ -139,6 +139,7 @@ export default ({
           editor.selection.forEach((node) => {
             node.emit(Topic.MouseUpEventPass, e)
           })
+          editor.emit(Topic.MouseUpEventPass, e)
           editor.dispatch(UIEvents.EvtDrop)
           setPosition([0, 0])
         }}

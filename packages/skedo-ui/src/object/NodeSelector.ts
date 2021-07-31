@@ -1,6 +1,20 @@
 import {Node} from '@skedo/core'
 export class NodeSelector {
-	static select(
+	public static selectForDrop(
+    container : Node,
+		position : [number, number],
+		exclude : Node | null
+	) {
+
+		let node = NodeSelector.select(container, position, exclude)
+
+		while(node && !node.isContainer()) {
+			node = node.getParent()
+		}
+		return node
+	}
+
+	private static select(
     container : Node,
 		position : [number, number],
 		exclude : Node | null,
