@@ -92,8 +92,13 @@ export class Package{
 
 	public link(){
 		console.log(chalk.cyanBright(`link ${this.getName()}`))
-		this.exec('yarn link')
+		if(this.getSkedoType() !== 'cli') {
+			this.exec('yarn link')
+		} else {
+			this.exec("npm link --force")
+		}
 	}
+
 
 	public getDeps(){
 		return [this.json.dependencies,this.json.devDependencies]

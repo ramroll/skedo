@@ -35,6 +35,7 @@ export default class Publish implements Command {
     const rollup = new Rollup()
     await rollup.run(argv, config)
 
+
     await this.checkTarget(config)
 
     config.imageUrl = (await fileRemote.post2(fs.createReadStream(config.image))).data
@@ -78,9 +79,9 @@ export default class Publish implements Command {
     const requires = [
       "file",
       "group",
-      "type",
-      "version",
       "image",
+      "type",
+      "version"
     ]
 
     requires.forEach((key) => {

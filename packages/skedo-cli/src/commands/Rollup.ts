@@ -14,9 +14,9 @@ export default class Rollup implements Command{
 		const [group, name] = groupAndName(argv.groupAndName)
 		if(!config)
 			config = loadConfig(name)
-		const rollupPackager = new RollupPackager(config)
+		const rollupPackager = new RollupPackager(config , process.cwd())
 
-		await rollupPackager.build()
+		config.file = (await rollupPackager.build())!
 
 	}
 }

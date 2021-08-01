@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import styles from "./swiper.module.css";
+import React, { useState, useEffect } from "react"
+import styles from "./swiper.module.scss";
 
 /**
  * 提供基于时间间隔重复调用callback的hooks
