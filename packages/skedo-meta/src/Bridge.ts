@@ -1,6 +1,6 @@
 import { Topic } from './Topic'
 import { Node } from './instance/Node'
-import { Emiter } from './Emiter'
+import { Emiter } from '@skedo/utils'
 
 export class Bridge {
   node : Node 

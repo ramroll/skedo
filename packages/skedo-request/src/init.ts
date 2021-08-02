@@ -5,7 +5,7 @@ type FormDataConstructor = {
 
 
 // @ts-ignore
-export let fetch : FetchFunction = global.fetch 
+export let fetch : FetchFunction = typeof global !== 'undefined' ? global.fetch : null
 
 // @ts-ignore
-export let FormData : FormDataConstructor = global.FormData 
+export let FormData : FormDataConstructor = typeof global !== 'undefined' ?global.FormData  : null

@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react'
 import { Select } from 'antd'
-import {  Topic } from '@skedo/core'
+import { Topic } from '@skedo/meta'
 import 'antd/dist/antd.css'
 import style from './prop-editor.module.scss'
 import TextAlignSelector from './TextAlignSelector'
@@ -30,7 +30,7 @@ function render(type : string, props : PropComponentProps) : (JSX.Element | null
     const listType = type.match(ptnList)![1] 
     return (
       <List
-        minimum={props.metaProps.minimum}
+        minimum={props.metaProps?.minimum || 2}
         {...props}
         subItemRender={(props: PropComponentProps) =>
           render(listType, props)

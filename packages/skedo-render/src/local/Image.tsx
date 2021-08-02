@@ -1,4 +1,4 @@
-import { Bridge } from "@skedo/core"
+import { Bridge } from "@skedo/meta"
 
 import classes from './component.module.scss'
 

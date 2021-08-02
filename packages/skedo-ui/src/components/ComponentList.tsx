@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { UIModel, UIEvents } from '../object/UIModel'
-import {Topic, ComponentMeta, ComponentsLoader} from '@skedo/core'
+import { ComponentMeta } from '@skedo/meta'
+import {ComponentsLoader} from '@skedo/loader'
 import style from './compo-list.module.scss'
 import { groupBy } from 'ramda'
 
@@ -10,13 +11,13 @@ interface ComponentListProps {
 const ComponentList = ({editor} : ComponentListProps) => {
 
 	const loader = useRef(ComponentsLoader.get())
-	const [list, setList] = useState<Array<ComponentMeta>>([])
-	useEffect(() => {
-    loader.current.on(Topic.Loaded).subscribe(() => {
-      setList(loader.current.list)
-    })
-    loader.current.load()
-  }, [])
+	// const [list, setList] = useState<Array<ComponentMeta>>(lo)
+	// useEffect(() => {
+  //   loader.current.on(Topic.Loaded).subscribe(() => {
+  //     setList(loader.current.list)
+  //   })
+  //   loader.current.load()
+  // }, [])
 
   const groupTitle : any = {
     basic : "基础组件",
@@ -24,7 +25,7 @@ const ComponentList = ({editor} : ComponentListProps) => {
     custom1 : "业务组件库1"
   }
 
-  const groupList = Object.values(groupBy(x => x.group, list))
+  const groupList = Object.values(groupBy(x => x.group, loader.current.list))
 
 	return (
     <div className={style["component-list"]}>

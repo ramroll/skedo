@@ -8,7 +8,7 @@
 import { reactive, toRef, provide} from 'vue'
 import Card from './Card.vue'
 import classes from './card.module.scss'
-import { Bridge } from '@skedo/core'
+import { Bridge } from '@skedo/meta'
 export default {
   components: { Card },
 	props : {

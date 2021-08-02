@@ -1,14 +1,16 @@
-import { Emiter } from "../Emiter"
 import { Topic } from "../Topic"
 import { Node } from "./Node"
 import { NodeType, NodeJsonStructure, BoxDescriptor, NodeData, BoxDescriptorInput} from "../standard.types"
 import { boxDescriptor } from "../BoxDescriptor"
-import { Logger } from "../Logger"
-import { ComponentsLoader } from "../meta/ComponentsLoader" 
+import { Logger, Emiter } from "@skedo/utils"
 import {ComponentMeta} from '../meta/ComponentMeta'
 import {fromJS} from 'immutable'
 
 
+
+type ComponentsLoader = {
+  loadByName : (group : string, name : string) => ComponentMeta
+}
 
 export class Page extends Emiter<Topic>{
   root : NodeType
@@ -17,12 +19,14 @@ export class Page extends Emiter<Topic>{
   pageNode : NodeType
   name : string
   logger : Logger = new Logger('page')
+  loader : ComponentsLoader
 
-  constructor(name : string, json : NodeJsonStructure){
+  constructor(name : string, json : NodeJsonStructure, loader : ComponentsLoader ){
     super()
     this.name = name
     this.id_base = 1
     this.nodes = []
+    this.loader = loader
 
     const box = boxDescriptor({
       left : 0,
@@ -31,7 +35,7 @@ export class Page extends Emiter<Topic>{
       height : 3200,
       mode : 'normal'
     })
-    const meta = ComponentsLoader.loadByName("basic", "root")
+    const meta = this.loader.loadByName("basic", "root")
     this.root = new Node(meta, meta.createData(this.createId(), box))
     this.linkPage(this.root)
     const pageNode = this.fromJson(json)
@@ -81,7 +85,7 @@ export class Page extends Emiter<Topic>{
     if(typeof json.box.width !== 'object') {
       json.box = boxDescriptor(json.box as BoxDescriptorInput)
     }
-    const meta = ComponentsLoader.loadByName(
+    const meta = this.loader.loadByName(
       json.group,
       json.name
     )

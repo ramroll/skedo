@@ -1,5 +1,5 @@
 import  { useEffect, useState } from 'react'
-import {Bridge} from '@skedo/core'
+import {Bridge} from '@skedo/meta'
 import style from './component.module.scss'
 import { fileRemote } from '@skedo/request'
 

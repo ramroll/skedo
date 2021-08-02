@@ -22,11 +22,11 @@
     "sequelize": "^6.6.5",
     "sqlite3": "^5.0.2"
   },
-  "skedo" : {
-    "type" : "service",
-    "port" : 7002,
-    "bootstrap" : "./src/scripts/force_build_db.ts",
-    "devLinks" : [
+  "skedo": {
+    "type": "service",
+    "port": 7002,
+    "bootstrap": "./src/scripts/force_build_db.ts",
+    "devLinks": [
       "@skedo/svc-config"
     ]
   }

@@ -1,4 +1,4 @@
-import {Node} from '@skedo/core'
+import {Node} from '@skedo/meta'
 export class NodeSelector {
 	public static selectForDrop(
     container : Node,

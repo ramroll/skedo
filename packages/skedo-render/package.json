@@ -1,6 +1,6 @@
 {
   "name": "@skedo/render",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "src/index.ts",
   "scripts": {
@@ -17,11 +17,13 @@
     "@types/node": "^16.4.3",
     "@types/react": "^17.0.15"
   },
-  "skedo" : {
-    "type" : "lib",
-    "devLinks" : [
+  "skedo": {
+    "type": "lib",
+    "devLinks": [
       "@skedo/request",
-      "@skedo/core"
+      "@skedo/meta",
+      "@skedo/utils",
+      "@skedo/loader"
     ]
   }
 }

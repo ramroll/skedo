@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 // import {Component as VueComponent, createApp} from 'vue'
-import {Bridge, Node} from '@skedo/core'
+import {Bridge, Node} from '@skedo/meta'
 import styles from './render.module.scss'
 import { componentRemote } from '@skedo/request'
 const vue = require('vue')
@@ -49,7 +49,7 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 
 		const cache = this.props.node.getRemoteCache(this.props.url)
 		if(cache) {
-			console.log('use remote cache')
+			console.log('use remote cache' ,cache)
 			this.setState({
 				C : cache 
 			})
@@ -81,6 +81,7 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 						const ReactComponent = <ComponentC bridge={self.props.bridge} />
 
 						node.setRemoteCache(node.meta.url!, ReactComponent)
+						console.log('build remove component--')
 						self.setState({C : ReactComponent})
 					} else if(componentType === 'vue') {
 						// eslint-disable-next-line

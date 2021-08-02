@@ -1,4 +1,4 @@
-import { NodeJsonStructure, Node } from "@skedo/core"
+import { NodeJsonStructure, Node } from "@skedo/meta"
 
 
 export default class PageExporter{

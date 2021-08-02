@@ -1,4 +1,4 @@
-import { ComponentMetaConfig } from '@skedo/core'
+import { ComponentMetaConfig } from '@skedo/meta'
 import { rollup, InputOptions, OutputOptions } from 'rollup'
 import vue from 'rollup-plugin-vue'
 // @ts-ignore
@@ -7,14 +7,16 @@ import postcss from 'rollup-plugin-postcss'
 // @ts-ignore
 import resolve from '@rollup/plugin-node-resolve'
 import babel from '@rollup/plugin-babel'
-
+import path from 'path'
 
 export default class RollupPackager {
 	outputOptions : OutputOptions
 	config :ComponentMetaConfig
-	constructor(config : ComponentMetaConfig){
+	cwd : string
+	constructor(config : ComponentMetaConfig, cwd : string){
 
 
+		this.cwd = cwd
 		this.outputOptions = {
 			file: `build/${config.name}.js`,
 			format: "amd",
@@ -39,6 +41,7 @@ export default class RollupPackager {
 			}
 			await bundle.write(this.outputOptions)
 			await bundle.close()
+			return this.outputOptions.file
 		}
 		catch(ex) {
 			console.log(ex)
@@ -72,14 +75,18 @@ export default class RollupPackager {
 			}
 		} else if(config.type === 'react') {
 			const plugins = [
-				postcss({
-					modules:true,
-					plugins:[]
+,
+				typescript({
+					cwd : this.cwd,
+					tsconfig : path.resolve(__dirname, './tsconfig-react.json'),
 				}),
-				babel({
-					presets : ["@babel/preset-react"]
-				})
-			]
+        postcss({
+					modules: true,
+					use : ['sass']
+        })
+
+
+      ]
 			return {
 				input: config.src,
 				plugins,

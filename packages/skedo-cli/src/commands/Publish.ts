@@ -8,7 +8,7 @@ import YML from '../helper/Yml'
 import { loadConfig } from "../helper/loadConfig";
 import Rollup from "./Rollup";
 import { groupAndName } from "../helper/groupAndName";
-import { ComponentMetaConfig } from "@skedo/core";
+import { ComponentMetaConfig } from "@skedo/meta";
 
 
 export default class Publish implements Command {
@@ -34,6 +34,7 @@ export default class Publish implements Command {
     this.ui.info("开始打包...")
     const rollup = new Rollup()
     await rollup.run(argv, config)
+
 
     await this.checkTarget(config)
 
@@ -78,9 +79,9 @@ export default class Publish implements Command {
     const requires = [
       "file",
       "group",
-      "type",
-      "version",
       "image",
+      "type",
+      "version"
     ]
 
     requires.forEach((key) => {

@@ -1,4 +1,4 @@
-import { SkedoComponentProps, Topic, Node } from '@skedo/core'
+import { SkedoComponentProps, Node } from '@skedo/meta'
 import classes from './component.module.scss'
 import RenderContext from '../render/RenderContext'
 import { useContext } from 'react'

@@ -1,6 +1,6 @@
 import {useState, useRef, useEffect} from 'react'
 import styles from './component.module.scss'
-import {Bridge, Topic} from "@skedo/core"
+import { Bridge } from "@skedo/meta"
 
 interface ButtonProps {
   text : string,

@@ -1,6 +1,6 @@
 {
   "name": "@skedo/cli",
-  "version": "1.0.18",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "bin": {
@@ -12,7 +12,9 @@
   },
   "author": "",
   "license": "MIT",
-  "devDependencies": {},
+  "devDependencies": {
+    "typescript-plugin-css-modules": "^3.4.0"
+  },
   "dependencies": {
     "@babel/core": "^7.14.6",
     "@babel/preset-env": "^7.14.7",
@@ -48,10 +50,11 @@
     "vue": "^3.1.4",
     "yargs": "^17.0.1"
   },
-  "skedo" : {
-    "type" : "cli",
-    "devLinks" : [
-      "@skedo/request"
+  "skedo": {
+    "type": "cli",
+    "devLinks": [
+      "@skedo/request",
+      "@skedo/meta"
     ]
   }
 }

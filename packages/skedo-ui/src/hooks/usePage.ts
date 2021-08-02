@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import {pageRemote, fileRemote, compose,} from '@skedo/request'
-import { boxDescriptor, NodeJsonStructure } from "@skedo/core"
+import { boxDescriptor, NodeJsonStructure } from "@skedo/meta"
 
 
 const json : NodeJsonStructure = {

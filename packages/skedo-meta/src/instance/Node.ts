@@ -1,7 +1,5 @@
-import { Emiter }  from "../Emiter"
-import { Rect } from '../Rect'
 import { ComponentMeta } from "../meta/ComponentMeta"
-import { Logger } from '../Logger'
+import { Logger, Rect, Emiter } from '@skedo/utils'
 import { PropMeta } from '../meta/PropMeta'
 import { Topic } from "../Topic"
 import { BoxDescriptor, NodeData} from "../standard.types"

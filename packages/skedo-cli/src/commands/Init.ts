@@ -51,12 +51,15 @@ export default class Init implements Command{
 		try{
 			const groupAndName = argv.groupAndName
 			const componentSourceFile = argv.src
+			if(!componentSourceFile) {
+				throw new Error("you should specify component source code file.")
+			}
 			if(!fs.existsSync(componentSourceFile)) {
 				throw new Error(`file ${componentSourceFile} not found.`)
 			}
 
 			const ext = path.extname(componentSourceFile)
-			if(['.tsx', '.ts', '.js', '.vue'].indexOf(ext) === -1) {
+			if(['.tsx', '.ts', '.jsx', '.vue'].indexOf(ext) === -1) {
 				throw new Error(`${ext} is not supproted.`)
 			}
 			if(!groupAndName) {

@@ -1,5 +1,4 @@
 import {Observable, Subscriber} from 'rxjs'
-import { Topic } from './Topic'
 
 
 

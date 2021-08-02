@@ -1,4 +1,4 @@
-import {Rect} from '@skedo/core'
+import {Rect} from '@skedo/utils'
 
 export default class ResizerNew{ 
   cubeType : number

@@ -1,4 +1,4 @@
-import { ComponentMetaConfig } from "@skedo/core"
+import { ComponentMetaConfig } from "@skedo/meta"
 import Yml from "./Yml"
 
 export function loadConfig(name : string) {

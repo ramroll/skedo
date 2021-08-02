@@ -1,4 +1,4 @@
-import { Bridge } from '@skedo/core'
+import { Bridge } from '@skedo/meta'
 import FlexContainer from './FlexContainer'
 const Column = ({bridge} : {bridge : Bridge}) => {
   return <FlexContainer bridge={bridge} gap="col" />

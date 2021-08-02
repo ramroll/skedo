@@ -3,7 +3,7 @@ import {CaretDownOutlined,  CaretRightOutlined} from '@ant-design/icons'
 import style from './prop-editor.module.scss'
 import PropertyItem from './PropertyItem'
 import * as R from 'ramda'
-import {GroupMeta} from '@skedo/core'
+import {GroupMeta} from '@skedo/meta'
 import PropItem from '../../object/PropItem'
 
 

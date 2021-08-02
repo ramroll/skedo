@@ -1,4 +1,4 @@
-import { Rect } from "../Rect"
+import { Rect } from "@skedo/utils"
 
 export class CordNew {
 

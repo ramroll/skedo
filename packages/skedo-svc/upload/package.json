@@ -55,12 +55,14 @@
   "eslintIgnore": [
     "coverage"
   ],
-  "skedo" : {
-    "type" : "service",
-    "port" : 7001,
-    "devLinks" : [
+  "skedo": {
+    "type": "service",
+    "port": 7001,
+    "devLinks": [
       "@skedo/svc-config"
-    ]
+    ],
+    "localInstall" : true
+    
   },
   "author": "",
   "license": "MIT"

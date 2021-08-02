@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect} from 'react'
 import styles from './component.module.scss'
-import {Bridge, Topic} from '@skedo/core'
+import {Bridge, Topic} from '@skedo/meta'
 
 
 interface TextProps {
