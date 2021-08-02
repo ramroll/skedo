@@ -1,7 +1,8 @@
 type: react
 title: 轮播图
-initialWidth: 100
-initialHeight: 100
+box:
+  width: 200px
+  height: 100px
 url: https://voice-static.oss-accelerate.aliyuncs.com/custom1/swiper-1.0.0.js
 image: swiper.png
 author: null
@@ -14,7 +15,7 @@ editor:
       props:
         - name: src
           label: 字号
-          type: list<image-upload>
+          type: list<image>
           path: passProps.imgs
 group: custom1
 name: swiper

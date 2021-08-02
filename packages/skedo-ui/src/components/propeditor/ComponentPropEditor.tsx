@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { UIModel } from '../../object/UIModel'
-import { Topic } from '@skedo/core'
+import { Topic } from '@skedo/meta'
 import style from './prop-editor.module.scss'
 import "./antd-patch.css"
 

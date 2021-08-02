@@ -8,7 +8,7 @@ import YML from '../helper/Yml'
 import { loadConfig } from "../helper/loadConfig";
 import Rollup from "./Rollup";
 import { groupAndName } from "../helper/groupAndName";
-import { ComponentMetaConfig } from "@skedo/core";
+import { ComponentMetaConfig } from "@skedo/meta";
 
 
 export default class Publish implements Command {

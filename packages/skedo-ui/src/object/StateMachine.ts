@@ -1,4 +1,4 @@
-import { Emiter, Topic } from "@skedo/core"
+import { Emiter, Topic } from "@skedo/meta"
 
 type StateTransferFunction = (...args : Array<any>) => void 
 type RegFuncType<S, A> = (

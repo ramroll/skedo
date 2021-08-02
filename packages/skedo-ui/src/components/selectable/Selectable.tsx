@@ -1,6 +1,6 @@
 
 import  { MouseEvent, useRef, useMemo, useEffect, MouseEventHandler, useContext} from "react"
-import {Node} from '@skedo/core'
+import {Node} from '@skedo/meta'
 import { UIEvents } from "../../object/UIModel"
 import ResizerNew from '../../object/Resizer.new'
 import RenderContext from "../render/RenderContext"

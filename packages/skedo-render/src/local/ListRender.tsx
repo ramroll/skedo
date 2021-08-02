@@ -1,4 +1,4 @@
-import { SkedoComponentProps, Topic } from '@skedo/core'
+import { SkedoComponentProps, Topic } from '@skedo/meta'
 export default ({bridge} : SkedoComponentProps ) => {
 	const node = bridge.node
 	return <>

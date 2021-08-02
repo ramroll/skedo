@@ -1,5 +1,6 @@
 export enum Topic {
-  Loaded,
+
+  RemoteComponentsLoaded,
   EditMode,
   PropertyEditorUpdated,
   // New Event System

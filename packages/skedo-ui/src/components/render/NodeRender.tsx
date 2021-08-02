@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Bridge, Node, sizeUnitToString, Topic, ComponentsLoader } from '@skedo/core'
+import { Bridge, Node, sizeUnitToString, Topic } from '@skedo/meta'
 import ExternalComponent from './ExternalComponent'
 import { NodeRenderProps, RenderedComponentProps } from './render.types'
 import Draggable from '../draggable/Draggable'

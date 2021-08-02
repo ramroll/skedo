@@ -5,7 +5,7 @@
 
 <script lang="ts">
 import {  inject, onMounted, PropType, ref } from 'vue'
-import { Bridge, Node } from '@skedo/core'
+import { Bridge, Node } from '@skedo/meta'
 
 export default {
 	props : {

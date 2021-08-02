@@ -1,6 +1,6 @@
 {
   "name": "@skedo/cli",
-  "version": "1.0.18",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "bin": {
@@ -54,7 +54,7 @@
     "type": "cli",
     "devLinks": [
       "@skedo/request",
-      "@skedo/core"
+      "@skedo/meta"
     ]
   }
 }

@@ -1,6 +1,6 @@
 import {Input} from 'antd'
-import { debounce, parseSizeUnit, SizeUnit } from '@skedo/core'
-import PropItem from '../../object/PropItem'
+import { debounce } from '@skedo/utils'
+import { parseSizeUnit, SizeUnit } from "@skedo/meta"
 import useValue from './useValue'
 import { useEffect, useRef } from 'react'
 import { PropComponentProps } from './propeditor.types'

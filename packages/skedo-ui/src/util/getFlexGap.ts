@@ -1,5 +1,5 @@
 
-import { Node } from "@skedo/core";
+import { Node } from "@skedo/meta";
 
 export function getFlexGap(children: Array<Node>, movingNode: Node, type = 'row') {
 	children = children.slice()

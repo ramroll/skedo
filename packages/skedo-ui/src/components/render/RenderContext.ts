@@ -1,4 +1,5 @@
-import { CordNew, Rect } from '@skedo/core'
+import { CordNew } from '@skedo/meta'
+import {Rect} from '@skedo/utils'
 import React from 'react'
 import UIModel from '../../object/UIModel'
 

@@ -4,27 +4,29 @@ Usage:  npm run COMMAND [Options]
 @skedo's project manager
 
 COMMANDS:
-	dev           dev a specified package
-	
-	  usage : npm run dev -- --name [name in package.json]
-		e.g.  : npm run dev -- --name=@skedo/service-upload
+  dev           dev a specified package
+  
+    usage : npm run dev -- --name [name in package.json]
+    e.g.  : npm run dev -- --name=@skedo/service-upload
 
   reinstall     reinstall all packages and links them all.
-	list          list all packages
-	install-link  install links only
-	incver     increase version
+  list          list all packages
+  install-link  install links only
+  incver     increase version
 
-		usage : npm run incver --name [name in package.json] [options]
-		
-		   options : 
-			 		--major  increase major version
-					--minor  increase minor version
-					--hotfix increase hotfix version
+    usage : npm run incver --name [name in package.json] [options]
+    
+       options : 
+          --major  increase major version
+          --minor  increase minor version
+          --hotfix increase hotfix version
 
-	set-ver       set version
+  set-ver       set version
 
-	  usage : npm run set-ver --name [ver]
+    usage : npm run set-ver --name [ver]
 
-	help          man
+  set-all-ver   set all version
+    usage : npm run set-all-ver -- --ver [version] 
+  help          man
 
 ^ ^

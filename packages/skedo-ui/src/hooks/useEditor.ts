@@ -2,7 +2,8 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import UIModel from "../object/UIModel"
 import {pageRemote, fileRemote, compose} from '@skedo/request'
-import { boxDescriptor, NodeJsonStructure } from "@skedo/core"
+import { boxDescriptor, NodeJsonStructure, Topic } from "@skedo/meta"
+import {ComponentsLoader} from '@skedo/loader'
 
 const json : NodeJsonStructure = {
   type : "react",
@@ -46,7 +47,12 @@ const useEditor = (pageName : string) : [UIModel | null] => {
 			}
 		}
 
-		loadPage()
+		ComponentsLoader.get().on(Topic.RemoteComponentsLoaded)
+			.subscribe(() => {
+				loadPage()
+			})
+
+		ComponentsLoader.get().load()
 
 	}, [])
 

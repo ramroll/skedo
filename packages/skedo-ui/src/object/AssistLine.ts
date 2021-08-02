@@ -1,4 +1,5 @@
-import { Node, Emiter, Logger, Topic, Rect } from "@skedo/core"
+import { Node, Emiter, Topic } from "@skedo/meta"
+import {Logger, Rect} from '@skedo/utils'
 
 const THROTTLE = 10
 

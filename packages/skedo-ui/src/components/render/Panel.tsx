@@ -1,14 +1,14 @@
 import { useEffect, DragEvent, useMemo, useRef, useState, useContext } from 'react'
-import { Rect, sizeUnitToNumber, Topic } from '@skedo/core'
+import { sizeUnitToNumber, Topic } from '@skedo/meta'
 import useBound from '../../hooks/useBound'
 import RenderContext from './RenderContext'
 import Shadow from './Shadow'
 import UIModel, { UIEvents } from '../../object/UIModel'
 import classes from './render.module.scss'
-import {throttle} from '@skedo/core'
+import {throttle, Rect} from '@skedo/utils'
 import AssistLineSVG from '../assistline/AssistLineSVG'
 import { useSubscribe } from '../../hooks/useSubscribe'
-import { AssistLine, LineDescriptor } from '../../object/AssistLine'
+import { LineDescriptor } from '../../object/AssistLine'
 
 const handleDragOver = (e : DragEvent) => {
 	e.preventDefault()	

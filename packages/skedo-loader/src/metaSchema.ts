@@ -1,7 +1,7 @@
 export default {
   id : "/meta",
   type : 'object',
-  required: ["name", "imageUrl", "title", "group", "componentType"],
+  required: ["name", "imageUrl", "title", "group", "componentType", "box"],
   properties : {
     componentType : {
       type : "string"

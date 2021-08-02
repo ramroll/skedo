@@ -1,4 +1,4 @@
-import { ComponentMetaConfig } from '@skedo/core'
+import { ComponentMetaConfig } from '@skedo/meta'
 import { rollup, InputOptions, OutputOptions } from 'rollup'
 import vue from 'rollup-plugin-vue'
 // @ts-ignore

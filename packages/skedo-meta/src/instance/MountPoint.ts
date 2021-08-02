@@ -1,5 +1,5 @@
 import { Node } from './Node'
-import { Rect } from '../Rect'
+import { Rect } from '@skedo/utils'
 import { CordNew } from './Cord.new'
 
 export class MountPoint {

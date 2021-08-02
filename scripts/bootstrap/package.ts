@@ -11,7 +11,8 @@ interface PackageJSON{
 		devLinks? : string[],
 		type? : "service" | "app" | "lib" | "cli",
 		port? : number,
-		bootstrap ? : string
+		bootstrap ? : string,
+		localInstall? : boolean
 	},
 	dependencies : {
 		[dep : string] : string
@@ -73,14 +74,14 @@ export class Package{
 		if(!this.dirty) {
 			return
 		}
-		const _json = R.clone(this.json)
+		const _json : any = R.clone(this.json)
 		_json.version = this.json.version.join('.')
 		const content = JSON.stringify(_json, null, 2)
 		fs.writeFileSync(this.fullname, content, 'utf-8')
 	}
 
-	private exec(cmd : string, silent = false, envs : any = {}) {
-		runCmd(cmd, {
+	private async exec(cmd : string, silent = false, envs : any = {}) {
+		await runCmd(cmd, {
 			// windowsHide: true,
 			env : {
 				...process.env,
@@ -90,12 +91,12 @@ export class Package{
 		}, silent)
 	}
 
-	public link(){
+	public async link(){
 		console.log(chalk.cyanBright(`link ${this.getName()}`))
 		if(this.getSkedoType() !== 'cli') {
-			this.exec('yarn link')
+			await this.exec('yarn link')
 		} else {
-			this.exec("npm link --force")
+			await this.exec("npm link --force")
 		}
 	}
 
@@ -119,22 +120,25 @@ export class Package{
 		}
 	}
 
-	public npmInstall(){
-		this.exec('yarn install')
+	public async npmInstall(){
+		await this.exec('yarn install')
 	}
 
+	public async npmClear(){
+		// await this.exec("pm2 stop all", true)
+		// await this.exec("pm2 delete all", true)
+		await this.exec("rm -rf ./package-lock.json", true)
+		await this.exec("rm -rf ./node_modules", true)
+	}
 
 	public reNpmInstall(){
-		this.exec("pm2 stop all", true)
-		this.exec("pm2 delete all", true)
-		this.exec("rm -rf ./package-lock.json", true)
-		this.exec("rm -rf ./node_modules", true)
+		this.npmClear()	
 		this.npmInstall()
 	}
 
-	public runBootstrapScript(){
+	public async runBootstrapScript(){
 		if(this.json.skedo?.bootstrap) {
-			this.exec(`ts-node ${this.json.skedo.bootstrap}`)
+			await this.exec(`ts-node ${this.json.skedo.bootstrap}`)
 		}
 	}
 
@@ -142,23 +146,22 @@ export class Package{
 		return this.json.name
 	}
 
-	public linkDev(){
-
-		this.getDevLinks().forEach((link) => {
-			this.exec(`yarn link ${link}`)
-		})
+	public async linkDev(){
+		for(let link of this.getDevLinks()) {
+			await this.exec(`yarn link ${link}`)
+		}
 	}
 
-	public startDev(){
+	public async startDev(){
 
 		switch (this.getSkedoType()) {
       case "app": {
 				const script = path.resolve(__dirname, './start-service.js')
-				this.exec(
+				await this.exec(
           `pm2 start --name ${this.getName()} --watch=true ${script}`,
           true
         )
-				// this.exec('npm run dev')
+				// await this.exec('npm run dev')
         break
 			}
       case "service": {
@@ -167,10 +170,10 @@ export class Package{
 					break
 				}
 				const script = path.resolve(__dirname, './start-service.js')
-				this.exec(`pm2 start --name ${this.getName()} --watch=true ${script}`, true, {
+				await this.exec(`pm2 start --name ${this.getName()} --watch=true ${script}`, true, {
 					PORT : this.json.skedo.port
 				})
-				this.exec(`pm2 list`)
+				await this.exec(`pm2 list`)
         break
 			}
       default:
@@ -179,4 +182,22 @@ export class Package{
     }
 		
 	}
+
+	public setDep(key : string, version :string) {
+		this.dirty = true
+		this.json.dependencies[key] = version
+	}
+	public setDevDep(key : string, version :string) {
+		this.dirty = true
+		this.json.devDependencies[key] = version
+	}
+
+	public hasDep(key : string) {
+		return !!this.json.dependencies[key]
+	}
+
+	public isLocalInstall(){
+		return this.json.skedo?.localInstall
+	}
+
 }

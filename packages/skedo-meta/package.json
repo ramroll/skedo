@@ -1,6 +1,6 @@
 {
-  "name": "@skedo/core",
-  "version": "1.0.0",
+  "name": "@skedo/meta",
+  "version": "0.0.2",
   "description": "",
   "main": "src/index.ts",
   "scripts": {
@@ -30,8 +30,8 @@
   },
   "skedo": {
     "type": "lib",
-    "devLinks": [
-      "@skedo/request"
+    "devLinks" : [
+      "@skedo/utils"
     ]
   }
 }

@@ -1,0 +1,29 @@
+{
+  "name": "@skedo/loader",
+  "version": "0.0.2",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "skedo": {
+    "type": "lib",
+    "devLinks": [
+      "@skedo/request",
+      "@skedo/meta",
+      "@skedo/utils"
+    ]
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "jsonschema": "^1.4.0",
+    "ramda": "^0.27.1"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.2",
+    "@types/ramda": "^0.27.44"
+  }
+
+}

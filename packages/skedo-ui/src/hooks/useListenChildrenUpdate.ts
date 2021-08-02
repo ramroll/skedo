@@ -1,4 +1,4 @@
-import {Node, Topic} from '@skedo/core'
+import {Node, Topic} from '@skedo/meta'
 import { useEffect, useState } from "react"
 
 export default function useListenChildrenUpdate(node : Node){

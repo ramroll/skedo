@@ -1,0 +1,14 @@
+{
+  "name": "@skedo/utils",
+  "main": "src/index.ts",
+  "version": "0.0.2",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "skedo": {
+    "type": "lib"
+  }
+}

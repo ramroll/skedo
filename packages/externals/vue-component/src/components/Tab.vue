@@ -7,7 +7,7 @@
 <script lang="ts">
 import { computed, inject,  PropType, Ref} from 'vue'
 import classes from './tab.module.scss'
-import { Bridge } from '@skedo/core'
+import { Bridge } from '@skedo/meta'
 import SkedoDivContainer from './SkedoDivContainer.vue'
 import { TabData } from './TabData'
 

@@ -24,13 +24,13 @@ class Packages {
 		this.loadMarks()
 	}
 
-	public increMinorVer(pkg : Package){
+	public async increMinorVer(pkg : Package){
 		const ver : [number, number, number] = [...this.ver]
 		ver[1] ++
 		pkg.setVer(ver)
 	}
 
-	public deps(){
+	public async deps(){
 
 		function depsCountMap(mDeps: Map<string,[number, string]>, deps : any){
 			Object.keys(deps || {}).map(dep => {
@@ -47,28 +47,48 @@ class Packages {
 		const mDeps = new Map<string, [number, string]>()
 		const mDevDeps = new Map<string, [number, string]>()
 		this.packages.forEach(pkg => {
+			if(pkg.isLocalInstall()) {
+				return
+			}
 			const [deps, devDeps] = pkg.getDeps()
 			depsCountMap(mDeps, deps)
 			depsCountMap(mDevDeps, devDeps)
 		})
 
-		this.packages.forEach(pkg => {
-			pkg.updateDeps(mDeps, mDevDeps)
-		})
+		// this.packages.forEach(pkg => {
+		// 	pkg.updateDeps(mDeps, mDevDeps)
+		// })
 
 		for (let key of mDeps.keys() ){
 			if ( mDeps.get(key)[0] > 0 ) {
 				const version = mDeps.get(key)[1]
-				// this.package.setDep(key, mDeps.get(key)[1])
 				console.log("extract dep", key, version)
+				this.package.setDep(key, version)
 			}
 		}
 		for (let key of mDevDeps.keys() ){
 			if ( mDevDeps.get(key)[0] > 0 ) {
 				const version = mDevDeps.get(key)[1]
 				console.log("extract dev dep", key, version)
+				if(!this.package.hasDep(key)) {
+					this.package.setDevDep(key, version)
+				}
 			}
 		}
+
+		this.package.save()
+
+		for(let pkg of this.packages){
+			await pkg.npmClear()
+			if(pkg.isLocalInstall()) {
+
+				await pkg.npmInstall()
+			}
+		}
+	
+		await this.package.npmInstall()
+
+		await this.installLinks()
 
 	}
 
@@ -103,6 +123,7 @@ class Packages {
 	public setAllPackagesVerTo(ver : [number, number, number]) {
 		this.packages.forEach(pkg => {
 			pkg.setVer(ver)
+			pkg.save()
 		})
 	}
 
@@ -129,17 +150,25 @@ class Packages {
 
 	}
 
-	public installLinks(){
+	public async installLinks(){
 		const links = new Set()
-		this.packages.forEach(pkg => pkg.getDevLinks().forEach((link) => {
-			if(!links.has(link)) {
-				const pkgToLink = this.find(link)
-				pkgToLink.link()
-			}
-			links.add(link)
-		}))
+		for(let pkg of this.packages) {
+			for (let link of pkg.getDevLinks()) {
+        if (!links.has(link)) {
+          const pkgToLink = this.find(link)
+          if (!pkgToLink) {
+            throw new Error("Cannot find link:" + link)
+          }
+          await pkgToLink.link()
+        }
+        links.add(link)
+      }
 
-		this.packages.forEach(pkg => pkg.linkDev())
+		}
+
+		for(let pkg of this.packages) {
+			await pkg.linkDev()
+		}
 		this.marks["linked"] = true
 		this.saveMark()
 	}

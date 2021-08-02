@@ -11,7 +11,7 @@
   "devDependencies": {
     "@types/node": "^16.4.1"
   },
-  "skedo" : {
-    "type" : "lib"
+  "skedo": {
+    "type": "lib"
   }
 }

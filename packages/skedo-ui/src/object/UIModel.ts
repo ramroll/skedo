@@ -3,15 +3,18 @@ import PropertyEditor from './PropertyEditor'
 import { AssistLine } from './AssistLine'
 import md5 from 'md5'
 import {
-  ComponentMeta,
   Logger,
   throttle,
+  Rect,
+} from "@skedo/utils"
+import {
+  ComponentMeta,
   Topic,
   Node,
-  Page,
   NodeJsonStructure,
-  Rect,
-} from "@skedo/core"
+  Page,
+} from "@skedo/meta"
+import {ComponentsLoader} from '@skedo/loader'
 import { NodeSelector } from './NodeSelector'
 import SelectionNew from './Selection.new'
 import ResizerNew from './Resizer.new'
@@ -70,7 +73,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
     this.selection = new SelectionNew()
 
     this.propertyEditor = new PropertyEditor(this)
-    this.page = new Page(pageName, json)
+    this.page = new Page(pageName, json, ComponentsLoader.get())
     this.root = this.page.root
     this.ctrlDown = false
     this.mouseDown = false

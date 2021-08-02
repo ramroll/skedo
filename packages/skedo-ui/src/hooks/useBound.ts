@@ -1,5 +1,5 @@
 import  {useEffect, useRef, RefObject, useState} from 'react'
-import {Rect} from "@skedo/core"
+import {Rect} from "@skedo/utils"
 
 const useBound = ( callback? : (rect : Rect) => void ) : [Rect, RefObject<HTMLDivElement>] => {
 

@@ -1,5 +1,6 @@
-import { Subscription} from 'rxjs'
-import { Emiter, Topic } from "@skedo/core"
+import { Subscription } from 'rxjs'
+import { Emiter } from "@skedo/utils"
+import { Topic } from "@skedo/meta"
 import { useEffect } from 'react'
 type SubscribeGroup = [emiter : Emiter<Topic>, topic : Topic | Topic[]]
 
@@ -8,10 +9,10 @@ function isGroupArray(groups : SubscribeGroup | SubscribeGroup[]) : groups is Su
 }
 export function useSubscribe(group : SubscribeGroup | SubscribeGroup[] , callback : (...args:Array<any>) => any) {
 
-	function createSub(group :SubscribeGroup) {
+	function createSub(group :SubscribeGroup) : Subscription {
 		const [emiter, topic] = group
 		return emiter.on(topic)
-			.subscribe((...data) => {
+			.subscribe((...data : Array<any>) => {
 				callback(...data)
 			})
 	}

@@ -1,4 +1,4 @@
-import {Bridge, Node} from '@skedo/core'
+import {Bridge, Node} from '@skedo/meta'
 
 export type NodeRenderProps = {
 	node : Node,

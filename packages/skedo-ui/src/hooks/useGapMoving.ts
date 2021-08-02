@@ -1,4 +1,4 @@
-import { Node, Topic } from "@skedo/core"
+import { Node, Topic } from "@skedo/meta"
 import { useContext, useEffect, useRef, useState } from "react"
 import RenderContext from "../components/render/RenderContext"
 import { UIStates } from "../object/UIModel"

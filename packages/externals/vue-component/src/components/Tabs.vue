@@ -16,7 +16,7 @@
 import { PropType, provide, reactive, toRefs } from 'vue'
 import classes from "./tab.module.scss"
 import Tab from "./Tab.vue"
-import { Bridge } from '@skedo/core'
+import { Bridge } from '@skedo/meta'
 import { TabData } from './TabData'
 
 

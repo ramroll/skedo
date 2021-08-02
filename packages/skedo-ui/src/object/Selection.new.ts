@@ -1,4 +1,4 @@
-import {Node} from '@skedo/core'
+import {Node} from '@skedo/meta'
 export default class SelectionNew {
 
 	private sel : Set<Node> = new Set()

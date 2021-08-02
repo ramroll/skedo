@@ -3,7 +3,8 @@ import TitleBar from "../components/frame/TitleBar"
 import style from  "./ui.module.scss"
 import { NodeRender } from '@skedo/render'
 import usePage from "../hooks/usePage"
-import {Page} from "@skedo/core"
+import {Page} from "@skedo/meta"
+import { ComponentsLoader } from "@skedo/loader"
 
 const Preview = () => {
 
@@ -13,7 +14,7 @@ const Preview = () => {
   if(pageData === null) {
     return null
   }
-  const pageObj = new Page(pageName, pageData)
+  const pageObj = new Page(pageName, pageData, ComponentsLoader.get())
 
   return (
     <div>

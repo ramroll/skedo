@@ -3,23 +3,38 @@ import chalk  from "chalk";
 
 // import detect from 'detect-character-encoding'
 
-export function runCmd(command: string, options?: ExecOptions, silent = false) {
+export function runCmd(command: string, options?: ExecOptions, silent = false) : Promise<void> {
 
 	console.log(chalk.yellow('cwd(' + options.cwd + ")"))
 	console.log(chalk.blueBright('run command>' + command))
 	if(process.platform === 'win32') {
 		command = '@chcp 65001 >nul & cmd /d/s/c ' + command
 	}
-	try{
-		const result = execSync(command, options)
-		
-		console.log(result.toString("utf8"))
-	}
-	catch(ex) {
-		if(silent) {
-			console.log(ex.message)
-			return
+
+	return new Promise((resolve, reject) => {
+		try{
+			const proc = exec(command, options)
+	
+			proc.stdout.on("data", (chunk:string) => {
+				console.log(chunk)
+			})
+			proc.stderr.on("data", (chunk:string) => {
+				console.log(chalk.red(chunk))
+			})
+
+			proc.on('close', () => {
+				resolve()
+			})
+
 		}
-		throw ex
-	}
+		catch(ex) {
+			if(silent) {
+				console.log(ex.message)
+				resolve()
+				return
+			}
+			reject(ex)
+		}
+	})
+
 }

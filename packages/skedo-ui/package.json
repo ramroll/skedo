@@ -118,6 +118,7 @@
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.1",
+    "eslint-plugin-autofix": "^1.0.5",
     "typescript": "^4.3.4"
   },
   "jest": {
@@ -181,8 +182,10 @@
     "type": "app",
     "devLinks": [
       "@skedo/request",
-      "@skedo/core",
-      "@skedo/render"
+      "@skedo/meta",
+      "@skedo/render",
+      "@skedo/utils",
+      "@skedo/loader"
     ]
   }
 }

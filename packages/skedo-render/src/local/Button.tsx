@@ -1,4 +1,4 @@
-import { Bridge } from '../../../skedo-core/src'
+import { Bridge } from '@skedo/meta'
 import styles from './component.module.scss'
 
 interface ButtonProps {

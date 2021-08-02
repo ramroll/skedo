@@ -1,4 +1,4 @@
-import { Bridge, Topic, Node } from '@skedo/core'
+import { Bridge, Topic, Node } from '@skedo/meta'
 import { useEffect, useState } from 'react'
 import classes from './component.module.scss'
 import ListRender from './ListRender'

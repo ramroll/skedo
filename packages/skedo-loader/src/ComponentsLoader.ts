@@ -1,6 +1,5 @@
-import { Emiter  } from "../Emiter"
-import { ComponentMetaConfig, ComponentMeta } from "./ComponentMeta" 
-import { Topic } from "../Topic"
+import { Emiter  } from "@skedo/utils"
+import { ComponentMetaConfig, ComponentMeta, Topic } from "@skedo/meta" 
 import * as R from 'ramda'
 import yaml from 'js-yaml'
 
@@ -55,7 +54,7 @@ export class ComponentsLoader extends Emiter<Topic> {
 	list : Array<ComponentMeta> = []
 
 
-	static loadByName(group : string, name:string) : ComponentMeta {
+	loadByName(group : string, name:string) : ComponentMeta {
     const key = group + '.'  + name 
 		if (!metas[key]) {
       const props = R.clone(
@@ -73,6 +72,7 @@ export class ComponentsLoader extends Emiter<Topic> {
     }
     return metas[key]
 	}
+
 
 
 	static get() {
@@ -93,7 +93,7 @@ export class ComponentsLoader extends Emiter<Topic> {
           content
         ) as any
         ymls[config.group + "." + config.name] = config
-        ComponentsLoader.loadByName(
+        this.loadByName(
           config.group,
           config.name
         )
@@ -105,18 +105,17 @@ export class ComponentsLoader extends Emiter<Topic> {
 
 	async load(){
 		if(this.state === 1) {
-			this.emit(Topic.Loaded)
+			this.emit(Topic.RemoteComponentsLoaded)
 			return
 		}
 		for(let key in ymls) {
       const [group, name] = key.split('.')
-			ComponentsLoader.loadByName(group, name)
+			this.loadByName(group, name)
 		}
     await this.loadRemote()
 		this.state = 1
 		this.list = Object.values(metas).filter(meta => meta.intrinsic !== true)
-		this.emit(Topic.Loaded)
-    
+		this.emit(Topic.RemoteComponentsLoaded)
 	}
 }
 

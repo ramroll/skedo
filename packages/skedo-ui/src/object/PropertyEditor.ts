@@ -1,4 +1,4 @@
-import { NodeType as Node, Emiter, GroupMeta, Topic } from "@skedo/core"
+import { NodeType as Node, Emiter, GroupMeta, Topic } from "@skedo/meta"
 import SelectionNew from './Selection.new'
 import { UIModel } from "./UIModel"
 import PropItem from './PropItem'
