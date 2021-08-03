@@ -1,4 +1,4 @@
-import { useEffect, DragEvent, useMemo, useRef, useState, useContext } from 'react'
+import { useEffect, useMemo, useRef, useState, useContext } from 'react'
 import { sizeUnitToNumber, Topic } from '@skedo/meta'
 import useBound from '../../hooks/useBound'
 import RenderContext from './RenderContext'
@@ -10,17 +10,13 @@ import AssistLineSVG from '../assistline/AssistLineSVG'
 import { useSubscribe } from '../../hooks/useSubscribe'
 import { LineDescriptor } from '../../object/AssistLine'
 
-const handleDragOver = (e : DragEvent) => {
-	e.preventDefault()	
-}
-
 function isFunction<T>(val : T | (() => T)) : val is (() => T){
 	return typeof val === 'function'
 }
 
 function useThrottledState<T>(initialState : T, interval = 16) : [T, (val : (T|(() => T))) => void] {
 	const state = useRef<T>(initialState)
-	const [ver, setVer] = useState(0)
+	const [, setVer] = useState(0)
 
 	const setState = useMemo(() => {
 		const fn = (val : T | (() => T))  => {

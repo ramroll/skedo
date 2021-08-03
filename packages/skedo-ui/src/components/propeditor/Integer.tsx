@@ -1,5 +1,4 @@
 import {Input} from 'antd'
-import PropItem from '../../object/PropItem'
 import { PropComponentProps } from './propeditor.types'
 import useValue from './useValue'
 interface IntegerProps {

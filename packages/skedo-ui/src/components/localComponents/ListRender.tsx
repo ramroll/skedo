@@ -7,7 +7,6 @@ export default ({bridge, children, childrenProps, gapIndex} : SkedoComponentProp
 	children? : Array<Node | string>,
 	gapIndex? : number
 }) => {
-	const node = bridge.node
 	const ctx = useContext(RenderContext)
 
 	if(!children) {

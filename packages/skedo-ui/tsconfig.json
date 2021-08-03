@@ -21,7 +21,8 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "declaration": true,
-    "noEmit": true
+    "noEmit": true,
+    "noImplicitAny": true
 
   },
   "include": [

@@ -9,7 +9,7 @@ type ListProps = {
 
 const List = (props : ListProps & PropComponentProps) => {
 
-	const [value, setValue] = useValue<Array<any>>(props.propValue || [], props.onChange)
+	const [value, ] = useValue<Array<any>>(props.propValue || [], props.onChange)
 
 
 	function handleChange(i :number, v : any) {

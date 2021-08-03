@@ -48,7 +48,7 @@ export class FileService {
 	}
 
 	async get(url : string) : Promise<CustomResponse> {
-		let resp = null
+		let resp : any = null
 		try{
 			resp = await fetch(url)
 			const text = await resp.text()

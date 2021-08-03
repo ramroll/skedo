@@ -2,7 +2,7 @@ import {Node, Topic} from '@skedo/meta'
 import { useEffect, useState } from "react"
 
 export default function useListenChildrenUpdate(node : Node){
-	const [ver, setVer] = useState(0)
+	const [, setVer] = useState(0)
 
 	useEffect(() => {
 		const sub = node.on([Topic.NewNodeAdded, Topic.NodeChildrenChanged])

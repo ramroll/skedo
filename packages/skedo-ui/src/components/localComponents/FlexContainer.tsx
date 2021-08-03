@@ -19,7 +19,7 @@ const FlexContainer = ({bridge, gap} : {bridge : Bridge, gap : string}) => {
   useEffect(() => {
     const node = bridge.getNode()
     node.on(Topic.NodeGapIndexChanged)
-      .subscribe(gapIndex => {
+      .subscribe( (gapIndex : number | null) => {
         if(gapIndex !== null) {
           const list : Array<Node|string> = node.getChildren() 
           list.splice(gapIndex, 0, `__${gap.toUpperCase()}__`)

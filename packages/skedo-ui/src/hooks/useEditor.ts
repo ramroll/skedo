@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
 import UIModel from "../object/UIModel"
 import {pageRemote, fileRemote, compose} from '@skedo/request'
 import { boxDescriptor, NodeJsonStructure, Topic } from "@skedo/meta"

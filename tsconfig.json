@@ -3,6 +3,7 @@
 		"lib": ["DOM", "esnext"],
 		"esModuleInterop" : true,
 		"downlevelIteration": true,
+		"noImplicitAny": true
 	},
 	"include": ["./scripts/**/*"]
 }
