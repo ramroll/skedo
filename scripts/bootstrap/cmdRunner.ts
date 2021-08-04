@@ -1,5 +1,6 @@
 import { exec, ExecOptions, execSync } from "child_process";
 import chalk  from "chalk";
+import { promisify } from "util";
 
 // import detect from 'detect-character-encoding'
 

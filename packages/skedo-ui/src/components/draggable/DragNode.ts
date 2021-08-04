@@ -1,5 +1,19 @@
 import { Emiter } from '@skedo/utils'
 
+function reducer(state = {
+  dragging: boolean = false
+  startX: number = 0 
+  startY: number = 0
+  diffX: number = 0
+  diffY: number = 0 
+}, action){
+
+  switch(action.type) {
+    case 'update':
+
+  }
+}
+
 export default class DragNode extends Emiter<number> {
   dragging: boolean = false
   startX: number = 0 
