@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target" : "es5",
+    "esModuleInterop": true ,
+    "outDir": "build",
+    "baseUrl": "./src",
+    "moduleResolution": "node",
+    // "rootDir": "."
+  },
+  "include": ["src/**/*", "templates"],
+  "exclude": ["templates/**/*"]
+}

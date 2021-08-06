@@ -2,9 +2,7 @@
 import fs from 'fs'
 import path from 'path'
 import yargs from 'yargs'
-import FatalError from './helper/FatalError'
 import UI from './helper/UI'
-import WaringError from './helper/Warning'
 import Command from './interface/Command'
 import figlet from 'figlet'
 
