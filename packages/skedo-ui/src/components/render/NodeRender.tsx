@@ -75,7 +75,6 @@ function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.Elem
 
   useSubscribe(
     [
-      [editor, Topic.SelectionChanged],
       [node, [Topic.Resized, Topic.NodeMoved, Topic.NodePropUpdated, Topic.NodeChildrenChanged]],
     ],
     () => {
@@ -111,7 +110,7 @@ function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.Elem
         node={node}
       >
         <Selectable
-          selected={editor.selection.contains(node)}
+          // selected={editor.selection.contains(node)}
           onSelectChanged={selectionChangeHandler}
           node={node}
         >

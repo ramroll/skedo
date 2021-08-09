@@ -1,5 +1,5 @@
-type: react
 title: 轮播图
+componentType: react
 box:
   width: 200px
   height: 100px

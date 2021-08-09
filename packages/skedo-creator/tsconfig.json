@@ -4,8 +4,8 @@
     "esModuleInterop": true ,
     "outDir": "build",
     "baseUrl": "./src",
+    "module": "commonjs",
     "moduleResolution": "node",
-    // "rootDir": "."
   },
   "include": ["src/**/*", "templates"],
   "exclude": ["templates/**/*"]

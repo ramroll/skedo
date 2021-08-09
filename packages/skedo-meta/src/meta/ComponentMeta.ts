@@ -4,6 +4,7 @@ import {PropMeta} from './PropMeta'
 import {Map as ImmutableMap, fromJS} from 'immutable'
 import { boxDescriptor } from '../BoxDescriptor'
 import { BoxDescriptor, BoxDescriptorInput } from '../standard.types'
+import { KeyValueCache } from './KeyValueCache'
 
 export interface PropConfig {
   name : string,
@@ -73,12 +74,14 @@ export class ComponentMeta {
   componentType : 'react' | "vue"
   props : {[name : string] : PropMeta}
   groups : Array<GroupMeta>
+  cache : KeyValueCache<any>
 
   
 
   constructor(config : ComponentMetaConfig) {
     
     this.type = config.type
+    this.cache = new KeyValueCache()
     this.name = config.name
     this.group = config.group
     this.image = config.image

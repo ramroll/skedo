@@ -11,4 +11,5 @@ export * from "./BoxDescriptor"
 export * from './standard.types'
 export * from './instance/Cord.new'
 export * from './instance/Page'
+export * from './metaSchema'
 

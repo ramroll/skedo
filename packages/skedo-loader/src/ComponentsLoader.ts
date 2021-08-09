@@ -6,7 +6,7 @@ import yaml from 'js-yaml'
 import {componentRemote} from '@skedo/request'
 
 import {Validator} from 'jsonschema'
-import metaSchema, {propMeta} from './metaSchema' 
+import { metaSchema } from '@skedo/meta' 
 
 
 const metas: {[key:string] : ComponentMeta} = {}  

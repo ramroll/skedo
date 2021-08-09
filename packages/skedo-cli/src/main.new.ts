@@ -4,9 +4,15 @@ import path from "path"
 import fs from 'fs'
 import chalk from "chalk"
 import Command from "./interface/Command"
+import FormData from 'form-data'
+import fetch from 'node-fetch'
 
 
+// @ts-ignore
+global.fetch = fetch 
 
+// @ts-ignore
+global.FormData = FormData
 
 const argv = yargsParser(process.argv)
 
@@ -38,8 +44,13 @@ async function run(){
   const cmdClass = require('./commands/' + cmd ).default
   const inst : Command = new cmdClass()
 
-  await inst.run(argv)
+  argv.groupAndName = argv._[3]
 
+  try{
+    await inst.run(argv)
+  }catch(ex) {
+    console.error(ex)
+  }
 }
 
 run()

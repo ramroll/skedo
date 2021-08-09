@@ -89,11 +89,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
     window["ui"] = this
 
     this.describe("大家好！我是小师叔，这里在处理拖拽新元素的逻辑", (register) => {
-      register(UIStates.Start, UIStates.StartAdd, UIEvents.EvtStartDragAdd, (meta : ComponentMeta) => {
-        this.dropCompoentMeta = meta
-      })
-  
-      register(UIStates.Selected, UIStates.StartAdd, UIEvents.EvtStartDragAdd, (meta : ComponentMeta) => {
+      register([UIStates.Start, UIStates.Selected], UIStates.StartAdd, UIEvents.EvtStartDragAdd, (meta : ComponentMeta) => {
         this.dropCompoentMeta = meta
       })
   
@@ -108,6 +104,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
         receiver?.emit(Topic.NewNodeAdded)
         this.dropCompoentMeta = null
         this.selection.replace(node)
+        console.log("emit Selection Changed")
         this.emit(Topic.SelectionChanged)
       })
           
@@ -121,6 +118,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
     this.describe("大家好！我是小师叔，这里在处理选中的逻辑", register => {
       register([UIStates.Start, UIStates.Selected], UIStates.Selected, UIEvents.EvtSelected, (node : Node) => {
         this.selection.replace(node)
+        console.log('here---')
         this.emit(Topic.SelectionChanged)
       })
       register(UIStates.Selected, UIStates.Start, UIEvents.EvtCancelSelect, (node : Node) => {

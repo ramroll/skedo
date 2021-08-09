@@ -76,22 +76,6 @@ export default class Publish implements Command {
   }
 
   private checkTarget(config: ComponentMetaConfig) {
-    const requires = [
-      "file",
-      "group",
-      "image",
-      "type",
-      "version"
-    ]
-
-    requires.forEach((key) => {
-      // @ts-ignore
-      if (!config[key]) {
-        throw new FatalError(
-          `Attribute ${key} not found in yml file, check your yml file.`
-        )
-      }
-    })
 
     if (!fs.existsSync(config.image)) {
       throw new FatalError(`Component image not exists.`)
