@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react"
 import {pageRemote, fileRemote, compose,} from '@skedo/request'
-import { boxDescriptor, NodeJsonStructure } from "@skedo/meta"
+import { NodeJsonStructure } from "@skedo/meta"
 
 
 const json : NodeJsonStructure = {
   type : "react",
 	name : "page",
   group : "basic",
-	box : boxDescriptor({
+	box : {
 		left : (3200-414)/2,	
 		top : 40,
 		width :414,
 		height : 736,
 		mode : 'normal'
-	}),
+	},
   children : [
   ],
   style : {

@@ -2,17 +2,23 @@ import { Node } from "./instance/Node";
 import { Bridge } from "./Bridge";
 import {Map as ImmutableMap} from 'immutable'
 import { LinkedNode } from "./instance/LinkedNode";
+import { BoxDescriptor } from "./BoxDescriptor";
 
+export type SizeUnitInput = {
+	value : number,
+	unit : string,
+	isAuto : boolean
+}
 export type BoxDescriptorInput = {
-	left? : number | string  
-	top? :  number | string
-	width :  number | string
-	height :  number | string
-	marginLeft? :  number | string
-	marginTop? :  number | string
-	marginRight? :  number | string
-	marginBottom? :  number | string,
-	mode : string 
+  left?: number | string | SizeUnitInput
+  top?: number | string | SizeUnitInput
+  width: number | string | SizeUnitInput
+  height: number | string | SizeUnitInput
+  marginLeft?: number | string | SizeUnitInput
+  marginTop?: number | string | SizeUnitInput
+  marginRight?: number | string | SizeUnitInput
+  marginBottom?: number | string | SizeUnitInput
+  mode: string
 }
 
 export type SkedoComponentProps = {
@@ -32,15 +38,23 @@ export type RenderedComponentProps = {
 
 export type NodeType = Node | LinkedNode
 
-export type NodeJsonStructure = {
+
+export type BasicNodeJsonStructure = {
 	type? : string,
 	group : string,
 	style : any,
 	name : string,
 	children : Array<NodeJsonStructure>,
 	id? : number,
-	passProps? : any,
-	box : BoxDescriptor | BoxDescriptorInput
+	passProps? : any
+}
+
+export type NodeInstanceJsonStructure = BasicNodeJsonStructure & {
+	box : BoxDescriptor
+}
+
+export type NodeJsonStructure = BasicNodeJsonStructure & { 
+	box : BoxDescriptorInput
 }
 
 export declare type NodeData = ImmutableMap<string, any>

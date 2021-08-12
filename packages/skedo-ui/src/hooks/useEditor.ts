@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react"
 import UIModel from "../object/UIModel"
 import {pageRemote, fileRemote, compose} from '@skedo/request'
-import { boxDescriptor, NodeJsonStructure, Topic } from "@skedo/meta"
+import { BoxDescriptor, NodeJsonStructure, Topic } from "@skedo/meta"
 import {ComponentsLoader} from '@skedo/loader'
 
 const json : NodeJsonStructure = {
   type : "react",
 	name : "page",
   group : "basic",
-	box : boxDescriptor({
+	box : {
 		left : (3200-414)/2,	
 		top : 40,
 		width :414,
 		height : 736,
 		mode : 'normal'
-	}),
+	},
   children : [
   ],
   style : {

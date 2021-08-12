@@ -17,4 +17,6 @@ export enum Topic {
   NodePropUpdated,
   
   NodeGapIndexChanged, // 仅仅用于制作Flex布局拖拽的阴影
+
+  ShadowReceiverChanged
 }

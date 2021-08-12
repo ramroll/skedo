@@ -1,7 +1,7 @@
 import { Topic } from "../Topic"
 import { Node } from "./Node"
-import { NodeType, NodeJsonStructure, BoxDescriptor, NodeData, BoxDescriptorInput} from "../standard.types"
-import { boxDescriptor } from "../BoxDescriptor"
+import { NodeType, NodeJsonStructure,  NodeData, BoxDescriptorInput} from "../standard.types"
+import { BoxDescriptor } from "../BoxDescriptor"
 import { Logger, Emiter } from "@skedo/utils"
 import {ComponentMeta} from '../meta/ComponentMeta'
 import {fromJS} from 'immutable'
@@ -28,7 +28,7 @@ export class Page extends Emiter<Topic>{
     this.nodes = []
     this.loader = loader
 
-    const box = boxDescriptor({
+    const box = new BoxDescriptor({
       left : 0,
       top : 0,
       width : 3200,
@@ -50,9 +50,10 @@ export class Page extends Emiter<Topic>{
 
 
   createFromJSON = (json: NodeJsonStructure) => {
-    if(typeof json.box.width !== 'object') {
-      json.box = boxDescriptor(json.box as BoxDescriptorInput)
-    }
+    // let box : BoxDescriptor | null = null
+    // if(typeof json.box.width !== 'object') {
+    //   box = new BoxDescriptor(json.box as BoxDescriptorInput)
+    // }
     return this.fromJson(json)
   }
 
@@ -61,7 +62,7 @@ export class Page extends Emiter<Topic>{
     position : [number, number]
   ) {
     const box = meta.box
-    const ipt = boxDescriptor({ 
+    const ipt = new BoxDescriptor({ 
       left : position[0],
       top : position[1],
       width : box.width.isAuto ? '' : box.width.value + box.width.unit,
@@ -82,9 +83,8 @@ export class Page extends Emiter<Topic>{
   fromJson(
     json: NodeJsonStructure
   ): Node {
-    if(typeof json.box.width !== 'object') {
-      json.box = boxDescriptor(json.box as BoxDescriptorInput)
-    }
+
+    const box = new BoxDescriptor(json.box)
     const meta = this.loader.loadByName(
       json.group,
       json.name
@@ -96,7 +96,7 @@ export class Page extends Emiter<Topic>{
     const id = json.id || this.createId() 
     
     const instanceData = json.id ? 
-      fromJS(json) : meta.createData(id, json.box as BoxDescriptor) 
+      meta.createDataFromJson(json) : meta.createData(id, box) 
     const node = new Node(meta, instanceData as NodeData)
     this.linkPage(node)
 
@@ -113,6 +113,7 @@ export class Page extends Emiter<Topic>{
           return childNode
         }))
     }
+    console.log(node.getName(), node.getBox())
     return node
   }
 
@@ -120,7 +121,7 @@ export class Page extends Emiter<Topic>{
     const rect = source.getRect()
     const id = this.id_base++
 
-    const box = boxDescriptor({
+    const box = new BoxDescriptor({
       left : rect.left,
       top : rect.top,
       width : rect.width,

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Bridge, Node, sizeUnitToString, Topic } from '@skedo/meta'
+import { Bridge, Node, Topic } from '@skedo/meta'
 import ExternalComponent from './ExternalComponent'
 import { NodeRenderProps, RenderedComponentProps } from './render.types'
 import Draggable from '../draggable/Draggable'
@@ -50,8 +50,8 @@ function Styled({
       draggable={draggable}
       {...{"data-skedo-type" : node.getName()}}
       style={{
-        width: sizeUnitToString(box.width),
-        height: sizeUnitToString(box.height),
+        width: box.width.toString(),
+        height: box.height.toString(),
         ...style,
         ...node.getStyleObject(),
       }}

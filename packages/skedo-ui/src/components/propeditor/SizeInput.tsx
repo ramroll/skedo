@@ -1,6 +1,6 @@
 import {Input} from 'antd'
 import { debounce } from '@skedo/utils'
-import { parseSizeUnit, SizeUnit } from "@skedo/meta"
+import { SizeUnit } from "@skedo/meta"
 import useValue from './useValue'
 import { useEffect, useRef } from 'react'
 import { PropComponentProps } from './propeditor.types'
@@ -11,8 +11,8 @@ const SizeInput = ({ propValue, disabled, onChange, metaProps }: SizeInputProps 
 	const [value, setValue] = useValue<SizeUnit | null>(propValue, onChange)
 	const ref = useRef<any>(null)
 	const debouncedOnChange = debounce( (e) => {
-		const value = e.target.value
-		setValue(parseSizeUnit(value))
+		const ipt = e.target.value
+		setValue(SizeUnit.parse(ipt, value!.getKey()))
 	}, 500)
 
 	useEffect(() => {
@@ -34,7 +34,7 @@ const SizeInput = ({ propValue, disabled, onChange, metaProps }: SizeInputProps 
 						if(!value) {
 							return value
 						}
-						return {...value, value : value.value + 1}
+						return new SizeUnit(value.value + 1, value.unit, value.isAuto, value.getKey()) 
 					})
 					return
 				}
@@ -43,7 +43,7 @@ const SizeInput = ({ propValue, disabled, onChange, metaProps }: SizeInputProps 
 						if(!value || value.value <= 0) {
 							return value
 						}
-						return {...value, value : value.value - 1}
+						return new SizeUnit(value.value - 1, value.unit, value.isAuto, value.getKey()) 
 					})
 				}
 				

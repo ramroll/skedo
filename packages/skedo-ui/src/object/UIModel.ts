@@ -96,6 +96,8 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
   
       register([UIStates.StartAdd, UIStates.Adding], UIStates.Adding, UIEvents.EvtAddDraging, (position) => {
         this.dropComponentPosition = position
+        const receiver = NodeSelector.selectForDrop(this.root, position, null)
+        this.emit(Topic.ShadowReceiverChanged, receiver)
       })
       register([UIStates.StartAdd, UIStates.Adding], UIStates.Added, UIEvents.EvtDrop, () => {
         const position = this.dropComponentPosition

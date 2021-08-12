@@ -2,8 +2,8 @@ import { ComponentMeta } from "../meta/ComponentMeta"
 import { Logger, Rect, Emiter } from '@skedo/utils'
 import { PropMeta } from '../meta/PropMeta'
 import { Topic } from "../Topic"
-import { BoxDescriptor, NodeData} from "../standard.types"
-import { boxDescriptor, sizeUnitToNumber } from "../BoxDescriptor"
+import { NodeData} from "../standard.types"
+import { BoxDescriptor } from "../BoxDescriptor"
 import { Map as ImmutableMap, fromJS } from "immutable"
 import { MountPoint } from "./MountPoint"
 import { Bridge } from "../Bridge"
@@ -42,7 +42,7 @@ class InstanceData extends Emiter<Topic> {
 
   
   public getBox() : BoxDescriptor{
-    return this.data.get('box').toJS()
+    return this.data.get('box')
   }
 
   public getType() {
@@ -84,41 +84,22 @@ class InstanceData extends Emiter<Topic> {
 
 
   public setXY = (x: number, y: number) => {
-    this.updateBoxValue('left', x)
-    this.updateBoxValue('top', y)
+    this.getBox().left.set(x)
+    this.getBox().top.set(y)
   }
 
   public setXYWH = (x : number, y : number, w : number, h : number) => {
-    this.updateBoxValue('left', x)
-    this.updateBoxValue("width", w)
-    this.updateBoxValue("height", h)
-    this.updateBoxValue("top", y)
+    const box = this.getBox()
+    box.left.set(x)
+    box.top.set(y)
+    box.width.set(w)
+    box.height.set(h)
   }
 
   public setWH = (w : number, h : number) => {
-    this.updateBoxValue("width", w)
-    this.updateBoxValue("height",h)
-  }
-
-  protected updateBoxValue(key : string, value : number) {
-    this.updateInstanceData('box', box => {
-      const item = box.get(key)
-      const unit = item.get('unit')
-      if(unit === 'px') {
-        box = box.setIn([key, 'value'], value)
-      }
-      else if(unit === '%') {
-        const prect = this.getParent().getRect()
-        const parentWidth = prect.width
-        const parentHeight = prect.height
-        if(['marginTop', 'marginBottom', 'top', 'height'].indexOf(key) !== -1) {
-          box = box.setIn([key, 'value'], (value / parentHeight))
-        } else {
-          box = box.setIn([key, 'value'], (value / parentWidth))
-        }
-      }
-      return box
-    })
+    const box = this.getBox()
+    box.width.set(w)
+    box.height.set(h)
   }
 }
 
@@ -141,6 +122,7 @@ export class Node extends InstanceData
     data : NodeData
   ) {
     super(data)
+    this.getBox().setNode(this)
     this.logger = new Logger("node")
     this.meta = meta
     this.receiving = null
@@ -185,23 +167,16 @@ export class Node extends InstanceData
 
   getRect(): Rect {
     if (!this.mountPoint) {
-      const parent = this.getParent()
-      const prect = parent ? parent.getRect() : Rect.ZERO 
-      const box = this.getBox() 
-      return new Rect(
-        Math.round(sizeUnitToNumber('left', box.left, prect.width, prect.height)),
-        Math.round(sizeUnitToNumber('top', box.top, prect.width, prect.height)),
-        Math.round(sizeUnitToNumber('width', box.width, prect.width, prect.height)),
-        Math.round(sizeUnitToNumber('height', box.height, prect.width, prect.height)),
-      )
+      return this.getBox().toRect()
     }
     return this.mountPoint?.getRect()
   }
 
   updateFromMount(){
     const rect = this.getRect()
-    this.updateBoxValue('left', rect.left)
-    this.updateBoxValue('top', rect.top)
+    const box = this.getBox()
+    box.left.set(rect.left)
+    box.top.set(rect.top)
   }
 
 
@@ -322,8 +297,8 @@ export class Node extends InstanceData
     const rect = parent.getRect()
 
     const box = this.getBox()
-    const x = sizeUnitToNumber('left', box.left, rect.width, rect.height)
-    const y = sizeUnitToNumber('top', box.top, rect.width, rect.height)
+    const x = box.left.toNumber()
+    const y = box.top.toNumber()
     return this.setXY(x + vec[0], y + vec[1])
   }
 
@@ -332,8 +307,8 @@ export class Node extends InstanceData
     const rect = parent.getRect()
 
     const box = this.getBox()
-    const x = sizeUnitToNumber('left', box.left, rect.width, rect.height)
-    const y = sizeUnitToNumber('top', box.left, rect.width, rect.height)
+    const x = box.left.toNumber()
+    const y = box.top.toNumber()
     return [x + vec[0], y + vec[1]]
   }
 
@@ -347,17 +322,16 @@ export class Node extends InstanceData
     if (node.getParent() === this) {
       return
     }
+
     this.logger.debug(
       "add",
       node.getName(),
-      node.absRect(),
       "to",
       this.getName(),
-      this.getRect()
     )
+
     const [x, y] = node.absPosition()
     const [sx, sy] = this.absPosition()
-
     node.setXY(x - sx, y - sy)
     if (node.getParent()) {
       const p = node.getParent()
@@ -373,7 +347,9 @@ export class Node extends InstanceData
         children = children.concat(node)
         if (this.isFlex()) {
           children = children.sort(
-            (a, b) => a.getRect().left - b.getRect().left
+            (a, b) => {
+              return a.getRect().left - b.getRect().left
+            }
           )
         }
         return children

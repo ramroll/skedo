@@ -2,8 +2,8 @@
 import {GroupMeta} from './GroupMeta'
 import {PropMeta} from './PropMeta'
 import {Map as ImmutableMap, fromJS} from 'immutable'
-import { boxDescriptor } from '../BoxDescriptor'
-import { BoxDescriptor, BoxDescriptorInput } from '../standard.types'
+import { BoxDescriptor } from '../BoxDescriptor'
+import { BoxDescriptorInput, NodeJsonStructure } from '../standard.types'
 import { KeyValueCache } from './KeyValueCache'
 
 export interface PropConfig {
@@ -87,7 +87,7 @@ export class ComponentMeta {
     this.image = config.image
     this.title = config.title
     this.containerType = config.containerType
-    this.box = boxDescriptor(config.box)
+    this.box = new BoxDescriptor(config.box)
     this.intrinsic = config.intrinsic
     this.url = config.url
     this.style = config.style
@@ -109,6 +109,14 @@ export class ComponentMeta {
   }
 
 
+  createDataFromJson(json : NodeJsonStructure) {
+    const box = new BoxDescriptor(json.box)
+    return fromJS({
+      ...json,
+      box 
+    })
+  }
+
   /**
    * 创建实例数据
    * @param id 
@@ -116,8 +124,6 @@ export class ComponentMeta {
    * @returns 
    */
   createData(id : number, box : BoxDescriptor | null) {
-
-    const isBoxDescritor = typeof box?.width === 'object'
 
     let data = ImmutableMap({
       id,
@@ -132,7 +138,7 @@ export class ComponentMeta {
       editMode: false,
       passProps: fromJS(this.defaultProps || {}),
       containerType: this.containerType,
-      box : fromJS(box)
+      box
     })
 
 
