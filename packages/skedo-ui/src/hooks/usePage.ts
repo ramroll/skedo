@@ -11,8 +11,7 @@ const json : NodeJsonStructure = {
 		left : (3200-414)/2,	
 		top : 40,
 		width :414,
-		height : 736,
-		mode : 'normal'
+		height : 736
 	},
   children : [
   ],

@@ -7,7 +7,7 @@ import { BoxDescriptor } from "./BoxDescriptor";
 export type SizeUnitInput = {
 	value : number,
 	unit : string,
-	isAuto : boolean
+	mode : "auto" | "fill" | "value"
 }
 export type BoxDescriptorInput = {
   left?: number | string | SizeUnitInput
@@ -18,7 +18,6 @@ export type BoxDescriptorInput = {
   marginTop?: number | string | SizeUnitInput
   marginRight?: number | string | SizeUnitInput
   marginBottom?: number | string | SizeUnitInput
-  mode: string
 }
 
 export type SkedoComponentProps = {

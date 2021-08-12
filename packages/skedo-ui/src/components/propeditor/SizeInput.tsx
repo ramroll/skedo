@@ -8,49 +8,50 @@ interface SizeInputProps {
 }
 
 const SizeInput = ({ propValue, disabled, onChange, metaProps }: SizeInputProps & PropComponentProps) => {
-	const [value, setValue] = useValue<SizeUnit | null>(propValue, onChange)
-	const ref = useRef<any>(null)
-	const debouncedOnChange = debounce( (e) => {
-		const ipt = e.target.value
-		setValue(SizeUnit.parse(ipt, value!.getKey()))
-	}, 500)
+	return null
+	// const [value, setValue] = useValue<SizeUnit | null>(propValue, onChange)
+	// const ref = useRef<any>(null)
+	// const debouncedOnChange = debounce( (e) => {
+	// 	const ipt = e.target.value
+	// 	setValue(SizeUnit.parse(ipt, value!.getKey()))
+	// }, 500)
 
-	useEffect(() => {
-		const ele = ref.current
-		if(ele) {
-			ele.setValue( (value?.value || "") + (value?.unit || "") )
-		}
-	}, [value])
-  return (
-    <Input
-			ref={ref}
-      {...metaProps}
-			disabled={disabled}
-      // initialValue={(value?.value || "") + (value?.unit || '')}
-			style={{width : 60}}
-      onKeyDown={(e) => {
-				if(e.key === "ArrowUp") {
-					setValue( value => {
-						if(!value) {
-							return value
-						}
-						return new SizeUnit(value.value + 1, value.unit, value.isAuto, value.getKey()) 
-					})
-					return
-				}
-				else if(e.key === 'ArrowDown') {
-					setValue( value => {
-						if(!value || value.value <= 0) {
-							return value
-						}
-						return new SizeUnit(value.value - 1, value.unit, value.isAuto, value.getKey()) 
-					})
-				}
+	// useEffect(() => {
+	// 	const ele = ref.current
+	// 	if(ele) {
+	// 		ele.setValue( (value?.value || "") + (value?.unit || "") )
+	// 	}
+	// }, [value])
+  // return (
+  //   <Input
+	// 		ref={ref}
+  //     {...metaProps}
+	// 		disabled={disabled}
+  //     // initialValue={(value?.value || "") + (value?.unit || '')}
+	// 		style={{width : 60}}
+  //     onKeyDown={(e) => {
+	// 			if(e.key === "ArrowUp") {
+	// 				setValue( value => {
+	// 					if(!value) {
+	// 						return value
+	// 					}
+	// 					return new SizeUnit(value.value + 1, value.unit, value.isAuto, value.getKey()) 
+	// 				})
+	// 				return
+	// 			}
+	// 			else if(e.key === 'ArrowDown') {
+	// 				setValue( value => {
+	// 					if(!value || value.value <= 0) {
+	// 						return value
+	// 					}
+	// 					return new SizeUnit(value.value - 1, value.unit, value.isAuto, value.getKey()) 
+	// 				})
+	// 			}
 				
-      }}
-      onChange={debouncedOnChange}
-    />
-  )
+  //     }}
+  //     onChange={debouncedOnChange}
+  //   />
+  // )
 }
 
 export default SizeInput 

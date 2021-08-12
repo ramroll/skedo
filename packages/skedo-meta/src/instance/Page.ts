@@ -32,8 +32,7 @@ export class Page extends Emiter<Topic>{
       left : 0,
       top : 0,
       width : 3200,
-      height : 3200,
-      mode : 'normal'
+      height : 3200
     })
     const meta = this.loader.loadByName("basic", "root")
     this.root = new Node(meta, meta.createData(this.createId(), box))
@@ -61,17 +60,9 @@ export class Page extends Emiter<Topic>{
     meta : ComponentMeta,
     position : [number, number]
   ) {
-    const box = meta.box
-    const ipt = new BoxDescriptor({ 
-      left : position[0],
-      top : position[1],
-      width : box.width.isAuto ? '' : box.width.value + box.width.unit,
-      height : box.height.isAuto ? '' : box.height.value + box.height.unit,
-      mode : box.mode
-    })
-
+    const box = meta.box.clone()
     const id = this.createId()
-    const nodeData = meta.createData(id, ipt)
+    const nodeData = meta.createData(id, box)
     const node = new Node(
       meta,
       nodeData
@@ -125,8 +116,7 @@ export class Page extends Emiter<Topic>{
       left : rect.left,
       top : rect.top,
       width : rect.width,
-      height : rect.height,
-      mode : source.getBox().mode
+      height : rect.height
     })
 
 

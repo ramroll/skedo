@@ -3,23 +3,28 @@ import { Node } from "./instance/Node"
 import { BoxDescriptorInput, SizeUnitInput } from "./standard.types"
 
 type Unit = 'px' | '%'
+type SizeMode = "auto" | "fill" | "value"
 export class SizeUnit{
 
-	value : number = 0
-	unit : Unit = 'px'
-	isAuto : boolean 
+	private value : number = 0
+	private unit : Unit = 'px'
+	private mode : SizeMode
 	private parent!: BoxDescriptor
 	private key : string
 
-	constructor(value : number, unit : Unit, isAuto : boolean, key : string) {
+	constructor(value : number, unit : Unit, mode : SizeMode, key : string) {
 		this.key = key
 		this.value = value
 		this.unit = unit
-		this.isAuto = isAuto
+		this.mode = mode
+	}
+
+	public getValue(){
+		return this.value
 	}
 
 	public toString(){
-		if(this.isAuto) {
+		if(this.mode === 'auto') {
 			return ""
 		}
 		return this.value + this.unit
@@ -45,25 +50,35 @@ export class SizeUnit{
 		}
 	}
 
+
+	private getMax(rect : Rect) {
+		if (
+			[
+				"marginTop",
+				"marginBottom",
+				"top",
+				"height",
+			].indexOf(this.key) !== -1
+		) {
+			return rect.height
+		} else {
+			return rect.width
+		}
+	}
 	public toPxNumberWithRect(rect : Rect) {
-		if (this.isAuto) {
+
+		const realtiveMax = this.getMax(rect)
+		if (this.mode === 'auto') {
 			return 0 
 		}	
+		else if(this.mode === 'fill') {
+			return realtiveMax
+		}
+
 		if (this.unit === "px") {
 			return this.value 
 		} else if (this.unit === "%") {
-			if (
-				[
-					"marginTop",
-					"marginBottom",
-					"top",
-					"height",
-				].indexOf(this.key) !== -1
-			) {
-				return Math.round((rect.height * this.value) / 100)
-			} else {
-				return Math.round((rect.width * this.value) / 100)
-			}
+			return realtiveMax * this.value / 100
 		}
 
 		throw new Error("invalid sizeunit.")	
@@ -87,14 +102,18 @@ export class SizeUnit{
 
 	static parse(ipt : string | number | SizeUnitInput | undefined, key : string) : SizeUnit{
 		if(typeof ipt === 'object') {
-			return new SizeUnit(ipt.value, ipt.unit as Unit, ipt.isAuto, key)
+			return new SizeUnit(ipt.value, ipt.unit as Unit, ipt.mode, key)
 		}
 
-		if(typeof ipt === 'undefined' || ipt === '' || ipt === 'px') {
-			return new SizeUnit(0, 'px', true, key)
+		if(ipt === 'fill') {
+			return new SizeUnit(100, '%', 'fill', key)
+		}
+
+		if(typeof ipt === 'undefined' || ipt === '' || ipt === 'px' || ipt === 'auto') {
+			return new SizeUnit(0, 'px', 'auto', key)
 		}
 		if(typeof ipt === 'number') {
-			return new SizeUnit(ipt, 'px', false, key)
+			return new SizeUnit(ipt, 'px', 'value', key)
 		}
 		if(typeof ipt === 'string') {
 			
@@ -105,12 +124,12 @@ export class SizeUnit{
 				if(isNaN(num)) {
 					num = 0	
 				}
-				return new SizeUnit(num, unit as Unit, false, key)
+				return new SizeUnit(num, unit as Unit, 'value', key)
 			}
 	
 			const val = Number.parseFloat(ipt)
 			if(!isNaN(val)) {
-				return new SizeUnit(val, 'px', false, key)
+				return new SizeUnit(val, 'px', 'value', key)
 			}
 	
 		}
@@ -119,7 +138,6 @@ export class SizeUnit{
 }
 
 export class BoxDescriptor {
-	mode : string
 	node! : Node
 	left : SizeUnit
 	top : SizeUnit
@@ -132,16 +150,10 @@ export class BoxDescriptor {
 
 
 	constructor(box : BoxDescriptorInput) {
-		this.mode = box.mode
 		this.left = this.parseSizeUnit(box.left, 'left')
 		this.top = this.parseSizeUnit(box.top, 'top')
-		if(this.mode === 'fill') {
-			this.width = this.parseSizeUnit('100%', 'width')
-			this.height = this.parseSizeUnit("100%", 'height')
-		} else {
-			this.width = this.parseSizeUnit(box.width, 'width')
-			this.height = this.parseSizeUnit(box.height, 'height')
-		}
+		this.width = this.parseSizeUnit(box.width, 'width')
+		this.height = this.parseSizeUnit(box.height, 'height')
 		this.marginLeft = this.parseSizeUnit(box.marginLeft, 'marginLeft')
 		this.marginRight = this.parseSizeUnit(box.marginRight, 'marginRight')
 		this.marginBottom = this.parseSizeUnit(box.marginBottom, 'marginBottom')
@@ -156,7 +168,6 @@ export class BoxDescriptor {
 
 	public toJson() : BoxDescriptorInput{
 		return {
-			mode : this.mode, 
 			left : this.left.toString(), 
 			top : this.top.toString(), 
 			width : this.width.toString(),
@@ -174,11 +185,20 @@ export class BoxDescriptor {
 
 	public toRect(){
 		return new Rect(
-			this.left.value,
-			this.top.value,
-			this.width.value,
-			this.height.value
+			this.left.getValue(),
+			this.top.getValue(),
+			this.width.getValue(),
+			this.height.getValue()
 		) 
+	}
+
+	public clone(){
+		return new BoxDescriptor({
+			left : this.left.toString(),
+			top: this.top.toString(),
+			width : this.width.toString(),
+			height : this.height.toString()
+		})
 	}
 
 }

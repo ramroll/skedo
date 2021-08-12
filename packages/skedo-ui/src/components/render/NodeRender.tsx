@@ -94,7 +94,7 @@ function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.Elem
     <Draggable
       style={inheritProps?.style}
       enabled={node.isDraggable()}
-      initialPosition={[box.left.value + box.left.unit, box.top.value + box.top.unit]}
+      initialPosition={[box.left.toString(), box.top.toString()]}
       onDrag={e => {
         if(node.isDraggable()) {
           editor.dispatch(UIEvents.EvtNodeSyncMoving, node, [e.diffX, e.diffY])

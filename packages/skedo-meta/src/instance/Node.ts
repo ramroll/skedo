@@ -77,7 +77,7 @@ class InstanceData extends Emiter<Topic> {
 
   public getWH() : [number, number]{
     const box = this.getBox()
-    return [box.width.value, box.height.value]
+    return [box.width.toNumber(), box.height.toNumber()]
   }
 
 
