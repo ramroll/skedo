@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { ComponentMeta, Topic } from '@skedo/meta'
+import { ComponentMeta, Node, Topic } from '@skedo/meta'
 import classes from './render.module.scss'
 import RenderContext from './RenderContext'
 export default ({meta, position} : {meta : ComponentMeta | null, position : [number, number]}) => {
@@ -12,10 +12,12 @@ export default ({meta, position} : {meta : ComponentMeta | null, position : [num
         setReceiver(receiver)
       })
   }, [])
-	if(!meta) {
+	if(!meta || !receiver) {
 		return null
 	}
 
+
+  const rect = receiver.getRect()
 	return (
     <div
       className={classes.shadow}
@@ -23,8 +25,8 @@ export default ({meta, position} : {meta : ComponentMeta | null, position : [num
         transform: `translate(${context.cord.worldX(
           position[0]
         )}px, ${context.cord.worldY(position[1])}px)`,
-        width: meta.box.width.toString(),
-        height: meta.box.height.toString(),
+        width: meta.box.width.toPxNumberWithRect(rect),
+        height : meta.box.height.toPxNumberWithRect(rect),
       }}
     ></div>
   )

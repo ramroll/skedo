@@ -19,7 +19,6 @@ export class SizeUnit{
 	}
 
 	public toString(){
-		
 		if(this.isAuto) {
 			return ""
 		}
@@ -39,23 +38,19 @@ export class SizeUnit{
 			const parentWidth = prect.width
 			const parentHeight = prect.height
 			if(['marginTop', 'marginBottom', 'top', 'height'].indexOf(this.key) !== -1) {
-				this.value = val / parentHeight
+				this.value = 100 * val / parentHeight
 			} else {
-				this.value = val / parentWidth
+				this.value = 100 * val / parentWidth
 			}
 		}
 	}
 
-	public toNumber(){
-
-		const parent = this.parent.node.getParent()
-		const prect = parent ? parent.getRect() : this.parent.node.getRect() 
-
-	  if (this.isAuto) {
-			return 0
-		}
+	public toPxNumberWithRect(rect : Rect) {
+		if (this.isAuto) {
+			return 0 
+		}	
 		if (this.unit === "px") {
-			return this.value
+			return this.value 
 		} else if (this.unit === "%") {
 			if (
 				[
@@ -65,12 +60,25 @@ export class SizeUnit{
 					"height",
 				].indexOf(this.key) !== -1
 			) {
-				return Math.round((prect.height * this.value) / 100)
+				return Math.round((rect.height * this.value) / 100)
 			} else {
-				return Math.round((prect.width * this.value) / 100)
+				return Math.round((rect.width * this.value) / 100)
 			}
 		}
+
 		throw new Error("invalid sizeunit.")	
+	}
+
+	public toPxNumber(node : Node){
+		const parent = node?.getParent()
+		const prect = parent ? parent.getRect() : node.getRect() 
+		return this.toPxNumberWithRect(prect)
+		
+	}
+
+	
+	public toNumber(){
+		return this.toPxNumber(this.parent?.node)
 	}
 
 	public getKey(){
