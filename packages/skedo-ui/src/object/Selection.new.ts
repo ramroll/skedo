@@ -33,4 +33,12 @@ export default class SelectionNew {
 			fn(node)
 		}
 	}
+
+	public nodes(){
+		return this.sel.values()
+	}
+
+	public clear(){
+		this.sel.clear()
+	}
 }

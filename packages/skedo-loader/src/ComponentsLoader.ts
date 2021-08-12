@@ -47,7 +47,7 @@ function loadDefault(){
  */
 export class ComponentsLoader extends Emiter<Topic> {
 
-	static inst : ComponentsLoader  = new ComponentsLoader() 
+	private static inst : ComponentsLoader  = new ComponentsLoader() 
 
 	static defaultProps : ComponentMetaConfig = loadDefault() 
 	state : number = 0

@@ -1,7 +1,7 @@
 title: 轮播图
 componentType: react
 box:
-  width: 200px
+  width: 100%
   height: 100px
 url: https://voice-static.oss-accelerate.aliyuncs.com/custom1/swiper-1.0.0.js
 image: swiper.png

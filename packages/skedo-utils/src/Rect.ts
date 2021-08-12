@@ -10,6 +10,7 @@ export class Rect {
     this.width = width
     this.height = height
   }
+
   static of (left : number, top : number, width : number, height:number) : Rect {
     return new Rect(left, top,width, height)
   }

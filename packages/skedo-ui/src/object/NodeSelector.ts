@@ -11,6 +11,10 @@ export class NodeSelector {
 		while(node && !node.isContainer()) {
 			node = node.getParent()
 		}
+
+		if(node?.getParent() === null) {
+			node = node.getChildren()[0]
+		}
 		return node
 	}
 

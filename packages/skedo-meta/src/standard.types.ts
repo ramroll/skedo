@@ -2,11 +2,7 @@ import { Node } from "./instance/Node";
 import { Bridge } from "./Bridge";
 import {Map as ImmutableMap} from 'immutable'
 import { LinkedNode } from "./instance/LinkedNode";
-export type SizeUnit = {
-	value : number,
-	unit : 'px' | '%',
-	isAuto : boolean 
-}
+
 export type BoxDescriptorInput = {
 	left? : number | string  
 	top? :  number | string
@@ -18,18 +14,6 @@ export type BoxDescriptorInput = {
 	marginBottom? :  number | string,
 	mode : string 
 }
-export type BoxDescriptor = {
-	mode : string,
-	left : SizeUnit  
-	top :  SizeUnit 
-	width :  SizeUnit 
-	height :  SizeUnit 
-	marginLeft:  SizeUnit 
-	marginTop : SizeUnit 
-	marginRight :  SizeUnit 
-	marginBottom :  SizeUnit 
-}
-
 
 export type SkedoComponentProps = {
 	bridge : Bridge

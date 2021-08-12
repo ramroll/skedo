@@ -5,7 +5,7 @@ import RenderContext from './RenderContext'
 import Shadow from './Shadow'
 import UIModel, { UIEvents } from '../../object/UIModel'
 import classes from './render.module.scss'
-import {throttle, Rect} from '@skedo/utils'
+import {throttle, Rect, debounce} from '@skedo/utils'
 import AssistLineSVG from '../assistline/AssistLineSVG'
 import { useSubscribe } from '../../hooks/useSubscribe'
 import { LineDescriptor } from '../../object/AssistLine'
@@ -74,7 +74,22 @@ export default ({
       ref.current!.scrollTo(scrollLeft, 0)
       renderContext.cord.setViewPort(rect)
     }
+
+    let keys = new Set<string>()
+    
+    window.addEventListener("keydown", (e) => {
+      keys.add(e.key)
+    })
+
+    window.addEventListener("keyup", debounce((e) => {
+      editor.handleHotKeys([...keys])
+      keys.delete(e.key)
+    }, 100))
   }, [rect])
+
+  useEffect(() => {
+
+  }, [])
 
   useSubscribe(
     [editor, Topic.AssistLinesChanged],

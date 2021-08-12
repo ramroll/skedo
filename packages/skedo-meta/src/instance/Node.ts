@@ -397,6 +397,15 @@ export class Node extends InstanceData
     )
   }
 
+  public destroy() {
+    if(this.getName() === 'root' || this.getName() === 'page') {
+      return
+    }
+
+    const parent = this.getParent()
+    parent.remove(this)
+  }
+
 
   public setpassProps = (passObject: any) => {
     this.setInstanceData(
@@ -437,6 +446,7 @@ export class Node extends InstanceData
       this.emit(Topic.NodePropUpdated)
     }
   }
+
 
   //#endregion
 

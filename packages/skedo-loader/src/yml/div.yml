@@ -7,7 +7,7 @@ url : local.Div
 box :
   width : 200
   height : 100
-containerType : absolutee
+containerType : absolute
 style:
   border: "1px solid #eee"
   background : white

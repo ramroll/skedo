@@ -18,6 +18,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "experimentalDecorators" : true,
     "isolatedModules": true,
     "declaration": true,
   },

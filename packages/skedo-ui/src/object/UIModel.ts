@@ -21,6 +21,7 @@ import ResizerNew from './Resizer.new'
 import PageExporter from './PageExporter'
 import { fileRemote, pageRemote, compose } from '@skedo/request'
 import { getFlexGap } from '../util/getFlexGap'
+import Hotkeys from './HotKeys'
 
 export enum UIStates{
   Start,
@@ -240,6 +241,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
 
           if(resizeNode) {
             const nextRect = resizer!.nextRect(startRect!, vec)
+            console.log(nextRect)
 
             const parentRect = resizeNode.getParent().absRect()
             // console.log(nextRect.top - parentRect.top)
@@ -305,6 +307,17 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
 
   public getSelection(){
     return this.selection
+  }
+
+  public clearSelection(){
+    this.selection.clear()
+  }
+
+  public handleHotKeys(keys : Array<string>){
+    const hotkeys = new Hotkeys()
+    hotkeys.run(keys, {
+      editor :this
+    })
   }
 }
 
