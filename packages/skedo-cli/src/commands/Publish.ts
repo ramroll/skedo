@@ -7,8 +7,7 @@ import {fileRemote, componentRemote, CustomResponse} from '@skedo/request'
 import YML from '../helper/Yml'
 import { loadConfig } from "../helper/loadConfig";
 import Rollup from "./Rollup";
-import { groupAndName } from "../helper/groupAndName";
-import { ComponentMetaConfig } from "@skedo/meta";
+import { ComponentMetaConfig } from "@skedo/meta/es";
 
 
 export default class Publish implements Command {
@@ -22,14 +21,13 @@ export default class Publish implements Command {
   }
 
   async run(argv: any) {
-    const [group,name] = groupAndName(argv.groupAndName)
     this.ui.info("Publish Component to Skedo")
     const ymls = YML.search()
     /// TODO
     if (ymls.length === 0) {
       throw new FatalError("no component found")
     }
-    const config = loadConfig(name)
+    const config = loadConfig(argv.yml)
     // build
     this.ui.info("开始打包...")
     const rollup = new Rollup()
@@ -52,12 +50,10 @@ export default class Publish implements Command {
     config.url = json.data
     this.ui.info("url:" + config.url)
     this.ui.info("Upload file to oss success.")
-
     const finalConf = yaml.dump(config)
-    const ymlFile = `${name}.skedo.yml`
     config.yml = (await fileRemote.post1(
       `${config.group}/${config.type}`,
-      ymlFile,
+      argv.yml,
       config.version,
       finalConf,
     )).data
@@ -67,7 +63,7 @@ export default class Publish implements Command {
     }
     this.ui.success("Success Publish Component.")
     fs.writeFileSync(
-      `${name}.skedo.yml`,
+      argv.yml,
       finalConf,
       "utf-8"
     )

@@ -103,6 +103,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
         const position = this.dropComponentPosition
         const node = this.page.createFromMetaNew(this.dropCompoentMeta!, position)
         const receiver = NodeSelector.selectForDrop(this.root, position, null)
+        node.setXY(...position)
         receiver?.add(node)
         receiver?.emit(Topic.NewNodeAdded)
         this.dropCompoentMeta = null

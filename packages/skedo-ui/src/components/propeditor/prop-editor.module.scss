@@ -1,7 +1,8 @@
 .editor {
   width : 300px;
-  min-height: 600px;
+  height : 100%;
   background-color: white;
+  overflow-y : scroll
 }
 
 
@@ -65,4 +66,14 @@
 
 .color-picker {
   border : 1px solid black;
+}
+
+
+.size-input {
+  display : flex;
+  align-items: center;
+  
+  .ant-input {
+    margin-right : 10px !important
+  }
 }

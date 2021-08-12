@@ -7,7 +7,7 @@ import { BoxDescriptor } from "./BoxDescriptor";
 export type SizeUnitInput = {
 	value : number,
 	unit : string,
-	mode : "auto" | "fill" | "value"
+	mode : "fill" | "value" | "fixed"
 }
 export type BoxDescriptorInput = {
   left?: number | string | SizeUnitInput

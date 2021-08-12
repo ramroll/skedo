@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import yargsParser from "yargs-parser"
 import figlet from "figlet"
 import path from "path"
@@ -24,7 +25,7 @@ function ucFirst(str :string) {
   return a.toUpperCase() + others.join("")
 }
 function printHelper(){
-  console.log(fs.readFileSync(path.resolve(__dirname, "./help.txt"), 'utf8'))
+  console.log(fs.readFileSync(path.resolve(__dirname, "../help.txt"), 'utf8'))
 }
 if(!cmd) {
   console.error(chalk.red("Command is needed!"))
@@ -37,10 +38,8 @@ cmd = ucFirst(cmd)
 async function run(){
 
   const module = './commands/' + cmd
-  if(!fs.existsSync(path.resolve(__dirname, module + ".ts"))) {
-    console.error(chalk.red(`Invalid command ${cmd}.`))
-    return
-  }
+
+  console.log(path.resolve(__dirname, module + ".ts"))
   const cmdClass = require('./commands/' + cmd ).default
   const inst : Command = new cmdClass()
 

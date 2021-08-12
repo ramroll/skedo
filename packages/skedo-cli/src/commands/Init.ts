@@ -1,10 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import readline from 'readline'
 import Command from "../interface/Command"
-import util from 'util'
-import yaml, { dump } from 'js-yaml'
-import yargs from 'yargs'
+import yaml from 'js-yaml'
 import Question from '../helper/UI'
 import * as Errors from '../helper/Errors'
 

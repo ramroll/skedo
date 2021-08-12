@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "outDir": "es",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
+    "rootDir": "src",
     "allowJs": false,
     "skipLibCheck": true,
     "downlevelIteration": true,
@@ -15,10 +17,11 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "declaration": true,
-  }
+  },
+  "include": ["src/**/*"]
 }

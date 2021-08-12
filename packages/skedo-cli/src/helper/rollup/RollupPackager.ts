@@ -1,4 +1,4 @@
-import { ComponentMetaConfig } from '@skedo/meta'
+import { ComponentMetaConfig } from '@skedo/meta/es'
 import path from 'path'
 import fs from 'fs'
 import { rollup } from 'rollup'
@@ -19,9 +19,12 @@ export default class RollupPackager {
 
 	private createTmpTSConfig(){
 		const content = fs.readFileSync(
-			path.resolve(__dirname, `tmp-${this.config.componentType}.tsconfig.json`),
-			'utf-8'
-		)
+      path.resolve(
+        __dirname,
+        `../../../resource/tmp-${this.config.componentType}.tsconfig.json`
+      ),
+      "utf-8"
+    )
 		fs.writeFileSync(this.tmpConfigPath(), content, 'utf8') 
 	}
 

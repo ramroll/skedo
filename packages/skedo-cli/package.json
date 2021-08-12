@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "skedo": "./src/main.new.ts"
+    "skedo": "./build/main.new.js"
   },
   "private": false,
   "scripts": {

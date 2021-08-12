@@ -4,7 +4,7 @@
     "module": "commonjs",                    
     "lib": ["es6", "dom"],                     
     "allowJs": true,
-    "outDir": "build",                          
+    "outDir": "es",                          
     "rootDir": "./src",
     "strict": true,         
     "noImplicitAny": true,
@@ -12,5 +12,6 @@
     "downlevelIteration": true,
     "resolveJsonModule": true,
     "experimentalDecorators": true
-  }
+  },
+  "include": ["src/**/*"]
 }

@@ -27,9 +27,12 @@ const ComponentPropEditor = ({editor} : PropEditorProps) => {
   }, [editor])
   return (
     <div className={style.editor} key={ver}>
+      <div className={style.scroller}>
+
       {editor.propertyEditor.groups.map((group) => {
         return <PropertyGroup key={group.name} group={group} props={editor.propertyEditor.props} />
       })}
+      </div>
     </div>
   )
 }

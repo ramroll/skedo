@@ -1,4 +1,5 @@
-import {NodeType as Node, Emiter, PropMeta, Topic} from '@skedo/meta'
+import {NodeType as Node, PropMeta, Topic} from '@skedo/meta'
+import {Emiter} from '@skedo/utils'
 
 export default class PropItem extends Emiter<Topic> {
 

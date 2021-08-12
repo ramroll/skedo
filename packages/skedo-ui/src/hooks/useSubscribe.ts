@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 type SubscribeGroup = [emiter : Emiter<Topic>, topic : Topic | Topic[]]
 
 function isGroupArray(groups : SubscribeGroup | SubscribeGroup[]) : groups is SubscribeGroup[] {
-	return !(groups[0] instanceof Emiter)
+	return !((groups[0] as any).emit)
 }
 export function useSubscribe(group : SubscribeGroup | SubscribeGroup[] , callback : (...args:Array<any>) => any) {
 

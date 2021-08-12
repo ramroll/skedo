@@ -4,8 +4,12 @@ componentType: react
 imageUrl : https://voice-static.oss-accelerate.aliyuncs.com/img/4d10b18f29340958d103c152e9c8502e606ddba2.png
 title : 行容器 
 box:
-  width : 100% 
+  width : fill 
   height : 200
+  left : 
+    value : 0
+    unit : px
+    mode : fixed
 
 containerType : flexRow
 url : local.Row

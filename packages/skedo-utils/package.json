@@ -1,6 +1,6 @@
 {
   "name": "@skedo/utils",
-  "main": "src/index.ts",
+  "main": "es/index.js",
   "version": "0.0.2",
   "description": "",
   "scripts": {

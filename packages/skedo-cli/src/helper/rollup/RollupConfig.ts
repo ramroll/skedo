@@ -1,4 +1,4 @@
-import { ComponentMetaConfig } from "@skedo/meta"
+import { ComponentMetaConfig } from "@skedo/meta/es"
 import postcss from 'rollup-plugin-postcss'
 // import typescript from '@rollup/plugin-typescript'
 import typescript from 'rollup-plugin-typescript2'

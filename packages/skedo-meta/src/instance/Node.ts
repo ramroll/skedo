@@ -84,6 +84,7 @@ class InstanceData extends Emiter<Topic> {
 
 
   public setXY = (x: number, y: number) => {
+    console.log('setXY', x,y )
     this.getBox().left.set(x)
     this.getBox().top.set(y)
   }

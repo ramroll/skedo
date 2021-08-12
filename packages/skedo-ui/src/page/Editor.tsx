@@ -61,7 +61,9 @@ interface RightTabsProps {
   editor : UIModel
 }
 const RightTabs = ({editor} : RightTabsProps) => {
-  return <Tabs defaultActiveKey="1" type="card">
+  return <Tabs defaultActiveKey="1" type="card" style={{
+    height : '100%'
+  }}>
     <TabPane tab="属性编辑" key="1">
       <PropEditor editor={editor} />
     </TabPane>
