@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Bridge, Node, Topic } from '@skedo/meta'
+import ReactDOM from 'react-dom'
+import { Bridge, Node, RenderOptions, Topic } from '@skedo/meta'
 import ExternalComponent from './ExternalComponent'
 import { NodeRenderProps, RenderedComponentProps } from './render.types'
 import Draggable from '../draggable/Draggable'
@@ -10,8 +11,20 @@ import { useSubscribe } from '../../hooks/useSubscribe'
 import getLocalComponentByURL from './getLocalComponentByURL'
 
 
-function __render(node : Node, key ? : any, childrenProps? : any){
-  return <NodeRender node={node} key={key} inheritProps={childrenProps} />
+function __render(node : Node, options : RenderOptions){
+  const reactElement = (
+    <NodeRender
+      node={node}
+      key={options.key}
+      inheritProps={options.childrenProps}
+    />
+  )
+  if(options.ele) {
+    ReactDOM.render(reactElement, options.ele)
+    return
+  }
+  return reactElement
+
 }
 
 function Styled({

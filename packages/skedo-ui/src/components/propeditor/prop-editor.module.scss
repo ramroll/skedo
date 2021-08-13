@@ -77,3 +77,30 @@
     margin-right : 10px !important
   }
 }
+
+.image {
+
+  input[type='file'] {
+    width : 100px;
+    color : white;
+  }
+
+  img {
+    width : 20px;
+    height : 20px;
+    margin-right : 20px;
+  }
+}
+
+.list {
+  .row {
+    display : flex;
+    align-items: center;
+  }
+  .btn-add {
+    width : 100%;
+    margin-top : 5px;
+
+  }
+
+}

@@ -26,8 +26,8 @@ const Image = ({img , bridge} : ImageProps) => {
         onChange={(e) => {
           if (e.target.files) {
             fileRemote.post2(e.target.files[0])
-              .then(json => {
-                bridge.setPropsValue('img', json.data)
+              .then( (json) => {
+                bridge.setPropValue(['img'], json.data)
               })
           }
         }}

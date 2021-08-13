@@ -22,12 +22,10 @@ export default class Test extends Service {
     }
   }
 
-  public async uploadContentb64(file : string, b64content : string, ctx : Context<any>) {
-    const content = Buffer.from(b64content, 'base64')
+  public async uploadContent(file : string, content : string, ctx : Context<any>) {
     const stream = new Readable()
     stream.setEncoding('utf-8')
-    console.log(content.toString('utf-8'))
-    stream.push(content.toString("utf-8"))
+    stream.push(content)
     stream.push(null)
     let fileName =  file
     await ctx.oss.putStream(fileName, stream)

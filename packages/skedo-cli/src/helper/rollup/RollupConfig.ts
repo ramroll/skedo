@@ -47,7 +47,8 @@ export class RollupConfig {
   private inputOptionsVue() : InputOptions{
     return {
       input : this.config.src, 
-      plugins: this.pluginsForVue() 
+      plugins: this.pluginsForVue(),
+      external : ['vue']
     }
   }
 
@@ -59,36 +60,39 @@ export class RollupConfig {
     }
   }
 
-  private plugins(){
-    switch(this.config.componentType) {
-      case 'react':
-        return this.pluginsForReact()
-      case 'vue':
-        return this.pluginsForVue()
-      default:
-        throw new Error("unkown usage:" + this.config.componentType)
-    }
-  }
-
 
   private pluginsForVue(){
+    const extensions = [".js", ".jsx", ".ts", "tsx", ".vue"]
     return [
       vue(),
-      typescript(),
-      resolve({ 
-        extensions : ['.js', '.ts', 'tsx', '.vue']
+      typescript({
+        typescript: require('typescript'),
+        tsconfig : path.resolve(this.cwd, "tmp-vue.tsconfig.json"),
+      }),
+      resolve({
+        extensions ,
+      }),
+      commonjs({
+        include : "node_modules/**"
       }),
       babel({
         exclude: "node_modules/**",
-        extensions: [".js", ".jsx",  ".tsx", ".ts"],
+        extensions: [".js", ".jsx", ".tsx", ".ts"],
         babelHelpers: "bundled",
-        presets : [
-          ["@babel/preset-env", { modules: false }, "@babel/preset-typescript"]
+        presets: [
+          [
+            "@babel/preset-env",
+            { modules: false },
+            "@babel/preset-typescript",
+          ],
+        ],
+        plugins: [
+          '@vue/babel-plugin-jsx'
         ]
       }),
       postcss({
-        use :['sass']
-      })
+        use: ["sass"],
+      }),
     ]
   }
 

@@ -59,17 +59,6 @@ export class RollupConfig {
     }
   }
 
-  private plugins(){
-    switch(this.config.componentType) {
-      case 'react':
-        return this.pluginsForReact()
-      case 'vue':
-        return this.pluginsForVue()
-      default:
-        throw new Error("unkown usage:" + this.config.componentType)
-    }
-  }
-
 
   private pluginsForVue(){
     return [

@@ -17,6 +17,13 @@ editor:
           label: 字号
           type: list<image>
           path: passProps.imgs
+          default:
+            - >-
+              https://voice-static.oss-accelerate.aliyuncs.com/img/b5a4be6a89708d481e7e57c056b5a336e0ef2b69.jpg
+            - >-
+              https://th.bing.com/th?id=OIP.qsPu-MfQrZdhoLjWf0SDKwHaEo&pid=Api&rs=1
+            - >-
+              https://th.bing.com/th?id=OIP.R_mn8O9thXZN4aXRk5XKJgHaEo&pid=Api&rs=1
 group: custom1
 name: swiper
 file: build/swiper.js

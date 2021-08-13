@@ -84,7 +84,6 @@ class InstanceData extends Emiter<Topic> {
 
 
   public setXY = (x: number, y: number) => {
-    console.log('setXY', x,y )
     this.getBox().left.set(x)
     this.getBox().top.set(y)
   }
@@ -389,6 +388,12 @@ export class Node extends InstanceData
       "passProps",
       fromJS(passObject)
     )
+  }
+
+  public setPassPropValue(path: Array<string>, value : any) {
+    const passProps = this.getPassProps()
+      .setIn(path, value)
+    this.setInstanceData("passProps", passProps)
   }
 
   public setAllowDrag = (allowDrag: boolean) => {

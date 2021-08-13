@@ -98,7 +98,7 @@ export class ComponentsLoader extends Emiter<Topic> {
           config.name
         )
       } catch (ex) {
-        console.error(`load component ${item.group}.${item.type} error`, ex.toString())
+        console.error(`load component ${item.group}.${item.name} error`, ex.toString())
       }
     }
   }

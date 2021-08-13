@@ -1,5 +1,3 @@
-import {fetch} from './init'
-
 export type CustomResponse = {
 	success : boolean,
 	message? : string,
@@ -50,6 +48,7 @@ export const fetchStandard = async (
     url: RequestInfo,
     init?: RequestInit | undefined
   ): Promise<CustomResponse> => {
+  
   return await analyzeResponse(await fetch(url, init))
 }
 

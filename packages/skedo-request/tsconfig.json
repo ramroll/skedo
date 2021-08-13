@@ -9,7 +9,9 @@
     "strict": true,         
     "noImplicitAny": true,
     "esModuleInterop": true,
+    "declaration": true,
     "downlevelIteration": true,
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "experimentalDecorators": true
   },

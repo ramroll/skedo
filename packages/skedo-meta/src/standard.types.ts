@@ -41,9 +41,9 @@ export type NodeType = Node | LinkedNode
 export type BasicNodeJsonStructure = {
 	type? : string,
 	group : string,
-	style : any,
+	style? : any,
 	name : string,
-	children : Array<NodeJsonStructure>,
+	children? : Array<NodeJsonStructure>,
 	id? : number,
 	passProps? : any
 }
@@ -56,4 +56,12 @@ export type NodeJsonStructure = BasicNodeJsonStructure & {
 	box : BoxDescriptorInput
 }
 
-export declare type NodeData = ImmutableMap<string, any>
+export type NodeData = ImmutableMap<string, any>
+
+export type RenderFor = 'react' | 'vue' | 'dom'
+
+export type RenderOptions = {
+  key? : string,
+  childrenProps? : Record<string, any>,
+	ele ? : HTMLElement
+}

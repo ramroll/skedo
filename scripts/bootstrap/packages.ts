@@ -173,10 +173,14 @@ class Packages {
 		this.saveMark()
 	}
 
-	public reinstall() {
-		this.packages.forEach(pkg => pkg.reNpmInstall())
-		this.installLinks()
-		this.packages.forEach(pkg => pkg.runBootstrapScript())
+	public async reinstall() {
+		for(let pkg of this.packages) {
+			await pkg.reNpmInstall()
+		}
+		await this.installLinks()
+		for(let pkg of this.packages) {
+			await pkg.runBootstrapScript()
+		}
 
 		this.marks['installed'] = true
 		this.saveMark()

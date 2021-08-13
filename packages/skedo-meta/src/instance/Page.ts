@@ -104,7 +104,6 @@ export class Page extends Emiter<Topic>{
           return childNode
         }))
     }
-    console.log(node.getName(), node.getBox())
     return node
   }
 

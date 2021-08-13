@@ -1,5 +1,5 @@
 const babel = require('@babel/core')
-const plugin = require('babel-plugin-closure-id')
+const plugin = require('./babel-plugin-closure-id').default
 const { createFilter } = require('@rollup/pluginutils')
 
 function closureIdPlugin(options) {
@@ -11,7 +11,7 @@ function closureIdPlugin(options) {
         exclude,
       } = options
 
-      const filter = createFilter(include || /\.[jt]sx$/, exclude)
+      const filter = createFilter(include || /\.[jt]sx?$/, exclude)
 
       if (filter(id)) {
         const plugins = [plugin(null, options, null)]
@@ -24,6 +24,7 @@ function closureIdPlugin(options) {
           configFile: false
         })
 
+        console.log(result.code)
         return {
           code: result.code,
           map: result.map

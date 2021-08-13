@@ -10,5 +10,8 @@
   "license": "ISC",
   "skedo": {
     "type": "lib"
+  },
+  "devDependencies": {
+    "node-libs-browser": "^2.2.1"
   }
 }

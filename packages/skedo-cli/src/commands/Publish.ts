@@ -1,11 +1,12 @@
 import Command from "../interface/Command";
 import fs from 'fs'
+import path from 'path'
 import UI from "../helper/UI";
 import yaml from 'js-yaml'
 import FatalError from "../helper/FatalError";
-import {fileRemote, componentRemote, CustomResponse} from '@skedo/request'
+import {fileRemote, componentRemote, CustomResponse} from '@skedo/request/es'
 import YML from '../helper/Yml'
-import { loadConfig } from "../helper/loadConfig";
+import { loadConfig, validateConfig } from "../helper/loadConfig";
 import Rollup from "./Rollup";
 import { ComponentMetaConfig } from "@skedo/meta/es";
 
@@ -20,23 +21,35 @@ export default class Publish implements Command {
     this.ui = UI.getUI()
   }
 
+  private async uploadImageIfNeed(config : ComponentMetaConfig){
+    if(!config.imageUrl) {
+
+      if(!config.image) {
+        throw new Error("please check image field in your yml file.")
+      }
+
+    config.imageUrl = (
+      await fileRemote.post2(
+        fs.createReadStream(config.image)
+      )
+    ).data
+    }
+  }
+
   async run(argv: any) {
     this.ui.info("Publish Component to Skedo")
-    const ymls = YML.search()
-    /// TODO
-    if (ymls.length === 0) {
-      throw new FatalError("no component found")
-    }
     const config = loadConfig(argv.yml)
+
+    const ymlName = path.basename(argv.yml)
+    await this.uploadImageIfNeed(config)
+	  validateConfig(config)
     // build
     this.ui.info("开始打包...")
     const rollup = new Rollup()
     await rollup.run(argv, config)
 
-
     await this.checkTarget(config)
 
-    config.imageUrl = (await fileRemote.post2(fs.createReadStream(config.image))).data
     const json = await fileRemote.post1(
       config.group,
       config.name + ".js",
@@ -46,14 +59,13 @@ export default class Publish implements Command {
     if(json.success === false) {
       throw new Error(json.message)
     }
-    // console.log(json)
     config.url = json.data
     this.ui.info("url:" + config.url)
     this.ui.info("Upload file to oss success.")
     const finalConf = yaml.dump(config)
     config.yml = (await fileRemote.post1(
-      `${config.group}/${config.type}`,
-      argv.yml,
+      `${config.group}/${config.name}`,
+      ymlName,
       config.version,
       finalConf,
     )).data

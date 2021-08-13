@@ -2,7 +2,7 @@ import { ComponentMetaConfig, metaSchema } from "@skedo/meta/es"
 import Yml from "./Yml"
 import {Validator} from 'jsonschema'
 
-function validateConfig(config : ComponentMetaConfig) {
+export function validateConfig(config : ComponentMetaConfig) {
   const v = new Validator()
   const result = v.validate(config, metaSchema)
 
@@ -18,7 +18,6 @@ export function loadConfig(yml : string) :ComponentMetaConfig {
       throw new Error("yml file path not specified.")
     }
 	  const config : ComponentMetaConfig = Yml.loadYML(yml)
-	  validateConfig(config)
 	  return config 
   }catch(ex) {
     throw ex

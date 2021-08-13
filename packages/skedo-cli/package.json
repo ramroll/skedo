@@ -15,6 +15,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-replace": "^3.0.0",
+    "@vue/babel-plugin-jsx": "^1.0.6",
     "rollup-plugin-url": "^3.0.1",
     "typescript-plugin-css-modules": "^3.4.0"
   },

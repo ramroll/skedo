@@ -28,8 +28,7 @@ const Button = ({text, fontSize, fontStyle = new Set<string>(), align, color, fo
 
   useEffect(() => {
     if(txt !== text) {
-      // console.log('text changed.')
-      bridge.setPropsValue('text', txt)
+      bridge.setPropValue(['text'], txt)
     }
   }, [txt])
 

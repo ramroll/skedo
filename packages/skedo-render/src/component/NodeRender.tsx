@@ -1,12 +1,19 @@
 import React, { useContext, useEffect, useRef } from 'react'
-import { Bridge, Node,  NodeRenderProps, RenderedComponentProps } from '@skedo/meta'
+import { Bridge, Node,  NodeRenderProps, RenderedComponentProps, RenderOptions } from '@skedo/meta'
 import ExternalComponent from './ExternalComponent'
 import RenderContext from './RenderContext'
 import getLocalComponentByURL from '../getLocalComponentByURL'
 
-function __render(node : Node, key ? : any, childrenProps? : any){
-  return <NodeRender node={node} key={key} inheritProps={childrenProps} />
+function __render(node : Node, options : RenderOptions){
+  return (
+    <NodeRender
+      node={node}
+      key={options.key}
+      inheritProps={options.childrenProps}
+    />
+  )
 }
+
 
 function Styled({
   node,

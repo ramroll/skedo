@@ -1,50 +1,65 @@
-import { Topic } from './Topic'
 import { Node } from './instance/Node'
-import { Emiter } from '@skedo/utils'
+import { NodeJsonStructure, RenderFor, RenderOptions } from './standard.types'
+import { Page } from './instance/Page'
+import invariant from 'invariant'
+import { Topic } from './Topic'
+
+
 
 export class Bridge {
-  node : Node 
-  renderForReact ? : (node : Node, key ? : any, childrenProps? : any) => JSX.Element
-  constructor(node : Node){
+  private node?: Node
+  private page?: Page
+
+  
+  renderForReact?: (
+    node: Node,
+    options: RenderOptions
+  ) => any
+  constructor(node?: Node, page ? : Page) {
     this.node = node
+    this.page = page
   }
 
-  public setPropsValue(key : string, value : any)  {
-    const passProps = this.node.getPassProps()
-    this.node.setpassProps(passProps.set(key, value))
-    this.node.emit(Topic.NodePropUpdated)
-  }
-
-  static getMockBridge(){
-    const node : unknown = new Emiter<Topic>()
-    
-    const bridge = new Bridge(node as Node)
-
-    return bridge
-
-  }
-
-
-  static of(node : Node) {
-    let bridge = node.bridgeCache
-    if(!bridge) {
-      bridge = new Bridge(node)
-      node.bridgeCache = bridge
-    }
-    return bridge
-
-  }
 
   public getNode(){
-    return this.node
+    invariant(this.node, "member node not exists on bridge, maybe this is a mocked bridge.")
+    return this.node!
   }
 
-  renderAsReact(node : Node, key? : any, childrenProps? : any) : JSX.Element {
-    return this.renderForReact!(node, key, childrenProps)
+  private getPage(){
+    invariant(this.page, "member page not exists on bridge, maybe this is a mocked bridge.")
+    return this.page!
   }
 
-  renderAsVue(){
-    
+  public passProps(): any {
+    return this.getNode().getPassProps().toJS()
   }
 
+  public setPropValue(path: Array<string>, value : any) {
+    return this.getNode().setPassPropValue(path, value)
+  }
+
+  public on(topic : Topic | Topic[]) {
+    return this.getNode().on(topic)
+  }
+
+  public render(
+    type: RenderFor,
+    node: Node,
+    options: RenderOptions
+  ) {
+    switch (type) {
+      case "react": {
+        return this.renderForReact!(node, options)
+      }
+      case "dom" : 
+        return this.renderForReact!(node, options)
+    }
+  }
+
+  public createNode(json:NodeJsonStructure){
+    const node = this.getPage().createFromJSON(json)
+    this.getNode().add(node)
+    return node
+  }
 }
