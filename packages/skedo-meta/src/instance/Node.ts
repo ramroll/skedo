@@ -162,8 +162,15 @@ export class Node extends InstanceData
 
   isDraggable() {
     const name = this.getName()
-    return name !== 'root' && name !== 'page'
+    return this.getBox().movable && name !== 'root' && name !== 'page'
   }
+
+  isResizable() {
+    const name = this.getName()
+    return this.getBox().resizable && name !== 'root' && name !== 'page'
+  }
+
+
 
   getRect(): Rect {
     if (!this.mountPoint) {
@@ -317,29 +324,27 @@ export class Node extends InstanceData
     this.setInstanceData('isMoving', isMoving)
   }
 
-  add = (node: Node) => {
-
-    if (node.getParent() === this) {
-      return
+  public addToRelative(node : Node, position? : [number, number]){
+    if(!position) {
+      position = [node.getBox().left.toNumber(), node.getBox().top.toNumber()]
     }
+    this.add(node)
+    node.setXY(...position)
+    this.sortChildren(node)
+  }
 
-    this.logger.debug(
-      "add",
-      node.getName(),
-      "to",
-      this.getName(),
-    )
-
-    const [x, y] = node.absPosition()
+  public addToAbsolute(node : Node, position? : [number, number]) {
+    if(!position) {
+      position = [node.getBox().left.toNumber(), node.getBox().top.toNumber()]
+    }
+    this.add(node)
+    const [x, y] = position 
     const [sx, sy] = this.absPosition()
     node.setXY(x - sx, y - sy)
-    if (node.getParent()) {
-      const p = node.getParent()
-      p.remove(node)
-    }
+    this.sortChildren(node)
+  }
 
-    node.setParent(this)
-
+  private sortChildren(node : Node){
     this.updateInstanceData(
       "children",
       (_children) => {
@@ -355,6 +360,30 @@ export class Node extends InstanceData
         return children
       }
     )
+  }
+
+  private add = (node: Node) => {
+
+    if (node.getParent() === this) {
+      return
+    }
+
+    this.logger.debug(
+      "add",
+      node.getName(),
+      "to",
+      this.getName(),
+    )
+
+
+    if (node.getParent()) {
+      const p = node.getParent()
+      p.remove(node)
+    }
+
+    node.setParent(this)
+
+
   }
 
 

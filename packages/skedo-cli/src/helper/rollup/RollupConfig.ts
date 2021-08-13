@@ -48,7 +48,7 @@ export class RollupConfig {
     return {
       input : this.config.src, 
       plugins: this.pluginsForVue(),
-      external : ['vue']
+      external : ['vue', "@skedo/meta", "@skedo/utils"]
     }
   }
 
@@ -78,7 +78,7 @@ export class RollupConfig {
       babel({
         exclude: "node_modules/**",
         extensions: [".js", ".jsx", ".tsx", ".ts"],
-        babelHelpers: "bundled",
+        babelHelpers: "runtime",
         presets: [
           [
             "@babel/preset-env",
@@ -87,6 +87,7 @@ export class RollupConfig {
           ],
         ],
         plugins: [
+          "@babel/plugin-transform-runtime",
           '@vue/babel-plugin-jsx'
         ]
       }),

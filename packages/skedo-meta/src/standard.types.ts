@@ -9,7 +9,11 @@ export type SizeUnitInput = {
 	unit : string,
 	mode : "fill" | "value" | "fixed"
 }
+
 export type BoxDescriptorInput = {
+	movable? : boolean,
+	resizable? : boolean,
+	selectable ? : boolean
   left?: number | string | SizeUnitInput
   top?: number | string | SizeUnitInput
   width: number | string | SizeUnitInput

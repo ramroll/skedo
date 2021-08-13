@@ -78,11 +78,11 @@ function Styled({
 }
 
 function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.ElementType}){
-  const bridge = new Bridge(node)
-  bridge.renderForReact = __render
-  const passProps = node.getPassProps().toJS()
   const context = useContext(RenderContext)
   const editor = context.editor!
+  const bridge = new Bridge(node, editor.page)
+  bridge.renderForReact = __render
+  const passProps = node.getPassProps().toJS()
 
   const [, setVer] = useState(0)
 
@@ -123,7 +123,6 @@ function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.Elem
         node={node}
       >
         <Selectable
-          // selected={editor.selection.contains(node)}
           onSelectChanged={selectionChangeHandler}
           node={node}
         >

@@ -32,19 +32,40 @@ export interface PropsEditorConfigure {
 }
 
 export interface ComponentMetaConfig {
-  type : string,
+
+  // 组件名称 
   name : string,
-  image : string,
-  title : string,
-  containerType : 'flexRow' | 'absolute' | 'flexColumn',
-  box : BoxDescriptorInput,
-  editor : PropsEditorConfigure,
-  description : string,
-  intrinsic? :  boolean,
-  style? : any,
-  author : string,
-  defaultProps : any,
+
+  // 分组
   group : string,
+
+  // logo图片
+  image : string,
+
+  // 标题
+  title : string,
+
+  // 容器行为
+  containerType : 'flexRow' | 'absolute' | 'flexColumn',
+
+  // 盒子模型
+  box : BoxDescriptorInput,
+
+  // 属性编辑器属性
+  editor : PropsEditorConfigure,
+
+  description : string,
+
+  // 是否为内部组件
+  intrinsic? :  boolean,
+
+  // 初始样式
+  style? : any,
+
+  author : string,
+
+  // 初始属性
+  defaultProps : any,
 
   /* External components' */
   componentType? : 'react' | 'vue', 
@@ -58,7 +79,6 @@ export interface ComponentMetaConfig {
 
 
 export class ComponentMeta {
-  type : string  
   name : string  
   group : string
   image : string
@@ -80,7 +100,6 @@ export class ComponentMeta {
 
   constructor(config : ComponentMetaConfig) {
     
-    this.type = config.type
     this.cache = new KeyValueCache()
     this.name = config.name
     this.group = config.group
@@ -128,7 +147,6 @@ export class ComponentMeta {
     let data = ImmutableMap({
       id,
       parent: null,
-      type: this.type,
       name : this.name,
       group: this.group,
       style: ImmutableMap<string, any>(),

@@ -74,7 +74,7 @@ const Selectable = ({
         }}
       />
       {children}
-      {selectedValue &&
+      {selectedValue && node.isResizable() &&
         ResizerNew.resizerData.map(([name, type]) => {
           return (
             <div

@@ -103,8 +103,14 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
         const position = this.dropComponentPosition
         const node = this.page.createFromMetaNew(this.dropCompoentMeta!, position)
         const receiver = NodeSelector.selectForDrop(this.root, position, null)
-        node.setXY(...position)
-        receiver?.add(node)
+        // node.setXY(...position)
+        const rect = receiver!.getRect()
+        const width = node.getBox().width.toPxNumberWithRect(rect)
+        const height = node.getBox().height.toPxNumberWithRect(rect)
+        receiver?.addToAbsolute(node, [
+          position[0] - width / 2,
+          position[1] - height / 2,
+        ])
         receiver?.emit(Topic.NewNodeAdded)
         this.dropCompoentMeta = null
         this.selection.replace(node)
@@ -186,11 +192,11 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
         this.selection.forEach(node => {
 
           const absRect = node.absRect()
-          const position : [number, number] = [absRect.centerX(), absRect.centerY()] 
+          const position : [number, number] = [absRect.left, absRect.top] 
           const receiver = NodeSelector.selectForDrop(this.root, position, node)
           const nodeParent = node.getParent()
           if(receiver !== nodeParent) {
-            receiver!.add(node)
+            receiver!.addToAbsolute(node, position)
             nodeParent.emit(Topic.NodeChildrenChanged)
             receiver?.emit(Topic.NodeChildrenChanged)
           }

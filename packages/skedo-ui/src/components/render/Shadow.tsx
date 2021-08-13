@@ -18,15 +18,18 @@ export default ({meta, position} : {meta : ComponentMeta | null, position : [num
 
 
   const rect = receiver.getRect()
+
+  const width = meta.box.width.toPxNumberWithRect(rect)
+  const height = meta.box.height.toPxNumberWithRect(rect)
 	return (
     <div
       className={classes.shadow}
       style={{
         transform: `translate(${context.cord.worldX(
-          position[0]
-        )}px, ${context.cord.worldY(position[1])}px)`,
-        width: meta.box.width.toPxNumberWithRect(rect),
-        height : meta.box.height.toPxNumberWithRect(rect),
+          position[0] - width / 2
+        )}px, ${context.cord.worldY(position[1] - height / 2)}px)`,
+        width,
+        height,
       }}
     ></div>
   )

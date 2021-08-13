@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from 'react'
 import {Bridge, Node} from '@skedo/meta'
 import styles from './render.module.scss'
 import { componentRemote } from '@skedo/request'
+import { Modules } from '@skedo/render'
 const vue = require('vue')
 
 interface ExternalComponentProps {
@@ -64,14 +65,9 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 					// eslint-disable-next-line
 					function define(deps : Array<string>, callback : (...deps : Array<any>) => void){
 						const depTypes = deps.map(stringName => {
-							switch(stringName) {
-								case 'react':
-									return React
-								case 'vue':
-									return vue 
-								default:
-									throw new Error(`${stringName} not installed.`)
-							}
+							
+							const modules = Modules.get()
+							return modules.resolve(stringName)
 						})
 						return callback(...depTypes)
 					}

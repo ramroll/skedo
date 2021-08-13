@@ -39,7 +39,7 @@ export class Page extends Emiter<Topic>{
     this.linkPage(this.root)
     const pageNode = this.fromJson(json)
     pageNode.setAllowDrag(false)
-    this.root.add(pageNode)
+    this.root.addToAbsolute(pageNode)
     this.pageNode = pageNode
     
     // @ts-ignore
@@ -49,10 +49,6 @@ export class Page extends Emiter<Topic>{
 
 
   createFromJSON = (json: NodeJsonStructure) => {
-    // let box : BoxDescriptor | null = null
-    // if(typeof json.box.width !== 'object') {
-    //   box = new BoxDescriptor(json.box as BoxDescriptorInput)
-    // }
     return this.fromJson(json)
   }
 
@@ -94,7 +90,7 @@ export class Page extends Emiter<Topic>{
     if(!json.id) {
       json.children &&
         json.children.forEach((child) => {
-          node.add(this.fromJson(child))
+          node.addToRelative(this.fromJson(child))
         })
     } else {
       json.children &&
@@ -125,7 +121,7 @@ export class Page extends Emiter<Topic>{
       data
     )
     source.getChildren().forEach((child) => {
-      node.add(this.copy(child))
+      node.addToRelative(this.copy(child))
     })
     this.linkPage(node)
     return node

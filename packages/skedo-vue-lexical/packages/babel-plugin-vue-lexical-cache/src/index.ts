@@ -43,7 +43,7 @@ const createPlugin = () => {
 				},
 
 
-				ImportDeclaration : {
+				ImportDeclaration : { 
 					enter(path : BabelCore.NodePath<t.ImportDeclaration>) {
 						const source = path.node.source.value
 						if(source === 'vue') {

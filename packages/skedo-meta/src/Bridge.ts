@@ -1,7 +1,7 @@
 import { Node } from './instance/Node'
 import { NodeJsonStructure, RenderFor, RenderOptions } from './standard.types'
 import { Page } from './instance/Page'
-import invariant from 'invariant'
+import invariant  from 'invariant'
 import { Topic } from './Topic'
 
 
@@ -57,9 +57,9 @@ export class Bridge {
     }
   }
 
-  public createNode(json:NodeJsonStructure){
+  public createExternalNode(json:NodeJsonStructure){
     const node = this.getPage().createFromJSON(json)
-    this.getNode().add(node)
+    this.getNode().addToRelative(node)
     return node
   }
 }

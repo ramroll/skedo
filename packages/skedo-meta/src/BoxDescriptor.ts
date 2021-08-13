@@ -66,7 +66,7 @@ export class SizeUnit{
 			this.value = val
 		}
 		else if(this.unit === '%') {
-			const prect = this.parent.node.getParent().getRect()
+			const prect = this.getPrect() 
 			const parentWidth = prect.width
 			const parentHeight = prect.height
 			if(['marginTop', 'marginBottom', 'top', 'height'].indexOf(this.key) !== -1) {
@@ -108,9 +108,15 @@ export class SizeUnit{
 		throw new Error("invalid sizeunit.")	
 	}
 
-	public toPxNumber(node : Node){
+	private getPrect(node? : Node){
 		const parent = node?.getParent()
-		const prect = parent ? parent.getRect() : node?.getRect() 
+		const prect = parent ? parent.getRect() : node?.getRect()
+		return prect || Rect.ZERO
+	}
+
+	public toPxNumber(node : Node){
+ 
+		const prect = this.getPrect()
 		return this.toPxNumberWithRect(prect || Rect.ZERO)
 		
 	}
@@ -178,6 +184,9 @@ export class SizeUnit{
 }
 
 export class BoxDescriptor {
+	movable : boolean
+	resizable : boolean
+	selectable : boolean
 	node! : Node
 	left : SizeUnit
 	top : SizeUnit
@@ -199,6 +208,9 @@ export class BoxDescriptor {
 				height : ''
 			}
 		}
+		this.movable = box.movable !== false
+		this.resizable = box.resizable !== false
+		this.selectable = box.selectable !== false
 		this.left = this.parseSizeUnit(box.left, "left")
 		this.top = this.parseSizeUnit(box.top, "top")
 		this.width = this.parseSizeUnit(box.width, "width")

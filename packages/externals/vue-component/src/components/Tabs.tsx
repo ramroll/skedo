@@ -5,7 +5,7 @@ import {
   ref,
 } from "vue"
 import classes from "./tab.module.scss"
-import { Bridge } from "@skedo/meta"
+import { Bridge, Node } from "@skedo/meta"
 import { TabData } from "./TabData"
 
 export default defineComponent({
@@ -34,12 +34,20 @@ export default defineComponent({
     },
   },
   setup(props) {
+
+    const childrens = props.bridge?.getNode().getChildren()  || []
     return () => {
       return (
         <div class={classes.tabs} style={props.style}>
           <div class={classes.panel}>
-            {props.tabs.map(tab => {
-              return <TabPanel bridge={props.bridge} tab={tab} />
+            {props.tabs.map( (tab, i) => {
+              return (
+                <TabPanel
+                  bridge={props.bridge}
+                  node={childrens[i]}
+                  tab={tab}
+                />
+              )
             })}
           </div>
           <div class={classes.menu}>
@@ -65,21 +73,29 @@ const MenuItem = ({ tab }: { tab: TabData }) => {
 const TabPanel = defineComponent({
   props : {
     tab : Object as PropType<TabData>,
-    bridge : Bridge
+    bridge : Bridge,
+    node : Node
   },
   setup(props) {
     const divRef : any = ref<HTMLElement | null>(null)
+    const bridge = props.bridge!
 
+    const node = props.node
+      ? props.node
+      : bridge!.createExternalNode({
+          name: "div",
+          group: "basic",
+          box: {
+            movable: false,
+            resizable: false,
+            top : 0,
+            left : 0,
+            width: "fill",
+            height: "fill",
+          },
+        })
     onMounted(() => {
-      const bridge = props.bridge!
-      const node = bridge!.createNode({
-        name : "div",
-        group : "basic",
-        box : {
-          width:'fill',
-          height : 'fill'
-        }
-      })
+
       const elem = divRef.value!
       bridge.render("dom", node, {
         ele : elem
@@ -88,7 +104,7 @@ const TabPanel = defineComponent({
 
     return () => {
       return (
-        <div ref={divRef} />
+        <div class={classes.tab} ref={divRef} />
       )
     }
   },
