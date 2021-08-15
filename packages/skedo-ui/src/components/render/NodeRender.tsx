@@ -65,6 +65,8 @@ function Styled({
       style={{
         width: box.width.toString(),
         height: box.height.toString(),
+        display : box.display,
+        flexDirection : box.flexDirection,
         ...style,
         ...node.getStyleObject(),
       }}
@@ -80,7 +82,7 @@ function Styled({
 function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.ElementType}){
   const context = useContext(RenderContext)
   const editor = context.editor!
-  const bridge = new Bridge(node, editor.page)
+  const bridge = new Bridge(node, editor.page, 'editor')
   bridge.renderForReact = __render
   const passProps = node.getPassProps().toJS()
 

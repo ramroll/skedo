@@ -104,6 +104,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
         const node = this.page.createFromMetaNew(this.dropCompoentMeta!, position)
         const receiver = NodeSelector.selectForDrop(this.root, position, null)
         // node.setXY(...position)
+        console.log(position,receiver )
         const rect = receiver!.getRect()
         const width = node.getBox().width.toPxNumberWithRect(rect)
         const height = node.getBox().height.toPxNumberWithRect(rect)
@@ -149,7 +150,8 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
         if(receiver && receiver.isFlex()) {
           const children = receiver.getChildren()
           let gapIndex
-          if (receiver.getContainerType() === "flexRow") {
+
+          if(receiver.getBox().flexDirection === 'row') {
             gapIndex = getFlexGap(children, node, "row")
           } else {
             gapIndex = getFlexGap(children, node, "column")

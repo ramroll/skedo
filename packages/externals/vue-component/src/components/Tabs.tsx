@@ -3,6 +3,8 @@ import {
   onMounted,
   PropType,
   ref,
+  Ref,
+  watch
 } from "vue"
 import classes from "./tab.module.scss"
 import { Bridge, Node } from "@skedo/meta"
@@ -36,6 +38,10 @@ export default defineComponent({
   setup(props) {
 
     const childrens = props.bridge?.getNode().getChildren()  || []
+
+    const active = ref(props.tabs[0].name)
+    console.log('setup', active.value)
+
     return () => {
       return (
         <div class={classes.tabs} style={props.style}>
@@ -43,6 +49,7 @@ export default defineComponent({
             {props.tabs.map( (tab, i) => {
               return (
                 <TabPanel
+                  active={active}
                   bridge={props.bridge}
                   node={childrens[i]}
                   tab={tab}
@@ -52,7 +59,9 @@ export default defineComponent({
           </div>
           <div class={classes.menu}>
             {props.tabs.map((tab) => {
-              return <MenuItem tab={tab} key={tab.name} />
+              return <MenuItem onClick={() => {
+                active.value = tab.name
+              }} tab={tab} key={tab.name} />
             })}
           </div>
         </div>
@@ -61,9 +70,9 @@ export default defineComponent({
   },
 })
 
-const MenuItem = ({ tab }: { tab: TabData }) => {
+const MenuItem = ({ tab, onClick }: { tab: TabData, onClick  : () => void }) => {
   return (
-    <div class={classes["menu-item"]}>
+    <div onClick={onClick} class={classes["menu-item"]}>
       <img src={tab.icon} />
       <div>{tab.title}</div>
     </div>
@@ -74,15 +83,18 @@ const TabPanel = defineComponent({
   props : {
     tab : Object as PropType<TabData>,
     bridge : Bridge,
-    node : Node
+    node : Node,
+    active : Object as PropType<Ref<string>>
   },
   setup(props) {
     const divRef : any = ref<HTMLElement | null>(null)
     const bridge = props.bridge!
 
-    const node = props.node
-      ? props.node
-      : bridge!.createExternalNode({
+    let node : Node
+    if(props.node) {
+      node = props.node
+    } else {
+      node = bridge!.createExternalNode({
           name: "div",
           group: "basic",
           box: {
@@ -94,15 +106,24 @@ const TabPanel = defineComponent({
             height: "fill",
           },
         })
-    onMounted(() => {
+      bridge.addChild(node)
+    }
 
-      const elem = divRef.value!
-      bridge.render("dom", node, {
-        ele : elem
-      })
-    })
+    
+
+    watch(divRef, () => {
+      if(divRef.value) {
+        const elem = divRef.value!
+        bridge.render("dom", node, {
+          ele : elem
+        })
+      }
+    }) 
 
     return () => {
+      if(props.tab!.name !== props.active!.value) {
+        return null
+      }
       return (
         <div class={classes.tab} ref={divRef} />
       )

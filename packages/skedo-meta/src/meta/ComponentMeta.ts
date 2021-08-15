@@ -45,9 +45,6 @@ export interface ComponentMetaConfig {
   // 标题
   title : string,
 
-  // 容器行为
-  containerType : 'flexRow' | 'absolute' | 'flexColumn',
-
   // 盒子模型
   box : BoxDescriptorInput,
 
@@ -83,7 +80,6 @@ export class ComponentMeta {
   group : string
   image : string
   title : string
-  containerType : "flexRow" | 'flexColumn' | "absolute" 
   box : BoxDescriptor
   editor : PropsEditorConfigure
   intrinsic? :  boolean
@@ -105,7 +101,6 @@ export class ComponentMeta {
     this.group = config.group
     this.image = config.image
     this.title = config.title
-    this.containerType = config.containerType
     this.box = new BoxDescriptor(config.box)
     this.intrinsic = config.intrinsic
     this.url = config.url
@@ -129,7 +124,7 @@ export class ComponentMeta {
 
 
   createDataFromJson(json : NodeJsonStructure) {
-    const box = new BoxDescriptor(json.box)
+    const box = new BoxDescriptor(json.box, this)
     return fromJS({
       ...json,
       box 
@@ -155,7 +150,6 @@ export class ComponentMeta {
       isMoving: false,
       editMode: false,
       passProps: fromJS(this.defaultProps || {}),
-      containerType: this.containerType,
       box
     })
 

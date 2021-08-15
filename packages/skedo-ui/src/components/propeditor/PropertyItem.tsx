@@ -24,6 +24,7 @@ interface PropItemProps {
 }
 
 
+
 const ptnList = /^list<(.*)>$/
 function render(type : string, props : PropComponentProps, key : any) : (JSX.Element | null){
 
@@ -33,15 +34,36 @@ function render(type : string, props : PropComponentProps, key : any) : (JSX.Ele
       <List
         key={key}
         minimum={props.metaProps?.minimum || 2}
+        children={[{
+          type : listType,
+          path : i => [i]
+        }]}
         {...props}
-        subItemRender={(props: PropComponentProps, key : any) =>
-          render(listType, props, key)
+        subItemRender={(type : string, props: PropComponentProps, key : any) =>
+          render(type, props, key)
         }
       />
     )
   }
 
   switch(type) {
+    case 'list':
+      return (
+        <List
+          key={key}
+          minimum={props.metaProps?.minimum || 2}
+          children={props.row!.map(x => {
+            return {
+              type : x.type,
+              path : (i) => [i, x.name] 
+            }
+          })}
+          {...props}
+          subItemRender={(type : string, props: PropComponentProps, key : any) =>
+            render(type, props, key)
+          }
+        />
+      )
     case "name":
       return <StringInput key={key} {...props} regex={/^[a-zA-Z0-9]*$/}  />
     case 'integer':

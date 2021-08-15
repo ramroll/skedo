@@ -8,11 +8,12 @@ export class LinkedNode extends Node{
 
 	node : Node
 	constructor(id : number, node : Node) {
-		const box = node.getBox()
+		const box = node.getBox().clone()
 		const data = node.meta.createData(id, box)
 		super(node.meta, data)
 		this.node = node
 	}
+
 
   public setInstanceData(key : string, value : any) : void {
 		if(['children', 'parent'].indexOf(key) !== -1) {

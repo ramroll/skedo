@@ -7,6 +7,6 @@ url : local.Root
 box : 
   width : 3200
   height : 3200
-containerType : absolutee
+  container : true
 intrinsic : true
  

@@ -5,6 +5,7 @@ import { BoxDescriptor } from "../BoxDescriptor"
 import { Logger, Emiter } from "@skedo/utils"
 import {ComponentMeta} from '../meta/ComponentMeta'
 import {fromJS} from 'immutable'
+import { LinkedNode } from "./LinkedNode"
 
 
 
@@ -28,13 +29,13 @@ export class Page extends Emiter<Topic>{
     this.nodes = []
     this.loader = loader
 
+    const meta = this.loader.loadByName("basic", "root")
     const box = new BoxDescriptor({
       left : 0,
       top : 0,
       width : 3200,
       height : 3200
-    })
-    const meta = this.loader.loadByName("basic", "root")
+    }, meta)
     this.root = new Node(meta, meta.createData(this.createId(), box))
     this.linkPage(this.root)
     const pageNode = this.fromJson(json)
@@ -48,11 +49,11 @@ export class Page extends Emiter<Topic>{
   }
 
 
-  createFromJSON = (json: NodeJsonStructure) => {
+  public createFromJSON = (json: NodeJsonStructure) => {
     return this.fromJson(json)
   }
 
-  createFromMetaNew(
+  public createFromMetaNew(
     meta : ComponentMeta,
     position : [number, number]
   ) {
@@ -67,15 +68,15 @@ export class Page extends Emiter<Topic>{
     return node 
   }
 
-  fromJson(
+  public fromJson(
     json: NodeJsonStructure
   ): Node {
-
-    const box = new BoxDescriptor(json.box)
     const meta = this.loader.loadByName(
       json.group,
       json.name
     )
+    const box = new BoxDescriptor(json.box, meta)
+
     
     if(json.id) {
       this.id_base = Math.max(this.id_base, json.id + 1)
@@ -103,7 +104,14 @@ export class Page extends Emiter<Topic>{
     return node
   }
 
-  copy(source : NodeType) {
+  public createLinkNode(node : Node) {
+    const id = this.id_base++
+    const linked = new LinkedNode(id, node)
+    this.linkPage(linked)
+    return linked
+  }
+
+  public copy(source : NodeType) {
     const rect = source.getRect()
     const id = this.id_base++
 
@@ -112,7 +120,7 @@ export class Page extends Emiter<Topic>{
       top : rect.top,
       width : rect.width,
       height : rect.height
-    })
+    }, source.meta)
 
 
     const data = source.meta.createData(id, box)

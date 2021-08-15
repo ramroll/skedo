@@ -143,12 +143,12 @@ export class Node extends InstanceData
   // #region 访问器
 
   getChildren(): Array<Node> {
-    const containerType = this.getContainerType()
     const children : Array<Node> = this.data.get("children").concat()
-    if(containerType === 'flexRow') {
+    const box = this.getBox()
+    if(box.display === 'flex' && box.flexDirection === 'row') {
       children.sort((a, b) => a.absRect().left - b.absRect().left)
     }
-    else if(containerType === 'flexColumn') {
+    if(box.display === 'flex' && box.flexDirection === 'column') {
       children.sort((a, b) => a.absRect().top - b.absRect().top)
     }
     return children
@@ -156,8 +156,9 @@ export class Node extends InstanceData
   getReceiving() {
     return this.receiving
   }
+
   isContainer(): boolean {
-    return !!this.meta.containerType
+    return this.getBox().container
   }
 
   isDraggable() {
@@ -174,7 +175,8 @@ export class Node extends InstanceData
 
   getRect(): Rect {
     if (!this.mountPoint) {
-      return this.getBox().toRect()
+      return Rect.ZERO
+      // return this.getBox().toRect()
     }
     return this.mountPoint?.getRect()
   }
@@ -204,8 +206,7 @@ export class Node extends InstanceData
   }
 
   public isFlex() {
-    return this.meta.containerType === 'flexRow'
-      || this.meta.containerType === 'flexColumn'
+    return this.getBox().display === 'flex'
   }
   // #endregion
 
@@ -387,8 +388,12 @@ export class Node extends InstanceData
   }
 
 
-  setChildren (children: Array<Node>) {
+  public setChildren (children: Array<Node>) {
     this.setInstanceData('children', children)
+  }
+
+  public clearChildren() {
+    this.setInstanceData('children', [])
   }
 
 
@@ -445,10 +450,6 @@ export class Node extends InstanceData
     this.setWH(rect.width, rect.height)
   }
 
-
-  public getContainerType() {
-    return this.meta.containerType
-  }
 
   setReceiving(node: Node | null) {
     this.logger.debug('set-receiving', node?.getType())

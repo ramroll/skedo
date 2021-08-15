@@ -1,14 +1,21 @@
 import { Rect } from "@skedo/utils"
 import { Node } from "./instance/Node"
-import { BoxDescriptorInput, SizeUnitInput } from "./standard.types"
+import { ComponentMeta } from "./meta/ComponentMeta"
+import {
+  BoxDescriptorInput,
+  SizeUnitInput,
+  SizeMode,
+	CSSPosition,
+	CSSDisplay,
+	FlexDirection
+} from "./standard.types"
 
 type Unit = 'px' | '%'
-type SizeMode =  "fill" | "value" | "fixed"
 export class SizeUnit{
 
 	private value : number = 0
 	private unit : Unit = 'px'
-	private mode : SizeMode
+	private mode : SizeMode 
 	private parent!: BoxDescriptor
 	private key : string
 
@@ -40,6 +47,10 @@ export class SizeUnit{
 	}
 
 	public toString(){
+		if(this.mode === 'auto') {
+			return ''
+		}
+
 		if(this.mode === 'fill') {
 			return '100%'
 		}
@@ -121,7 +132,6 @@ export class SizeUnit{
 		
 	}
 
-	
 	public toNumber(){
 		return this.toPxNumber(this.parent?.node)
 	}
@@ -139,6 +149,10 @@ export class SizeUnit{
 			return new SizeUnit(100, '%', 'fill', key)
 		}
 
+
+		if(ipt === 'auto') {
+			return new SizeUnit(100, '%', 'auto', key)
+		}
 
 		if(typeof ipt === 'undefined' || ipt === '') {
 			return new SizeUnit(0, 'px', 'value', key)
@@ -183,10 +197,22 @@ export class SizeUnit{
 	}
 }
 
+
+function definedOr(val : any, defaultValue : any) {
+	if(typeof val === 'undefined') {
+		return defaultValue
+	}
+	return val
+}
+
 export class BoxDescriptor {
 	movable : boolean
 	resizable : boolean
 	selectable : boolean
+	position : CSSPosition
+	display : CSSDisplay
+	flexDirection : FlexDirection
+	container : boolean
 	node! : Node
 	left : SizeUnit
 	top : SizeUnit
@@ -199,7 +225,7 @@ export class BoxDescriptor {
 
 
 
-	constructor(box? : BoxDescriptorInput) {
+	constructor(box? : BoxDescriptorInput, meta? : ComponentMeta) {
 		if(!box) {
 			box = {
 				left : '',
@@ -208,9 +234,14 @@ export class BoxDescriptor {
 				height : ''
 			}
 		}
-		this.movable = box.movable !== false
-		this.resizable = box.resizable !== false
-		this.selectable = box.selectable !== false
+
+		this.movable = definedOr( box.movable , meta?.box.movable !== false) 
+		this.resizable = definedOr( box.resizable, meta?.box.resizable !== false) 
+		this.selectable = definedOr( box.selectable, meta?.box.selectable !== false)
+		this.container = definedOr( box.container, meta?.box.container === true)
+		this.position = definedOr( box.position, meta?.box.position || 'absolute')
+		this.display = definedOr( box.display, meta?.box.display || 'block')
+		this.flexDirection = definedOr( box.flexDirection, meta?.box.flexDirection || '')
 		this.left = this.parseSizeUnit(box.left, "left")
 		this.top = this.parseSizeUnit(box.top, "top")
 		this.width = this.parseSizeUnit(box.width, "width")
@@ -271,7 +302,28 @@ export class BoxDescriptor {
 		box.top = this.top.clone()
 		box.width = this.width.clone()
 		box.height = this.height.clone()
+		box.marginBottom = this.marginBottom.clone()
+		box.marginLeft = this.marginLeft.clone()
+		box.marginRight = this.marginRight.clone()
+		box.marginTop = this.marginTop.clone()
+		
+		box.movable = this.movable
+		box.container  = this.container
+		box.selectable = this.selectable
+		box.resizable = this.resizable
+		box.position = this.position
+		box.flexDirection = this.flexDirection
+		box.display = this.display
 		return box
+	}
+
+	public toString(){
+		return [
+      this.left.toString(),
+      this.top.toString(),
+      this.width.toString(),
+      this.height.toString(),
+    ].join(",")
 	}
 
 }

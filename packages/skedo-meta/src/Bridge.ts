@@ -3,21 +3,26 @@ import { NodeJsonStructure, RenderFor, RenderOptions } from './standard.types'
 import { Page } from './instance/Page'
 import invariant  from 'invariant'
 import { Topic } from './Topic'
+import { LinkedNode } from './instance/LinkedNode'
 
 
+
+type BridgeMode = "editor" | "render"
 
 export class Bridge {
   private node?: Node
   private page?: Page
+  private mode : BridgeMode
 
   
   renderForReact?: (
     node: Node,
     options: RenderOptions
   ) => any
-  constructor(node?: Node, page ? : Page) {
+  constructor(node?: Node, page ? : Page, mode : BridgeMode = "editor") {
     this.node = node
     this.page = page
+    this.mode = mode
   }
 
 
@@ -39,6 +44,10 @@ export class Bridge {
     return this.getNode().setPassPropValue(path, value)
   }
 
+  public getMode(){
+    return this.mode
+  }
+
   public on(topic : Topic | Topic[]) {
     return this.getNode().on(topic)
   }
@@ -57,8 +66,18 @@ export class Bridge {
     }
   }
 
+
+  public createLinkNode(node : Node) {
+    const linked = this.getPage()!.createLinkNode(node) 
+    return linked
+  }
+
   public createExternalNode(json:NodeJsonStructure){
     const node = this.getPage().createFromJSON(json)
+    return node
+  }
+
+  public addChild(node : Node) {
     this.getNode().addToRelative(node)
     return node
   }

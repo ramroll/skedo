@@ -6,17 +6,18 @@ title : 行容器
 box:
   width : fill 
   height : 200
+  display : flex
+  flexDirection : row
+  container : true
   left : 
     value : 0
     unit : px
     mode : fixed
 
-containerType : flexRow
 url : local.Row
 style:
   borderWidth : 1px
   borderColor : "#eee"
-  display : flex
   
 editor : 
   groups:

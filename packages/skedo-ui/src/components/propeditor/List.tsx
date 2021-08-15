@@ -1,28 +1,32 @@
-import { PropComponentProps } from "./propeditor.types"
+import {  ListPropItemProps, PropComponentProps } from "./propeditor.types"
 import {range} from 'ramda'
-import useValue from "./useValue"
 import classes from './prop-editor.module.scss'
 import { useState } from "react"
+import {lensPath, set, path} from 'ramda'
 
 type ListProps = {
 	minimum : number,
-	subItemRender : (props : PropComponentProps, key : any) => (JSX.Element | null)
+	children : Array<ListPropItemProps>,
+	subItemRender : (type : string, props : PropComponentProps, key : any) => (JSX.Element | null)
 }
+
+
+
 
 const List = (props : ListProps & PropComponentProps) => {
 
 	const [limit, setLimit] = useState(Math.max(props.minimum , (props.propValue ? props.propValue.length : 0)))
 
-	console.log('render----', props.propValue)
-	function handleChange(i :number, v : any) {
+	function handleChange(path : Array<string | number>, v : any) {
 
 		if(!props.propValue) {
-			const arr = []
-			arr[i] = v
-			props.onChange(arr)
+			const arr : any = []
+			props.onChange ( 
+				set(lensPath(path), v, arr)
+			)
 		} else {
-			props.propValue[i] = v
-			props.onChange(props.propValue.slice())
+			const newPropValue = set(lensPath(path), v, props.propValue)
+			props.onChange(newPropValue)
 		}
 	}
 
@@ -36,14 +40,13 @@ const List = (props : ListProps & PropComponentProps) => {
       {range(0, limit).map((i) => {
 				return (
           <div key={i} className={classes.row}>
-            {props.subItemRender(
-              {
-                onChange: (v) => handleChange(i, v),
-                propValue: (props.propValue || [])[i],
-                disabled: props.disabled,
-              },
-              i
-            )}
+						{props.children!.map( (item, j) => {
+							return props.subItemRender(item.type, {
+								onChange : (v) => handleChange(item.path(i), v),
+								disabled : props.disabled,
+								propValue : path(item.path(i), (props.propValue || [])) 
+							}, i + "_" + j)
+						})}
             <button 
 							onClick={() => handleRemove(i)}
 							className={classes["btn-remove"]}>
