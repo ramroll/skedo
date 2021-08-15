@@ -52,22 +52,28 @@ export type RenderedComponentProps = {
 export type NodeType = Node | LinkedNode
 
 
-export type BasicNodeJsonStructure = {
+export type BasicJsonNode = {
 	type? : string,
 	group : string,
 	style? : any,
 	name : string,
-	children? : Array<NodeJsonStructure>,
+	children? : Array<JsonNode>,
 	id? : number,
 	passProps? : any
 }
 
-export type NodeInstanceJsonStructure = BasicNodeJsonStructure & {
+export type NodeInstanceJsonStructure = BasicJsonNode & {
 	box : BoxDescriptor
 }
 
-export type NodeJsonStructure = BasicNodeJsonStructure & { 
-	box : BoxDescriptorInput
+export type JsonNode = BasicJsonNode & { 
+	box : BoxDescriptorInput,
+	linkedId? : number
+}
+
+export type JsonPage = {
+	links : Record<number, JsonNode>,
+	page : JsonNode
 }
 
 export type NodeData = ImmutableMap<string, any>

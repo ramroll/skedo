@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import {pageRemote, fileRemote, compose,} from '@skedo/request'
-import { boxDescriptor, NodeJsonStructure } from "@skedo/meta"
+import { boxDescriptor, JsonNode } from "@skedo/meta"
 
 
-const json : NodeJsonStructure = {
+const json : JsonNode = {
   type : "react",
 	name : "page",
   group : "basic",
@@ -22,9 +22,9 @@ const json : NodeJsonStructure = {
   },
 }
 
-const usePage = (pageName : string) : (NodeJsonStructure | null) => {
+const usePage = (pageName : string) : (JsonNode | null) => {
 	
-	const [page, setPage] = useState<NodeJsonStructure | null>(null)
+	const [page, setPage] = useState<JsonNode | null>(null)
 
 	useEffect(() => {
 

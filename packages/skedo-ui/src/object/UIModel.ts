@@ -11,8 +11,10 @@ import {
   ComponentMeta,
   Topic,
   Node,
-  NodeJsonStructure,
+  JsonNode,
   Page,
+  JsonPage,
+  BoxDescriptor,
 } from "@skedo/meta"
 import {ComponentsLoader} from '@skedo/loader'
 import { NodeSelector } from './NodeSelector'
@@ -69,11 +71,13 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
   logger : Logger
   copyList : Array<Node> = []
 
-  constructor(json : NodeJsonStructure, pageName : string){
+  constructor(json : JsonPage, pageName : string){
     super(UIStates.Start)
     this.selection = new SelectionNew()
 
     this.propertyEditor = new PropertyEditor(this)
+
+
     this.page = new Page(pageName, json, ComponentsLoader.get())
     this.root = this.page.root
     this.ctrlDown = false

@@ -3,7 +3,7 @@ import {GroupMeta} from './GroupMeta'
 import {PropMeta} from './PropMeta'
 import {Map as ImmutableMap, fromJS} from 'immutable'
 import { BoxDescriptor } from '../BoxDescriptor'
-import { BoxDescriptorInput, NodeJsonStructure } from '../standard.types'
+import { BoxDescriptorInput, JsonNode } from '../standard.types'
 import { KeyValueCache } from './KeyValueCache'
 
 export interface PropConfig {
@@ -123,12 +123,12 @@ export class ComponentMeta {
   }
 
 
-  createDataFromJson(json : NodeJsonStructure) {
+  createDataFromJson(json : JsonNode) :ImmutableMap<string, any> {
     const box = new BoxDescriptor(json.box, this)
     return fromJS({
       ...json,
       box 
-    })
+    }) as ImmutableMap<string, any>
   }
 
   /**

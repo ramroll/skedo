@@ -59,10 +59,11 @@ function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.Elem
   const passProps = node.getPassProps().toJS()
 
 
+  console.log('node', node.getName(), node.getBox().position)
   return (
       <Styled
         node={node}
-        style={{ position: "absolute", ...inheritProps?.style }}
+        style={{ position: node.getBox().position, ...inheritProps?.style }}
       >
         <C bridge={bridge} {...passProps} />
       </Styled>

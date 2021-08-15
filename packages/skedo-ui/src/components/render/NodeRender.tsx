@@ -68,6 +68,7 @@ function Styled({
         display : box.display,
         flexDirection : box.flexDirection,
         ...style,
+        position : box.position,
         ...node.getStyleObject(),
       }}
     >

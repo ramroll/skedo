@@ -4,7 +4,7 @@ version: 1.0.0
 image: listview.png
 box:
   resizable: false
-  position : relative
+  position: relative
   width:
     value: 100
     mode: fixed

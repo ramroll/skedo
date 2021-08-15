@@ -2,7 +2,7 @@ import { ComponentMeta } from "../meta/ComponentMeta"
 import { Logger, Rect, Emiter } from '@skedo/utils'
 import { PropMeta } from '../meta/PropMeta'
 import { Topic } from "../Topic"
-import { NodeData} from "../standard.types"
+import { NodeData, NodeInstanceJsonStructure, JsonNode} from "../standard.types"
 import { BoxDescriptor } from "../BoxDescriptor"
 import { Map as ImmutableMap, fromJS } from "immutable"
 import { MountPoint } from "./MountPoint"
@@ -488,5 +488,13 @@ export class Node extends InstanceData
     for (let node of this.getChildren()) {
       node.print()
     }
+  }
+
+  toJSON(links = {}){
+    const data = this.getData().remove('parent')
+		const json : Partial<NodeInstanceJsonStructure> = data.toJS()
+		const newJson : any = {...json, box : json.box!.toJson()} 
+		newJson.children = this.getChildren().map(child => child.toJSON(links))
+		return newJson as JsonNode 
   }
 }

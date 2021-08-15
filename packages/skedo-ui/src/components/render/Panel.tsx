@@ -84,6 +84,7 @@ export default ({
     window.addEventListener("keyup", debounce((e) => {
       editor.handleHotKeys([...keys])
       keys.delete(e.key)
+      keys.clear()
     }, 100))
   }, [rect])
 

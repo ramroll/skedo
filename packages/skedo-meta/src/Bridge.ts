@@ -1,5 +1,5 @@
 import { Node } from './instance/Node'
-import { NodeJsonStructure, RenderFor, RenderOptions } from './standard.types'
+import { JsonNode, RenderFor, RenderOptions } from './standard.types'
 import { Page } from './instance/Page'
 import invariant  from 'invariant'
 import { Topic } from './Topic'
@@ -72,7 +72,7 @@ export class Bridge {
     return linked
   }
 
-  public createExternalNode(json:NodeJsonStructure){
+  public createExternalNode(json:JsonNode){
     const node = this.getPage().createFromJSON(json)
     return node
   }

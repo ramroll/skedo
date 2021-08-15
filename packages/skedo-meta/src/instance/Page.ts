@@ -1,6 +1,6 @@
 import { Topic } from "../Topic"
 import { Node } from "./Node"
-import { NodeType, NodeJsonStructure,  NodeData, BoxDescriptorInput} from "../standard.types"
+import { NodeType, JsonNode,  NodeData, BoxDescriptorInput, JsonPage} from "../standard.types"
 import { BoxDescriptor } from "../BoxDescriptor"
 import { Logger, Emiter } from "@skedo/utils"
 import {ComponentMeta} from '../meta/ComponentMeta'
@@ -21,8 +21,9 @@ export class Page extends Emiter<Topic>{
   name : string
   logger : Logger = new Logger('page')
   loader : ComponentsLoader
+  links : Record<number, Node>
 
-  constructor(name : string, json : NodeJsonStructure, loader : ComponentsLoader ){
+  constructor(name : string, json : JsonPage, loader : ComponentsLoader ){
     super()
     this.name = name
     this.id_base = 1
@@ -38,7 +39,16 @@ export class Page extends Emiter<Topic>{
     }, meta)
     this.root = new Node(meta, meta.createData(this.createId(), box))
     this.linkPage(this.root)
-    const pageNode = this.fromJson(json)
+
+    this.links = {}
+    Object.keys(json.links).forEach( (id : any) => {
+      const linkSource = json.links[id]
+      const meta = this.loader.loadByName(linkSource.group, linkSource.name)
+      const linkSourceNodeData = meta.createData(id, new BoxDescriptor(linkSource.box, meta))
+      this.links[id] = new Node(meta, linkSourceNodeData)
+    })
+
+    const pageNode = this.fromJson(json.page)
     pageNode.setAllowDrag(false)
     this.root.addToAbsolute(pageNode)
     this.pageNode = pageNode
@@ -49,7 +59,7 @@ export class Page extends Emiter<Topic>{
   }
 
 
-  public createFromJSON = (json: NodeJsonStructure) => {
+  public createFromJSON = (json: JsonNode) => {
     return this.fromJson(json)
   }
 
@@ -69,7 +79,7 @@ export class Page extends Emiter<Topic>{
   }
 
   public fromJson(
-    json: NodeJsonStructure
+    json: JsonNode
   ): Node {
     const meta = this.loader.loadByName(
       json.group,
@@ -83,9 +93,18 @@ export class Page extends Emiter<Topic>{
     }
     const id = json.id || this.createId() 
     
-    const instanceData = json.id ? 
-      meta.createDataFromJson(json) : meta.createData(id, box) 
-    const node = new Node(meta, instanceData as NodeData)
+    let node : Node
+    if(json.id) {
+      const instanceData = meta.createDataFromJson(json) 
+      node = json.linkedId ? 
+        new LinkedNode(json.id, this.links[json.linkedId], instanceData.get('box'))
+        :new Node(meta, instanceData as NodeData)
+
+    } else {
+      const instanceData = meta.createData(id, box) 
+      node = new Node(meta, instanceData as NodeData)
+    }
+    
     this.linkPage(node)
 
     if(!json.id) {
@@ -94,7 +113,7 @@ export class Page extends Emiter<Topic>{
           node.addToRelative(this.fromJson(child))
         })
     } else {
-      json.children &&
+      json.children && !json.linkedId &&
         node.setChildren(json.children.map(child => {
           const childNode = this.fromJson(child)
           childNode.setParent(node)

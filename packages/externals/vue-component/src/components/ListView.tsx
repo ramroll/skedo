@@ -15,11 +15,12 @@ export default defineComponent({
 
 
     const tempaltes = [...Array(templateNumber)].map(() => props.bridge!.createExternalNode({
-      name : "row",
+      name : "div",
       group : 'basic',
       box : {
         movable : false,
         resizable : false,
+        position : 'realitve',
         width : {
           mode : 'fixed',
           value : 100,
