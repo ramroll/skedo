@@ -42,10 +42,7 @@ export class Page extends Emiter<Topic>{
 
     this.links = {}
     Object.keys(json.links).forEach( (id : any) => {
-      const linkSource = json.links[id]
-      const meta = this.loader.loadByName(linkSource.group, linkSource.name)
-      const linkSourceNodeData = meta.createData(id, new BoxDescriptor(linkSource.box, meta))
-      this.links[id] = new Node(meta, linkSourceNodeData)
+      this.links[id] = this.fromJson(json.links[id])
     })
 
     const pageNode = this.fromJson(json.page)
@@ -56,6 +53,9 @@ export class Page extends Emiter<Topic>{
     // @ts-ignore
     // 调试用
     window["root"] = this.root
+
+    // @ts-ignore
+    window['page'] = this
   }
 
 

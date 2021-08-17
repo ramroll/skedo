@@ -57,6 +57,7 @@ export class Bridge {
     node: Node,
     options: RenderOptions
   ) {
+    console.log('bridge.render', type)
     switch (type) {
       case "react": {
         return this.renderForReact!(node, options)

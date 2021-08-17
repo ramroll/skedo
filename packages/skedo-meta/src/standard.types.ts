@@ -12,7 +12,7 @@ export type SizeUnitInput = {
 	mode :  SizeMode 
 }
 
-export type CSSPosition = "absolute" | "realitve" 
+export type CSSPosition = "absolute" | "relative" 
 export type CSSDisplay = "block" | "flex" 
 export type FlexDirection = "row" | "column"| ""
 

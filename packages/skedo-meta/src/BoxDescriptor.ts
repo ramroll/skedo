@@ -279,7 +279,15 @@ export class BoxDescriptor {
 			marginLeft : this.marginLeft.toJSON(), 
 			marginTop : this.marginTop.toJSON(), 
 			marginBottom : this.marginBottom.toJSON(), 
-			marginRight : this.marginRight.toJSON() 
+			marginRight : this.marginRight.toJSON() ,
+			resizable: this.resizable,
+			position :this.position,
+			flexDirection : this.flexDirection,
+			movable : this.movable,
+			container : this.container,
+			display : this.display,
+			selectable : this.selectable
+			
 		}
 	}
 

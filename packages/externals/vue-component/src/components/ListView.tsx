@@ -20,7 +20,7 @@ export default defineComponent({
       box : {
         movable : false,
         resizable : false,
-        position : 'realitve',
+        position : 'relative',
         width : {
           mode : 'fixed',
           value : 100,
@@ -42,15 +42,20 @@ export default defineComponent({
     if(props.bridge?.getMode() === 'editor') {
       for(let i = 0 ; i < tempaltes.length; i++) {
         for (let j = 0; j < replicaNumber; j++) {
-          if(!parent?.getChildren()[replicaNumber * i + j]) {
-            const node = props.bridge!.createLinkNode(tempaltes[i])
+          let node = parent?.getChildren()[replicaNumber * i + j] as LinkedNode
+          if(!node) {
+            node = props.bridge!.createLinkNode(tempaltes[i])
             nodes.push(node)
             parent?.addToRelative(node)
             node.getBox().top.setMode('auto')
+          } else {
+            nodes.push(node)
           }
         }
       }
     }
+
+    console.log('vue', nodes)
 
     return () => {
 

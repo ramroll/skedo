@@ -8,6 +8,7 @@ import { Map as ImmutableMap, fromJS } from "immutable"
 import { MountPoint } from "./MountPoint"
 import { Bridge } from "../Bridge"
 import { CordNew } from "./Cord.new"
+import { LinkedNode } from "./LinkedNode"
 
 // reactive / hooks
 // meta (immutable, data-flow, virtualdom)
@@ -142,7 +143,7 @@ export class Node extends InstanceData
 
   // #region 访问器
 
-  getChildren(): Array<Node> {
+  getChildren(): Array<Node | LinkedNode> {
     const children : Array<Node> = this.data.get("children").concat()
     const box = this.getBox()
     if(box.display === 'flex' && box.flexDirection === 'row') {

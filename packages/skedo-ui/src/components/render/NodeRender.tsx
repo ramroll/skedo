@@ -45,6 +45,7 @@ function Styled({
   const context = useContext(RenderContext)
 
   useEffect(() => {
+    console.log('monunt', node.getName())
     node.mount(ref.current!, context.cord)
   },[])
 
@@ -57,6 +58,7 @@ function Styled({
   })
 
 
+  console.log(node.getName(), box.position)
   return (
     <div
       ref={ref}
@@ -140,6 +142,7 @@ function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.Elem
 
 const NodeRender = ({node, inheritProps } : NodeRenderProps) => {
 
+  console.log('node-render', node.getName())
   if(node.meta.url) {
     const localComponent = getLocalComponentByURL(node.meta.url)
     if(localComponent) {
