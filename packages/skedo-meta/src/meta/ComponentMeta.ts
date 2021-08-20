@@ -11,12 +11,13 @@ export interface PropConfig {
   props? : any
   type : string,
   disabled? : boolean
-  default : any
-  label : string
+  default? : any
+  label? : string
   selections ? : any
   path : string,
-  row ? : number
-  rowLabel : string
+  row ? : number,
+  children? : Array<PropConfig>,
+  rowLabel? : string
 }
 
 export interface GroupConfig {
@@ -116,7 +117,9 @@ export class ComponentMeta {
       for (let group of config.editor.groups) {
         this.groups.push(GroupMeta.of(group))
         for (let prop of group.props || []) {
-          this.props[prop.name] = new PropMeta(prop)
+          if(prop.name) {
+            this.props[prop.name] = new PropMeta(prop)
+          }
         }
       }
     }
@@ -156,11 +159,11 @@ export class ComponentMeta {
 
     for(let key in this.props) {
       const prop = this.props[key]
-      if (prop.default !== undefined) {
+      if (prop.config.default !== undefined) {
         data = PropMeta.setPropValue(
           prop.path,
           data,
-          prop.default
+          prop.config.default
         )
       }
     }

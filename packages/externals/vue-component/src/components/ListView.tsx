@@ -86,7 +86,7 @@ const NodeRender = defineComponent({
       }
     })
     return () => {
-      return <div ref={divRef} />
+      return <div class={classes.tab} ref={divRef} />
     }
   }
 }) 

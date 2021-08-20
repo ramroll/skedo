@@ -34,11 +34,10 @@ function render(type : string, props : PropComponentProps, key : any) : (JSX.Ele
       <List
         key={key}
         minimum={props.metaProps?.minimum || 2}
-        children={[{
-          type : listType,
-          path : i => [i]
-        }]}
         {...props}
+        children={[{
+          type : listType
+        }]}
         subItemRender={(type : string, props: PropComponentProps, key : any) =>
           render(type, props, key)
         }
@@ -52,12 +51,7 @@ function render(type : string, props : PropComponentProps, key : any) : (JSX.Ele
         <List
           key={key}
           minimum={props.metaProps?.minimum || 2}
-          children={props.row!.map(x => {
-            return {
-              type : x.type,
-              path : (i) => [i, x.name] 
-            }
-          })}
+          children={props.children}
           {...props}
           subItemRender={(type : string, props: PropComponentProps, key : any) =>
             render(type, props, key)
@@ -68,6 +62,15 @@ function render(type : string, props : PropComponentProps, key : any) : (JSX.Ele
       return <StringInput key={key} {...props} regex={/^[a-zA-Z0-9]*$/}  />
     case 'integer':
       return <Integer key={key} {...props} />
+    case 'string':
+      return (
+        <StringInput
+          style={{ width: 100 }}
+          key={key}
+          {...props}
+          regex={/.*/}
+        />
+      )
     case 'image':
       return <Image key={key} {...props} />
     case 'color':
@@ -138,14 +141,15 @@ function render(type : string, props : PropComponentProps, key : any) : (JSX.Ele
 
 function renderProp(prop : PropItem, disabled : boolean, key : any){
 
-  return render(prop.meta.type, {
+  return render(prop.meta.config.type, {
     disabled : disabled || prop.disabled ,
     onChange : (v : any) => {
       prop.set(v)
       return 
     },
+    children : prop.meta.config.children,
     propValue : prop.value,
-    metaProps : prop.meta.props
+    metaProps : prop.meta.config.props
   }, key)
   
 }
@@ -161,10 +165,16 @@ const PropertyItem = ({prop, disabled} :PropItemProps) => {
       sub && sub.unsubscribe()
     }
   }, [prop])
-  return <div className={style.prop}>
-    {prop.meta.label && <span className={style["prop-label"]}>{prop.meta.label}:</span>}
-    {renderProp(prop, disabled, prop.meta.name)}
-  </div>
+  return (
+    <div className={style.prop}>
+      {prop.meta.config.label && (
+        <span className={style["prop-label"]}>
+          {prop.meta.config.label}:
+        </span>
+      )}
+      {renderProp(prop, disabled, prop.meta.config.name)}
+    </div>
+  )
 }
 
 

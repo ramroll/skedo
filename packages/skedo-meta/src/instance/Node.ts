@@ -15,6 +15,7 @@ import { LinkedNode } from "./LinkedNode"
 
 class InstanceData extends Emiter<Topic> {
   protected data: NodeData
+
 	constructor(data : NodeData) {
     super()
 		this.data = data
@@ -117,6 +118,8 @@ export class Node extends InstanceData
   private remoteCache? : Map<string, any>
   bridgeCache? : Bridge 
   level: number = 0
+
+  private refs : Array<LinkedNode> = []
   // #region 初始化
   constructor(
     meta: ComponentMeta,
@@ -130,6 +133,14 @@ export class Node extends InstanceData
   }
 
   //#endregion
+
+  public addRef(node : LinkedNode) {
+    this.refs.push(node)
+  }
+
+  public getRefs() {
+    return this.refs
+  }
 
   // #region runtime
   getMountPoint() {
@@ -330,6 +341,7 @@ export class Node extends InstanceData
     if(!position) {
       position = [node.getBox().left.toNumber(), node.getBox().top.toNumber()]
     }
+
     this.add(node)
     node.setXY(...position)
     this.sortChildren(node)
@@ -365,6 +377,10 @@ export class Node extends InstanceData
   }
 
   private add = (node: Node) => {
+
+    if(node ===  this) {
+      throw new Error("cannot add node to itself.")
+    }
 
     if (node.getParent() === this) {
       return

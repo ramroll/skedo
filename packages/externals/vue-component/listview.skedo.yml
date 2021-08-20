@@ -20,12 +20,12 @@ editor:
       props:
         - name: templateNumber
           label: 模板数
-          type: number
+          type: integer
           path: passProps.templateNumber
           default: 1
         - name: replicaNumber
           label: 复制数
-          type: number
+          type: integer
           path: passProps.replicaNumber
           default: 3
 group: custom1

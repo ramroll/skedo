@@ -33,7 +33,7 @@ if(!cmd) {
   process.exit(-1)
 }
 
-cmd = ucFirst(cmd)
+cmd = ucFirst(cmd) // Publish
 
 async function run(){
 

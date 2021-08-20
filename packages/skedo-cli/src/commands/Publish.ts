@@ -56,6 +56,7 @@ export default class Publish implements Command {
       config.version,
       fs.readFileSync(config.file, "utf-8")
     )
+
     if(json.success === false) {
       throw new Error(json.message)
     }
@@ -69,6 +70,8 @@ export default class Publish implements Command {
       config.version,
       finalConf,
     )).data
+
+    // 传sqlite
     const result = await this.submit(config)
     if(!result.success) {
       throw result.message
@@ -99,7 +102,6 @@ export default class Publish implements Command {
 
   private async submit(config: ComponentMetaConfig) : Promise<CustomResponse>  {
     const result = await componentRemote.put(config.group, config.name, {
-      type: config.type,
       group: config.group,
       name : config.name,
       image: config.image,

@@ -29,6 +29,7 @@ function makeVueComponent(Component : any) : React.ElementType<Props> {
 				vue.createApp(Component, {bridge}).mount(elem)
 			}
 		},[])
+		console.log('render vue component')
 		return <div className={styles['vue-container']} ref={ref}>
 		</div>
 	}
@@ -101,6 +102,7 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 			return null
 		}
 		const C = this.state.C
+		console.log('render---external', this.props.bridge.passProps())
 		return <C bridge={this.props.bridge} />
 	}
 }

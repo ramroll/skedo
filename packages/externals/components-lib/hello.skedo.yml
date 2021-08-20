@@ -1,0 +1,24 @@
+version: 1.0.0
+box:
+  width: 100
+  height: 50
+image: welcome.png
+editor:
+  groups:
+    - name: greetings
+      title: 你好组件
+      props:
+        - name: src
+          label: 文本
+          type: string
+          path: passProps.text
+          default: HELLO
+group: custom1
+name: hello
+title: 你好
+componentType: react
+src: src\Helloworld.tsx
+imageUrl: >-
+  https://voice-static.oss-accelerate.aliyuncs.com/img/d6f59bce3a183d24e6072fe2834157c41cf1ffee.png
+file: build/hello.js
+url: https://voice-static.oss-accelerate.aliyuncs.com/custom1/hello-1.0.0.js

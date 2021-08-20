@@ -14,6 +14,7 @@ export class LinkedNode extends Node{
 		const data = node.meta.createData(id, box)
 		super(node.meta, data)
 		this.node = node
+		this.node.addRef(this)
 	}
 
   public getParent(): Node {

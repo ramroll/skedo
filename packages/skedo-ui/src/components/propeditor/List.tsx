@@ -1,51 +1,78 @@
-import {  ListPropItemProps, PropComponentProps } from "./propeditor.types"
+import { PropComponentProps } from "./propeditor.types"
 import {range} from 'ramda'
 import classes from './prop-editor.module.scss'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {lensPath, set, path} from 'ramda'
 
 type ListProps = {
 	minimum : number,
-	children : Array<ListPropItemProps>,
 	subItemRender : (type : string, props : PropComponentProps, key : any) => (JSX.Element | null)
 }
 
 
-
+function getPath(i : number, name ? : string){
+	return name ? [i, name] : [i]
+}
 
 const List = (props : ListProps & PropComponentProps) => {
 
-	const [limit, setLimit] = useState(Math.max(props.minimum , (props.propValue ? props.propValue.length : 0)))
+
+  const [list, setList] = useState(
+    () => {
+      let list = props.propValue
+      if(!list) {
+        list = new Array(props.minimum)
+      }
+      return list as Array<any>
+
+    }
+  )
+
+
+  useEffect(() => {
+    props.onChange(list)
+  }, [list])
 
 	function handleChange(path : Array<string | number>, v : any) {
-
-		if(!props.propValue) {
-			const arr : any = []
-			props.onChange ( 
-				set(lensPath(path), v, arr)
-			)
-		} else {
-			const newPropValue = set(lensPath(path), v, props.propValue)
-			props.onChange(newPropValue)
-		}
+    setList((list) => {
+      const newList = set(lensPath(path), v, list)
+      return newList
+    })
 	}
 
 	function handleRemove(i : number) {
-		props.propValue.splice(i, 1)
-		props.onChange( props.propValue.slice() )
+    setList((list) => {
+      return list.filter((_ ,j) => i !== j)
+    })
 	}
 
 	return (
     <div className={classes.list}>
-      {range(0, limit).map((i) => {
+      {list.map((_ : any, i : number) => {
 				return (
           <div key={i} className={classes.row}>
 						{props.children!.map( (item, j) => {
-							return props.subItemRender(item.type, {
-								onChange : (v) => handleChange(item.path(i), v),
-								disabled : props.disabled,
-								propValue : path(item.path(i), (props.propValue || [])) 
-							}, i + "_" + j)
+							return (
+                <div key={j}>
+									<label>{item.label}</label>
+                  {props.subItemRender(
+                    item.type!,
+                    {
+                      onChange: (v) =>
+                        handleChange(
+                          getPath(i, item.name),
+                          v
+                        ),
+                      disabled: props.disabled,
+                      propValue: path(
+                        getPath(i, item.name),
+                        props.propValue || []
+                      ),
+                    },
+                    i + "_" + j
+                  )}
+                </div>
+              )
 						})}
             <button 
 							onClick={() => handleRemove(i)}
@@ -56,7 +83,9 @@ const List = (props : ListProps & PropComponentProps) => {
         )
       })}
 
-      <button onClick={() => setLimit(x => x + 1)} className={classes["btn-add"]}>+</button>
+      <button onClick={() => setList(list => {
+        return list.concat(undefined)
+      })} className={classes["btn-add"]}>+</button>
     </div>
   )
 }

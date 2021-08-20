@@ -1,30 +1,14 @@
 import {PropConfig} from './ComponentMeta'
 import {Map as ImmutableMap} from 'immutable'
-import { SizeUnit } from '../BoxDescriptor'
 
 export class PropMeta {
-  name : string
-  props? : any
-  type : string
   disabled? : boolean
-  default : any
-  label : string
-  selections ? : any
   path : Array<string>
-  row ? : number
-  rowLabel : string
+  config : PropConfig
 
   constructor(config : PropConfig) {
-    this.name = config.name
-    this.props = config.props
-    this.type = config.type
-    this.disabled = config.disabled
-    this.default = config.default
-    this.label = config.label
+    this.config = config
     this.path = config.path.split('.')
-    this.row = config.row
-    this.rowLabel = config.rowLabel
-    this.selections = config.selections
   }
 
   static setPropValue(path : Array<string>, data : ImmutableMap<string, any>, value : any) {

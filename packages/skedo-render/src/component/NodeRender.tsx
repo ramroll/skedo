@@ -59,7 +59,6 @@ function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.Elem
   const passProps = node.getPassProps().toJS()
 
 
-  console.log('node', node.getName(), node.getBox().position)
   return (
       <Styled
         node={node}

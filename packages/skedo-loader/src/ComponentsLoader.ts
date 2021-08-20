@@ -76,6 +76,8 @@ export class ComponentsLoader extends Emiter<Topic> {
 
 
 	static get() {
+    // @ts-ignore
+    window.componentsLoader = ComponentsLoader.inst 
 		return ComponentsLoader.inst
 	}
 

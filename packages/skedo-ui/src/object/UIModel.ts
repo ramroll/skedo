@@ -15,6 +15,7 @@ import {
   Page,
   JsonPage,
   BoxDescriptor,
+  LinkedNode,
 } from "@skedo/meta"
 import {ComponentsLoader} from '@skedo/loader'
 import { NodeSelector } from './NodeSelector'
@@ -119,7 +120,12 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
         receiver?.emit(Topic.NewNodeAdded)
         this.dropCompoentMeta = null
         this.selection.replace(node)
-        console.log("emit Selection Changed")
+
+        if(receiver instanceof LinkedNode) {
+          for(let refNode of receiver.node.getRefs()) {
+            refNode.emit(Topic.NodeChildrenChanged)
+          }
+        }
         this.emit(Topic.SelectionChanged)
       })
           
