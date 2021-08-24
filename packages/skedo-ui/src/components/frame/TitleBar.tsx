@@ -33,6 +33,7 @@ const TitleBar = ({pageName, name} : {
         />
         <Route
           active={name === "codeless"}
+          path={`/codeless/${pageName}`}
           src="https://voice-static.oss-accelerate.aliyuncs.com//img/8ff6fd7149b9def759a1f1c6760ac1beaf18557d.png"
         />
         <Route

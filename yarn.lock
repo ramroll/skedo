@@ -2774,7 +2774,7 @@ run-series@^1.1.8:
   resolved "https://registry.yarnpkg.com/run-series/-/run-series-1.1.9.tgz#15ba9cb90e6a6c054e67c98e1dc063df0ecc113a"
   integrity sha512-Arc4hUN896vjkqCYrUXquBFtRZdv1PfLbTYP71efP6butxyQ0kWpiNJyAgsxscmQg1cqvHY32/UCBzXedTpU2g==
 
-rxjs@^7.2.0:
+rxjs@^7.2.0, rxjs@^7.3.0:
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.3.0.tgz#39fe4f3461dc1e50be1475b2b85a0a88c1e938c6"
   integrity sha512-p2yuGIg9S1epc3vrjKf6iVb3RCaAYjYskkO+jHIaV0IjOPlJop4UnodOoFb2xeNwlguqLYvGw1b1McillYb5Gw==

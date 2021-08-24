@@ -23,6 +23,7 @@
     "figlet": "^1.5.0",
     "inquirer": "^8.1.2",
     "ramda": "^0.27.1",
+    "rxjs": "^7.3.0",
     "yargs-parser": "^20.2.9"
   },
   "devDependencies": {

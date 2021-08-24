@@ -54,7 +54,7 @@ export enum UIEvents {
 }
 
 
-export class UIModel extends StateMachine<UIStates, UIEvents> {
+export class UIModel extends StateMachine<UIStates, UIEvents, Topic> {
 
   assistLine : AssistLine
   ctrlDown : boolean 

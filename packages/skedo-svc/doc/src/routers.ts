@@ -54,6 +54,15 @@ export default function routers(app : Express) {
     ssi(docSvc.get.bind(docSvc), res)
   });
 
+  app.put('/code-project/:name', (req, res) => {
+    const docSvc = new DocService('code-project', req.params)
+    ssi(docSvc.put.bind(docSvc), res, req.body)
+  })
+
+  app.get('/code-project/:name', (req, res) => {
+    const docSvc = new DocService('code-project', req.params)
+    ssi(docSvc.get.bind(docSvc), res, req.body)
+  })
 
 
 }

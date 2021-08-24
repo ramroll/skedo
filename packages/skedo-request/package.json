@@ -13,5 +13,9 @@
   },
   "devDependencies": {
     "node-libs-browser": "^2.2.1"
+  },
+  "dependencies": {
+    "@types/md5": "^2.3.1",
+    "md5": "^2.3.0"
   }
 }

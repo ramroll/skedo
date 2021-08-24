@@ -3,5 +3,6 @@ export interface ConfigAttributes {
 	uploadFileObject : string,
 	uploadFileText: string,
 	componentUrl : (group? : string, name? : string) => string,
+	codeProjectURL : (name : string) => string
 
 }

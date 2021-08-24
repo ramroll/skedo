@@ -1,23 +1,17 @@
 import config from '../config'
 import {CustomResponse, fetchStandard} from '../standard'
+import md5 from 'md5'
 
 
 export class FileService {
 
 	async post1 (
 		bucket: string,
-		file: string,
-		version: string,
+		ext : string,
 		content: string
 	) : Promise<CustomResponse> {
-		let ext = file.split('.').pop()
-		if(ext === file) {
-			ext ='' 
-		}
-		const first = file.replace(new RegExp("\\." + ext + "$"), "")
-		const finalFileName = ext !== '' ? 
-			`${bucket}/${first}-${version}.${ext}`
-			: `${bucket}/${first}-${version}`
+		const hash = md5(content)
+		const finalFileName = ext ? `${bucket}/${hash}.${ext}` : `${bucket}/${hash}`
 
 		return await fetchStandard(config.uploadFileText, {
 			headers : {

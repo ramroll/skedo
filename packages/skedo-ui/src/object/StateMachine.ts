@@ -1,4 +1,3 @@
-import { Topic } from "@skedo/meta"
 import { Emiter } from '@skedo/utils'
 
 type StateTransferFunction = (...args : Array<any>) => void 
@@ -14,7 +13,8 @@ type RegFuncType<S, A> = (
  */
 export default class StateMachine<
   S extends number,
-  A extends number
+  A extends number,
+  Topic extends number
 > extends Emiter<Topic> {
   s: S
   table: Map<S, Map<A, [StateTransferFunction, S]>>
