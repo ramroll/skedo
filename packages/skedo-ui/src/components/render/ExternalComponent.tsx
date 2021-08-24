@@ -26,7 +26,12 @@ function makeVueComponent(Component : any) : React.ElementType<Props> {
 		useEffect(() => {
 			const elem = ref.current
 			if(elem) {
-				vue.createApp(Component, {bridge}).mount(elem)
+				try{
+					vue.createApp(Component, {bridge}).mount(elem)
+				}
+				catch(ex) {
+					throw new Error(`run vue component ${bridge.getNode().getName()} error:` + ex.toString())
+				}
 			}
 		},[])
 		console.log('render vue component')
@@ -43,6 +48,22 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 		}
 
 
+	}
+
+	getComponent(text : string){
+		function define(deps : Array<string>, callback : (...deps : Array<any>) => void){
+			const depTypes = deps.map(stringName => {
+				const modules = Modules.get()
+				return modules.resolve(stringName)
+			})
+			return callback(...depTypes)
+		}
+		try{
+			return eval(text)
+		}
+		catch(ex) {
+			throw new Error("eval error:" + text)
+		}
 	}
 
 	componentDidMount(){
@@ -75,14 +96,14 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 
 					if(componentType === 'react') {
 						// eslint-disable-next-line
-						const ComponentC = eval(text)
+						const ComponentC = self.getComponent(text)
 
 						node.meta.cache.set(node.meta.url!, ComponentC)
 						console.log('build remove component--')
 						self.setState({C : ComponentC})
 					} else if(componentType === 'vue') {
 						// eslint-disable-next-line
-						const Component = eval(text)
+						const Component = self.getComponent(text)
 						const VueComponentType = makeVueComponent(Component) 
 						// const VueComponent = <VueComponentType bridge={self.props.bridge} />
 						node.setRemoteCache(node.meta.url!, VueComponentType)
