@@ -5,14 +5,13 @@ imageUrl : https://voice-static.oss-accelerate.aliyuncs.com/img/4d10b18f29340958
 title : 列容器 
 url : local.Column
 box :
+  display : flex
+  flexDirection : column
   width : 80
   height : 200
-containerType : flexColumn 
 style:
   borderWidth : 1px
   borderColor : "#eee"
-  display : flex
-  flexDirection : column
   
 editor : 
   groups:

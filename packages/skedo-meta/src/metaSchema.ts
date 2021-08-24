@@ -1,4 +1,4 @@
-export default {
+export const metaSchema = {
   id : "/meta",
   type : 'object',
   required: ["name", "imageUrl", "title", "group", "componentType", "box"],
@@ -47,8 +47,3 @@ export default {
 
 }
 
-export const propMeta = {
-  type : 'object',
-  path : 'string',
-  required : ['path']
-}

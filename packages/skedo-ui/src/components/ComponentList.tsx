@@ -11,13 +11,6 @@ interface ComponentListProps {
 const ComponentList = ({editor} : ComponentListProps) => {
 
 	const loader = useRef(ComponentsLoader.get())
-	// const [list, setList] = useState<Array<ComponentMeta>>(lo)
-	// useEffect(() => {
-  //   loader.current.on(Topic.Loaded).subscribe(() => {
-  //     setList(loader.current.list)
-  //   })
-  //   loader.current.load()
-  // }, [])
 
   const groupTitle : any = {
     basic : "基础组件",
@@ -40,18 +33,8 @@ const ComponentList = ({editor} : ComponentListProps) => {
                 key={compConf.name}
                 draggable
                 onDragStart={(event) => {
-
                   event.preventDefault()
-                  // let div = document.getElementById('dragimage')
-                  // if(!div) {
-                  //   div = document.createElement("div")
-                  //   div.setAttribute("id", "dragimage")
-                  //   div.style.width = "1px" 
-                  //   div.style.height = "1px"
-                  // }
-                  // event.dataTransfer.setData("text" ,"111")
                   editor.dispatch(UIEvents.EvtStartDragAdd, compConf)
-                  // editor.onDragStart(compConf)
                 }}
                 className={style["component-list-item"]}
               >

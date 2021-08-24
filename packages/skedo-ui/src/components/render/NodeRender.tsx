@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Bridge, Node, sizeUnitToString, Topic } from '@skedo/meta'
+import ReactDOM from 'react-dom'
+import { Bridge, Node, RenderOptions, Topic } from '@skedo/meta'
 import ExternalComponent from './ExternalComponent'
 import { NodeRenderProps, RenderedComponentProps } from './render.types'
 import Draggable from '../draggable/Draggable'
@@ -10,9 +11,22 @@ import { useSubscribe } from '../../hooks/useSubscribe'
 import getLocalComponentByURL from './getLocalComponentByURL'
 
 
-function __render(node : Node, key ? : any, childrenProps? : any){
-  return <NodeRender node={node} key={key} inheritProps={childrenProps} />
+function __render(node : Node, options : RenderOptions){
+  const reactElement = (
+    <NodeRender
+      node={node}
+      key={options.key}
+      inheritProps={options.childrenProps}
+    />
+  )
+  if(options.ele) {
+    ReactDOM.render(reactElement, options.ele)
+    return
+  }
+  return reactElement
+
 }
+
 
 function Styled({
   node,
@@ -50,9 +64,12 @@ function Styled({
       draggable={draggable}
       {...{"data-skedo-type" : node.getName()}}
       style={{
-        width: sizeUnitToString(box.width),
-        height: sizeUnitToString(box.height),
+        width: box.width.toString(),
+        height: box.height.toString(),
+        display : box.display,
+        flexDirection : box.flexDirection,
         ...style,
+        position : box.position,
         ...node.getStyleObject(),
       }}
     >
@@ -65,17 +82,16 @@ function Styled({
 }
 
 function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.ElementType}){
-  const bridge = new Bridge(node)
-  bridge.renderForReact = __render
-  const passProps = node.getPassProps().toJS()
   const context = useContext(RenderContext)
   const editor = context.editor!
+  const bridge = new Bridge(node, editor.page, 'editor')
+  bridge.renderForReact = __render
+  const passProps = node.getPassProps().toJS()
 
   const [, setVer] = useState(0)
 
   useSubscribe(
     [
-      [editor, Topic.SelectionChanged],
       [node, [Topic.Resized, Topic.NodeMoved, Topic.NodePropUpdated, Topic.NodeChildrenChanged]],
     ],
     () => {
@@ -95,7 +111,7 @@ function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.Elem
     <Draggable
       style={inheritProps?.style}
       enabled={node.isDraggable()}
-      initialPosition={[box.left.value + box.left.unit, box.top.value + box.top.unit]}
+      initialPosition={[box.left.toString(), box.top.toString()]}
       onDrag={e => {
         if(node.isDraggable()) {
           editor.dispatch(UIEvents.EvtNodeSyncMoving, node, [e.diffX, e.diffY])
@@ -111,7 +127,6 @@ function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.Elem
         node={node}
       >
         <Selectable
-          selected={editor.selection.contains(node)}
           onSelectChanged={selectionChangeHandler}
           node={node}
         >

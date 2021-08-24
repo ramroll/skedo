@@ -6,7 +6,7 @@ import yaml from 'js-yaml'
 import {componentRemote} from '@skedo/request'
 
 import {Validator} from 'jsonschema'
-import metaSchema, {propMeta} from './metaSchema' 
+import { metaSchema } from '@skedo/meta' 
 
 
 const metas: {[key:string] : ComponentMeta} = {}  
@@ -47,7 +47,7 @@ function loadDefault(){
  */
 export class ComponentsLoader extends Emiter<Topic> {
 
-	static inst : ComponentsLoader  = new ComponentsLoader() 
+	private static inst : ComponentsLoader  = new ComponentsLoader() 
 
 	static defaultProps : ComponentMetaConfig = loadDefault() 
 	state : number = 0
@@ -76,6 +76,8 @@ export class ComponentsLoader extends Emiter<Topic> {
 
 
 	static get() {
+    // @ts-ignore
+    window.componentsLoader = ComponentsLoader.inst 
 		return ComponentsLoader.inst
 	}
 
@@ -98,7 +100,7 @@ export class ComponentsLoader extends Emiter<Topic> {
           config.name
         )
       } catch (ex) {
-        console.error(`load component ${item.group}.${item.type} error`, ex.toString())
+        console.error(`load component ${item.group}.${item.name} error`, ex.toString())
       }
     }
   }

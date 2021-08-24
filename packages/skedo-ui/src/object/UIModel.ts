@@ -11,8 +11,11 @@ import {
   ComponentMeta,
   Topic,
   Node,
-  NodeJsonStructure,
+  JsonNode,
   Page,
+  JsonPage,
+  BoxDescriptor,
+  LinkedNode,
 } from "@skedo/meta"
 import {ComponentsLoader} from '@skedo/loader'
 import { NodeSelector } from './NodeSelector'
@@ -21,6 +24,7 @@ import ResizerNew from './Resizer.new'
 import PageExporter from './PageExporter'
 import { fileRemote, pageRemote, compose } from '@skedo/request'
 import { getFlexGap } from '../util/getFlexGap'
+import Hotkeys from './HotKeys'
 
 export enum UIStates{
   Start,
@@ -68,11 +72,13 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
   logger : Logger
   copyList : Array<Node> = []
 
-  constructor(json : NodeJsonStructure, pageName : string){
+  constructor(json : JsonPage, pageName : string){
     super(UIStates.Start)
     this.selection = new SelectionNew()
 
     this.propertyEditor = new PropertyEditor(this)
+
+
     this.page = new Page(pageName, json, ComponentsLoader.get())
     this.root = this.page.root
     this.ctrlDown = false
@@ -89,25 +95,37 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
     window["ui"] = this
 
     this.describe("大家好！我是小师叔，这里在处理拖拽新元素的逻辑", (register) => {
-      register(UIStates.Start, UIStates.StartAdd, UIEvents.EvtStartDragAdd, (meta : ComponentMeta) => {
-        this.dropCompoentMeta = meta
-      })
-  
-      register(UIStates.Selected, UIStates.StartAdd, UIEvents.EvtStartDragAdd, (meta : ComponentMeta) => {
+      register([UIStates.Start, UIStates.Selected], UIStates.StartAdd, UIEvents.EvtStartDragAdd, (meta : ComponentMeta) => {
         this.dropCompoentMeta = meta
       })
   
       register([UIStates.StartAdd, UIStates.Adding], UIStates.Adding, UIEvents.EvtAddDraging, (position) => {
         this.dropComponentPosition = position
+        const receiver = NodeSelector.selectForDrop(this.root, position, null)
+        this.emit(Topic.ShadowReceiverChanged, receiver)
       })
       register([UIStates.StartAdd, UIStates.Adding], UIStates.Added, UIEvents.EvtDrop, () => {
         const position = this.dropComponentPosition
         const node = this.page.createFromMetaNew(this.dropCompoentMeta!, position)
         const receiver = NodeSelector.selectForDrop(this.root, position, null)
-        receiver?.add(node)
+        // node.setXY(...position)
+        console.log(position,receiver )
+        const rect = receiver!.getRect()
+        const width = node.getBox().width.toPxNumberWithRect(rect)
+        const height = node.getBox().height.toPxNumberWithRect(rect)
+        receiver?.addToAbsolute(node, [
+          position[0] - width / 2,
+          position[1] - height / 2,
+        ])
         receiver?.emit(Topic.NewNodeAdded)
         this.dropCompoentMeta = null
         this.selection.replace(node)
+
+        if(receiver instanceof LinkedNode) {
+          for(let refNode of receiver.node.getRefs()) {
+            refNode.emit(Topic.NodeChildrenChanged)
+          }
+        }
         this.emit(Topic.SelectionChanged)
       })
           
@@ -142,7 +160,8 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
         if(receiver && receiver.isFlex()) {
           const children = receiver.getChildren()
           let gapIndex
-          if (receiver.getContainerType() === "flexRow") {
+
+          if(receiver.getBox().flexDirection === 'row') {
             gapIndex = getFlexGap(children, node, "row")
           } else {
             gapIndex = getFlexGap(children, node, "column")
@@ -185,11 +204,11 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
         this.selection.forEach(node => {
 
           const absRect = node.absRect()
-          const position : [number, number] = [absRect.centerX(), absRect.centerY()] 
+          const position : [number, number] = [absRect.left, absRect.top] 
           const receiver = NodeSelector.selectForDrop(this.root, position, node)
           const nodeParent = node.getParent()
           if(receiver !== nodeParent) {
-            receiver!.add(node)
+            receiver!.addToAbsolute(node, position)
             nodeParent.emit(Topic.NodeChildrenChanged)
             receiver?.emit(Topic.NodeChildrenChanged)
           }
@@ -307,6 +326,17 @@ export class UIModel extends StateMachine<UIStates, UIEvents> {
 
   public getSelection(){
     return this.selection
+  }
+
+  public clearSelection(){
+    this.selection.clear()
+  }
+
+  public handleHotKeys(keys : Array<string>){
+    const hotkeys = new Hotkeys()
+    hotkeys.run(keys, {
+      editor :this
+    })
   }
 }
 

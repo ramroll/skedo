@@ -1,3 +1,5 @@
+import { BoxDescriptor } from "../BoxDescriptor";
+import { JsonNode } from "../standard.types";
 import { Node } from "./Node";
 
 /**
@@ -7,11 +9,20 @@ import { Node } from "./Node";
 export class LinkedNode extends Node{
 
 	node : Node
-	constructor(id : number, node : Node) {
-		const box = node.getBox()
+	constructor(id : number, node : Node, box? : BoxDescriptor) {
+		box = box || node.getBox().clone()
 		const data = node.meta.createData(id, box)
 		super(node.meta, data)
 		this.node = node
+		this.node.addRef(this)
+	}
+
+  public getParent(): Node {
+    return this.node.getParent()
+  }
+
+	public getChildren() {
+		return this.node.getChildren()
 	}
 
   public setInstanceData(key : string, value : any) : void {
@@ -35,4 +46,15 @@ export class LinkedNode extends Node{
 		}
 		return this.updateInstanceByPath(path, value)
   }
+
+	public toJSON(links : Record<number, JsonNode> = {}) : JsonNode{
+
+		const json = super.toJSON(links)
+		json.linkedId = this.node.getId()
+
+		if(!links[this.node.getId()]) {
+			links[this.node.getId()] = this.node.toJSON(links)
+		}
+		return json
+	}
 }

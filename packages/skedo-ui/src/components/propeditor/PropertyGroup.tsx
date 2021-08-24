@@ -19,9 +19,9 @@ const PropertyGroup = ({group, props} : GroupProps) => {
     groupStyle.display = "none"
   }
 
-  const list = Object.values(props).filter(x => group.propKeys.has(x.meta.name))
+  const list = Object.values(props).filter(x => group.propKeys.has(x.meta.config.name))
   const groupsMap = R.groupBy(
-    (x) => x.meta.row + "",
+    (x) => x.meta.config.row + "",
     list 
   )
 
@@ -41,13 +41,13 @@ const PropertyGroup = ({group, props} : GroupProps) => {
         {groups.map((list, i) => {
           return (
             <React.Fragment key={i}>
-            <h3 key={"row-label"} className={style['row-label']}>{list[0].meta.rowLabel}</h3>
+            <h3 key={"row-label"} className={style['row-label']}>{list[0].meta.config.rowLabel}</h3>
             <div className={`${style['group-row']} ${i===groups.length-1 ? style.last : ''}`}>
               {list.map((prop) => {
                 return (
                   <PropertyItem
                     disabled={!!group.disabled}
-                    key={prop.meta.name}
+                    key={prop.meta.config.name}
                     prop={prop}
                   />
                 )

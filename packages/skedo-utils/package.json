@@ -3,6 +3,9 @@
   "main": "src/index.ts",
   "version": "0.0.2",
   "description": "",
+  "peerDependencies": {
+    "rxjs": "^7.3.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,25 +1,13 @@
 import fs from 'fs'
 import path from 'path'
-import readline from 'readline'
 import Command from "../interface/Command"
-import util from 'util'
-import yaml, { dump } from 'js-yaml'
-import yargs from 'yargs'
-import Question from '../helper/UI'
-import * as Errors from '../helper/Errors'
+import yaml from 'js-yaml'
+import inquirer from 'inquirer'
 
 
 const template = `
-type : 
-# 组件在skedo中展示的图片
-image : 
-title :  
 initialWidth : 100
 initialHeight : 100 
-url : 
-author : 
-# 组件文件的源地址
-src : 
 version : 1.0.0
 editor :
   groups:
@@ -37,65 +25,67 @@ editor :
  */
 export default class Init implements Command{
 	name : string = 'init'
-	format : string = "init [groupAndName] [src]"
-	desc :string = "init a component. e.g. \n" + "skedo init foo.bar ./components/A.vue"
 
-	question : Question
 
-	constructor(){
-		this.question = new Question()
-	}
 
 	async run(argv : any){
-		this.question.start()
-		try{
-			const groupAndName = argv.groupAndName
-			const componentSourceFile = argv.src
-			if(!componentSourceFile) {
-				throw new Error("you should specify component source code file.")
-			}
-			if(!fs.existsSync(componentSourceFile)) {
-				throw new Error(`file ${componentSourceFile} not found.`)
-			}
-
-			const ext = path.extname(componentSourceFile)
-			if(['.tsx', '.ts', '.jsx', '.vue'].indexOf(ext) === -1) {
-				throw new Error(`${ext} is not supproted.`)
-			}
-			if(!groupAndName) {
-				throw new Error(Errors.GROUP_AND_NAME_NOT_SPECIFIED)
-			}
-			const [group, name] = groupAndName.split('.')
-			this.question.title("begin init component : ", groupAndName)
-			if(!(group && name)) {
-				throw new Error(Errors.GROUP_AND_NAME_NOT_SPECIFIED)
-			}
-			await this.createYML(group, name, componentSourceFile)
-		}finally {
-			this.question.end()
+		const sourceFile = argv.source
+		if(!sourceFile)  {
+			throw new Error("you should specify component source code file.")
 		}
+		if(!fs.existsSync(sourceFile)) {
+			throw new Error(`file ${sourceFile} not found.`)
+		}
+
+		const ext = path.extname(sourceFile)
+		if(['.tsx', '.ts', '.jsx', '.vue'].indexOf(ext) === -1) {
+			throw new Error(`${ext} is not supproted.`)
+		}
+
+		const answer = await this.questions()
+		answer.src = sourceFile
+
+		await this.createYML(answer, sourceFile)
+
 	}
 
-	async createYML(group : string, name : string, src : string){
+	private async questions(){
+		const result = await inquirer.prompt([
+			{
+        message: "select a group",
+        choices: ["custom1", "custom"],
+        type: "list",
+        name: "group",
+      },
+      {
+        message: "what's your component name? ",
+        type: "input",
+        name: "name",
+      },
+      {
+        message: "what's your component tilte(display name)? ",
+        type: "input",
+        name: "title",
+      },
+      {
+        message: "which framework? ",
+        type: "list",
+        name: "componentType",
+				choices : ['react', 'vue']
+      },
+    ])
+		return result
+	}
 
-		const config : any = yaml.load(template)
-		config.group = group
-		config.src = src
-		config.name = name
-		const title = await this.question.ask("Input component title")
-		config['title'] = title
-		config['name']  = name
 
-		let type = await this.question.ask("Which framework(react/vue)?(default react)")
-		if(type === "") {
-			type = "react"
-		}
-		if(! (type === 'react' || type === 'vue')) {
-			throw new Error("Invalid component type:" + type)
-		}
-		config.type = type
+
+	async createYML(answer : any, src : string){
+
+		let config : any = yaml.load(template)
+		config = {...config, ...answer}
+
 		const str = yaml.dump(config)
-		fs.writeFileSync(`./${name}.skedo.yml`, str, 'utf-8')
+		fs.writeFileSync(`./${config.name}.skedo.yml`, str, 'utf-8')
 
 	}
 }

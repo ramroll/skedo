@@ -7,9 +7,9 @@ import { InputOptions, OutputOptions, RollupWatchOptions } from "rollup"
 import replace from '@rollup/plugin-replace'
 // @ts-ignore
 import url from 'rollup-plugin-url'
+
 type RollupUsage = "dev" | "build"
 export default class ProjectRollupConfig {
-
 
   usage : RollupUsage
   constructor(usage : RollupUsage) {

@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef, useState, useContext } from 'react'
-import { sizeUnitToNumber, Topic } from '@skedo/meta'
+import { Topic } from '@skedo/meta'
 import useBound from '../../hooks/useBound'
 import RenderContext from './RenderContext'
 import Shadow from './Shadow'
 import UIModel, { UIEvents } from '../../object/UIModel'
 import classes from './render.module.scss'
-import {throttle, Rect} from '@skedo/utils'
+import {throttle, Rect, debounce} from '@skedo/utils'
 import AssistLineSVG from '../assistline/AssistLineSVG'
 import { useSubscribe } from '../../hooks/useSubscribe'
 import { LineDescriptor } from '../../object/AssistLine'
@@ -74,7 +74,23 @@ export default ({
       ref.current!.scrollTo(scrollLeft, 0)
       renderContext.cord.setViewPort(rect)
     }
+
+    let keys = new Set<string>()
+    
+    window.addEventListener("keydown", (e) => {
+      keys.add(e.key)
+    })
+
+    window.addEventListener("keyup", debounce((e) => {
+      editor.handleHotKeys([...keys])
+      keys.delete(e.key)
+      keys.clear()
+    }, 100))
   }, [rect])
+
+  useEffect(() => {
+
+  }, [])
 
   useSubscribe(
     [editor, Topic.AssistLinesChanged],
@@ -103,28 +119,17 @@ export default ({
             // common moving
             return
           }
-          const box = meta.box
-
-          const [maxW, maxH] = editor.page.pageNode.getWH()
-          const w = sizeUnitToNumber(
-            "width",
-            box.width,
-            maxW,
-            maxH
-          )
-          const h = sizeUnitToNumber(
-            "height",
-            box.height,
-            maxW,
-            maxH
-          )
+          // const box = meta.box
+          // const w = box.width.toNumber()
+          // const h = box.height.toNumber()
+          
           setPosition([
-            e.clientX - w / 2,
-            e.clientY - h / 2,
+            e.clientX ,
+            e.clientY ,
           ])
           const position = [
-            renderContext.cord.worldX(e.clientX) - w / 2,
-            renderContext.cord.worldY(e.clientY) - h / 2,
+            renderContext.cord.worldX(e.clientX) ,
+            renderContext.cord.worldY(e.clientY) ,
           ]
           editor.dispatch(UIEvents.EvtAddDraging, position)
         }}

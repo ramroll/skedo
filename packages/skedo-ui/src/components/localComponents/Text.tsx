@@ -28,19 +28,18 @@ const Text: React.FC<TextProps> = ({
   const iptRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    const sub = bridge.node
-      .on(Topic.EditMode)
-      .subscribe((value) => {
+    const sub = bridge.on(Topic.EditMode)
+      .subscribe((value : any) => {
         setState(value ? 1 : 0)
       })
     return () => {
       sub.unsubscribe()
     }
-  }, [bridge.node])
+  }, [])
 
   useEffect(() => {
     if (txt !== text) {
-      bridge.setPropsValue("text", txt)
+      bridge.setPropValue(["text"], txt)
     }
   }, [txt])
 

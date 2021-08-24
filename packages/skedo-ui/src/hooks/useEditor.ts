@@ -1,26 +1,27 @@
 import { useEffect, useState } from "react"
 import UIModel from "../object/UIModel"
 import {pageRemote, fileRemote, compose} from '@skedo/request'
-import { boxDescriptor, NodeJsonStructure, Topic } from "@skedo/meta"
+import { BoxDescriptor, JsonNode, JsonPage, Topic } from "@skedo/meta"
 import {ComponentsLoader} from '@skedo/loader'
 
-const json : NodeJsonStructure = {
-  type : "react",
-	name : "page",
-  group : "basic",
-	box : boxDescriptor({
-		left : (3200-414)/2,	
-		top : 40,
-		width :414,
-		height : 736,
-		mode : 'normal'
-	}),
-  children : [
-  ],
-  style : {
-    border : "1px solid #eee",
-    backgroundColor : 'white'
+const json: JsonPage = {
+  page: {
+    type: "react",
+    name: "page",
+    group: "basic",
+    box: {
+      left: (3200 - 414) / 2,
+      top: 40,
+      width: 414,
+      height: 736,
+    },
+    children: [],
+    style: {
+      border: "1px solid #eee",
+      backgroundColor: "white",
+    },
   },
+	links : {}
 }
 
 const useEditor = (pageName : string) : [UIModel | null] => {

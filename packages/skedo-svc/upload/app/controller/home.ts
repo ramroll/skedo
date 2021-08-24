@@ -12,8 +12,7 @@ export default class HomeController extends Controller {
     const {ctx} = this
     const file = ctx.request.body.file
     const content = ctx.request.body.content
-
-    ctx.body = await ctx.service.upload.uploadContentb64(file, content, ctx)
+    ctx.body = await ctx.service.upload.uploadContent(file, content, ctx)
   }
 
   public async uploadPage() {

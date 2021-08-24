@@ -46,10 +46,13 @@ export default ({bridge, children, childrenProps, gapIndex} : SkedoComponentProp
 					
 				}
 				else {
-					return bridge.renderAsReact(
+					return bridge.render(
+						'react',
 						childNode,
-						childNode.getId(),
-						childrenProps
+						{
+							key : childNode.getId() + "",
+							childrenProps 
+						}
 					)
 				}
 			})}

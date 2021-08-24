@@ -131,9 +131,9 @@ export class Package{
 		await this.exec("rm -rf ./node_modules", true)
 	}
 
-	public reNpmInstall(){
-		this.npmClear()	
-		this.npmInstall()
+	public async reNpmInstall(){
+		await this.npmClear()	
+		await this.npmInstall()
 	}
 
 	public async runBootstrapScript(){

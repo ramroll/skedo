@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from 'react'
 import {Bridge, Node} from '@skedo/meta'
 import styles from './render.module.scss'
 import { componentRemote } from '@skedo/request'
+import { Modules } from '@skedo/render'
 const vue = require('vue')
 
 interface ExternalComponentProps {
@@ -11,7 +12,7 @@ interface ExternalComponentProps {
 	node: Node,
 }
 interface ExternalComponentState {
-	C : JSX.Element | null ,
+	C : React.ElementType<Props>,
 }
 
 interface Props {
@@ -25,9 +26,15 @@ function makeVueComponent(Component : any) : React.ElementType<Props> {
 		useEffect(() => {
 			const elem = ref.current
 			if(elem) {
-				vue.createApp(Component, {bridge}).mount(elem)
+				try{
+					vue.createApp(Component, {bridge}).mount(elem)
+				}
+				catch(ex) {
+					throw new Error(`run vue component ${bridge.getNode().getName()} error:` + ex.toString())
+				}
 			}
 		},[])
+		console.log('render vue component')
 		return <div className={styles['vue-container']} ref={ref}>
 		</div>
 	}
@@ -37,17 +44,33 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 	constructor(props : ExternalComponentProps){
 		super(props)
 		this.state = {
-			C : null
+			C : () => null
 		}
 
 
 	}
 
+	getComponent(text : string){
+		function define(deps : Array<string>, callback : (...deps : Array<any>) => void){
+			const depTypes = deps.map(stringName => {
+				const modules = Modules.get()
+				return modules.resolve(stringName)
+			})
+			return callback(...depTypes)
+		}
+		try{
+			return eval(text)
+		}
+		catch(ex) {
+			throw new Error("eval error:" + text)
+		}
+	}
+
 	componentDidMount(){
 		const self = this
-		const componentType = this.props.node.meta.type
+		const componentType = this.props.node.meta.componentType
 
-		const cache = this.props.node.getRemoteCache(this.props.url)
+		const cache = this.props.node.meta.cache.get(this.props.url)
 		if(cache) {
 			console.log('use remote cache' ,cache)
 			this.setState({
@@ -64,40 +87,32 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 					// eslint-disable-next-line
 					function define(deps : Array<string>, callback : (...deps : Array<any>) => void){
 						const depTypes = deps.map(stringName => {
-							switch(stringName) {
-								case 'react':
-									return React
-								case 'vue':
-									return vue 
-								default:
-									throw new Error(`${stringName} not installed.`)
-							}
+							
+							const modules = Modules.get()
+							return modules.resolve(stringName)
 						})
 						return callback(...depTypes)
 					}
+
 					if(componentType === 'react') {
 						// eslint-disable-next-line
-						const ComponentC = eval(text)
-						const ReactComponent = <ComponentC bridge={self.props.bridge} />
+						const ComponentC = self.getComponent(text)
 
-						node.setRemoteCache(node.meta.url!, ReactComponent)
+						node.meta.cache.set(node.meta.url!, ComponentC)
 						console.log('build remove component--')
-						self.setState({C : ReactComponent})
+						self.setState({C : ComponentC})
 					} else if(componentType === 'vue') {
 						// eslint-disable-next-line
-						const Component = eval(text)
+						const Component = self.getComponent(text)
 						const VueComponentType = makeVueComponent(Component) 
-						const VueComponent = <VueComponentType bridge={self.props.bridge} />
-						node.setRemoteCache(node.meta.url!, VueComponent)
+						// const VueComponent = <VueComponentType bridge={self.props.bridge} />
+						node.setRemoteCache(node.meta.url!, VueComponentType)
 						self.setState({
-							C : VueComponent 
+							C : VueComponentType
 						})
 					} else {
 						/// TODO : normalize component type in meta config 
 						console.error("Unkown componnet Type", node.getName())
-
-
-						
 					}
 				})()
 			}) 
@@ -107,7 +122,8 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 		if(this.state.C === null) {
 			return null
 		}
-		return this.state.C
-		// return <this.state.C bridge={this.props.bridge} />
+		const C = this.state.C
+		console.log('render---external', this.props.bridge.passProps())
+		return <C bridge={this.props.bridge} />
 	}
 }

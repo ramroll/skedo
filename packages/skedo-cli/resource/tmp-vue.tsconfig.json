@@ -1,0 +1,15 @@
+{
+	"compilerOptions": { 
+    "target": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "jsx" : "preserve"
+	},
+	"include": ["./src"]
+}
+
+
+

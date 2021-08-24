@@ -2,20 +2,22 @@
 import {GroupMeta} from './GroupMeta'
 import {PropMeta} from './PropMeta'
 import {Map as ImmutableMap, fromJS} from 'immutable'
-import { boxDescriptor } from '../BoxDescriptor'
-import { BoxDescriptor, BoxDescriptorInput } from '../standard.types'
+import { BoxDescriptor } from '../BoxDescriptor'
+import { BoxDescriptorInput, JsonNode } from '../standard.types'
+import { KeyValueCache } from './KeyValueCache'
 
 export interface PropConfig {
   name : string,
   props? : any
   type : string,
   disabled? : boolean
-  default : any
-  label : string
+  default? : any
+  label? : string
   selections ? : any
   path : string,
-  row ? : number
-  rowLabel : string
+  row ? : number,
+  children? : Array<PropConfig>,
+  rowLabel? : string
 }
 
 export interface GroupConfig {
@@ -31,19 +33,37 @@ export interface PropsEditorConfigure {
 }
 
 export interface ComponentMetaConfig {
-  type : string,
+
+  // 组件名称 
   name : string,
-  image : string,
-  title : string,
-  containerType : 'flexRow' | 'absolute' | 'flexColumn',
-  box : BoxDescriptorInput,
-  editor : PropsEditorConfigure,
-  description : string,
-  intrinsic? :  boolean,
-  style? : any,
-  author : string,
-  defaultProps : any,
+
+  // 分组
   group : string,
+
+  // logo图片
+  image : string,
+
+  // 标题
+  title : string,
+
+  // 盒子模型
+  box : BoxDescriptorInput,
+
+  // 属性编辑器属性
+  editor : PropsEditorConfigure,
+
+  description : string,
+
+  // 是否为内部组件
+  intrinsic? :  boolean,
+
+  // 初始样式
+  style? : any,
+
+  author : string,
+
+  // 初始属性
+  defaultProps : any,
 
   /* External components' */
   componentType? : 'react' | 'vue', 
@@ -57,12 +77,10 @@ export interface ComponentMetaConfig {
 
 
 export class ComponentMeta {
-  type : string  
   name : string  
   group : string
   image : string
   title : string
-  containerType : "flexRow" | 'flexColumn' | "absolute" 
   box : BoxDescriptor
   editor : PropsEditorConfigure
   intrinsic? :  boolean
@@ -73,18 +91,18 @@ export class ComponentMeta {
   componentType : 'react' | "vue"
   props : {[name : string] : PropMeta}
   groups : Array<GroupMeta>
+  cache : KeyValueCache<any>
 
   
 
   constructor(config : ComponentMetaConfig) {
     
-    this.type = config.type
+    this.cache = new KeyValueCache()
     this.name = config.name
     this.group = config.group
     this.image = config.image
     this.title = config.title
-    this.containerType = config.containerType
-    this.box = boxDescriptor(config.box)
+    this.box = new BoxDescriptor(config.box)
     this.intrinsic = config.intrinsic
     this.url = config.url
     this.style = config.style
@@ -99,12 +117,22 @@ export class ComponentMeta {
       for (let group of config.editor.groups) {
         this.groups.push(GroupMeta.of(group))
         for (let prop of group.props || []) {
-          this.props[prop.name] = new PropMeta(prop)
+          if(prop.name) {
+            this.props[prop.name] = new PropMeta(prop)
+          }
         }
       }
     }
   }
 
+
+  createDataFromJson(json : JsonNode) :ImmutableMap<string, any> {
+    const box = new BoxDescriptor(json.box, this)
+    return fromJS({
+      ...json,
+      box 
+    }) as ImmutableMap<string, any>
+  }
 
   /**
    * 创建实例数据
@@ -114,12 +142,9 @@ export class ComponentMeta {
    */
   createData(id : number, box : BoxDescriptor | null) {
 
-    const isBoxDescritor = typeof box?.width === 'object'
-
     let data = ImmutableMap({
       id,
       parent: null,
-      type: this.type,
       name : this.name,
       group: this.group,
       style: ImmutableMap<string, any>(),
@@ -128,18 +153,17 @@ export class ComponentMeta {
       isMoving: false,
       editMode: false,
       passProps: fromJS(this.defaultProps || {}),
-      containerType: this.containerType,
-      box : fromJS(box)
+      box
     })
 
 
     for(let key in this.props) {
       const prop = this.props[key]
-      if (prop.default !== undefined) {
+      if (prop.config.default !== undefined) {
         data = PropMeta.setPropValue(
           prop.path,
           data,
-          prop.default
+          prop.config.default
         )
       }
     }

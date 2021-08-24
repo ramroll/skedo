@@ -1,21 +1,35 @@
-import { useContext } from 'react'
-import { ComponentMeta, sizeUnitToString } from '@skedo/meta'
+import { useContext, useEffect, useState } from 'react'
+import { ComponentMeta, Node, Topic } from '@skedo/meta'
 import classes from './render.module.scss'
 import RenderContext from './RenderContext'
 export default ({meta, position} : {meta : ComponentMeta | null, position : [number, number]}) => {
 	const context = useContext(RenderContext)
-	if(!meta) {
+  const [receiver, setReceiver] = useState<Node | null>(null)
+
+  useEffect(() => {
+    context.editor!.on(Topic.ShadowReceiverChanged)
+      .subscribe((receiver : Node) => {
+        setReceiver(receiver)
+      })
+  }, [])
+	if(!meta || !receiver) {
 		return null
 	}
+
+
+  const rect = receiver.getRect()
+
+  const width = meta.box.width.toPxNumberWithRect(rect)
+  const height = meta.box.height.toPxNumberWithRect(rect)
 	return (
     <div
       className={classes.shadow}
       style={{
         transform: `translate(${context.cord.worldX(
-          position[0]
-        )}px, ${context.cord.worldY(position[1])}px)`,
-        width: sizeUnitToString(meta.box.width),
-        height: sizeUnitToString(meta.box.height),
+          position[0] - width / 2
+        )}px, ${context.cord.worldY(position[1] - height / 2)}px)`,
+        width,
+        height,
       }}
     ></div>
   )

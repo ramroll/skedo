@@ -6,22 +6,21 @@
       "dom.iterable",
       "esnext"
     ],
+    "outDir" : "./es",
     "allowJs": false,
-    "skipLibCheck": true,
+    "rootDir" : "src",
     "downlevelIteration": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "experimentalDecorators" : true,
     "isolatedModules": true,
     "declaration": true,
   },
   "include": [
-    "src/**/*", "../skedo-utils/src/Emiter.ts", "../skedo-loader/src/ComponentsLoader.ts",
+    "src/**/*"
   ]
 }

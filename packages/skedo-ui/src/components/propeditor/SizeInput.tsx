@@ -1,55 +1,65 @@
-import {Input} from 'antd'
-import { debounce } from '@skedo/utils'
-import { parseSizeUnit, SizeUnit } from "@skedo/meta"
-import useValue from './useValue'
-import { useEffect, useRef } from 'react'
+import {Input, Select} from 'antd'
+import Checkbox from 'antd/lib/checkbox/Checkbox'
 import { PropComponentProps } from './propeditor.types'
+import classes from './prop-editor.module.scss'
+import { SizeUnit } from '@skedo/meta'
+import { useState } from 'react'
 interface SizeInputProps {
 }
 
-const SizeInput = ({ propValue, disabled, onChange, metaProps }: SizeInputProps & PropComponentProps) => {
-	const [value, setValue] = useValue<SizeUnit | null>(propValue, onChange)
-	const ref = useRef<any>(null)
-	const debouncedOnChange = debounce( (e) => {
-		const value = e.target.value
-		setValue(parseSizeUnit(value))
-	}, 500)
+const Option = Select.Option
+const SizeInput = ({
+  propValue,
+  disabled,
+  onChange,
+  metaProps,
+}: PropComponentProps) => {
 
-	useEffect(() => {
-		const ele = ref.current
-		if(ele) {
-			ele.setValue( (value?.value || "") + (value?.unit || "") )
-		}
-	}, [value])
+  const sizeUnit : SizeUnit = propValue
+
+  const [value ,setValue] = useState(sizeUnit.getValue())
+  const [unit,setUnit] = useState(sizeUnit.getUnit())
+  const [fixed, setFixed] = useState(sizeUnit.getMode() === 'fixed')
+
   return (
-    <Input
-			ref={ref}
-      {...metaProps}
-			disabled={disabled}
-      // initialValue={(value?.value || "") + (value?.unit || '')}
-			style={{width : 60}}
-      onKeyDown={(e) => {
-				if(e.key === "ArrowUp") {
-					setValue( value => {
-						if(!value) {
-							return value
-						}
-						return {...value, value : value.value + 1}
-					})
-					return
-				}
-				else if(e.key === 'ArrowDown') {
-					setValue( value => {
-						if(!value || value.value <= 0) {
-							return value
-						}
-						return {...value, value : value.value - 1}
-					})
-				}
-				
-      }}
-      onChange={debouncedOnChange}
-    />
+    <div className={classes["size-input"]}>
+      <label style={{ width: "40px" }}>
+        {metaProps.suffix}:{" "}
+      </label>
+      <Input
+        disabled={disabled}
+        onChange={(e) => {
+          const value = Number.parseInt(e.target.value)
+          if (isNaN(value)) {
+            return
+          }
+          sizeUnit.setValue(value)
+          onChange(sizeUnit)
+          setValue(value)
+        }}
+        value={value}
+        style={{ width: "60px" }}
+      />
+      <span style={{ width: "10px" }}></span>
+      <Select
+        value={unit}
+        onChange={(unit) => {
+          sizeUnit.setUnit(unit)
+          onChange(sizeUnit)
+          setUnit(unit)
+        }}
+        disabled={disabled}
+      >
+        <Option value="px">px</Option>
+        <Option value="%">%</Option>
+      </Select>
+      <span style={{ width: "10px" }}></span>
+      <span>fixed</span>
+      <Checkbox
+        checked={fixed}
+        disabled={disabled}
+      ></Checkbox>
+    </div>
   )
 }
 

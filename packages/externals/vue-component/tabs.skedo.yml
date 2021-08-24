@@ -1,29 +1,48 @@
-name: tabs
-type: vue
-image: tabs.png
-group: custom1
-title: 标签页
-box:
-  mode: fill
-author: null
-src: ./src/components/Tabs.vue
-file: ./build/tabs.js
+initialWidth: 100
+initialHeight: 100
 version: 1.0.0
-componentType: vue
-style:
-  background: white
-  display: flex
-  flexDirection: row
-  height: 100%
+image: tabs.png
+box:
+  width: 100px
+  height: 100px
 editor:
   groups:
-    - name: swiper
+    - name: example
       title: 标签页
       props:
-        - name: src
-          label: 字号
-          type: list<image-upload>
-          path: passProps.imgs
+        - name: tabs
+          label: 标签设置
+          type: list
+          path: passProps.tabs
+          children:
+            - name: name
+              type: string
+              label: name
+            - name: title
+              type: string
+              label: 文案
+            - name: icon
+              type: image
+              label: 图标
+          default:
+            - name: home
+              title: 首页
+              icon: >-
+                https://voice-static.oss-accelerate.aliyuncs.com/img/0ad95d3784e75a6aaeaaaef718cfa4da03be0b48.png
+            - name: discover
+              title: 发现
+              icon: >-
+                https://voice-static.oss-accelerate.aliyuncs.com/img/ca6ab328733e5db1f6c7ff4101388c78dff25040.png
+            - name: user
+              title: 我的
+              icon: >-
+                https://voice-static.oss-accelerate.aliyuncs.com/img/3dec8e25d1121fca1e57c007a70cba131f9ccd9d.png
+group: custom1
+name: tabs
+title: 标签页
+componentType: vue
+src: src\components\Tabs.tsx
 imageUrl: >-
   https://voice-static.oss-accelerate.aliyuncs.com/img/c7c64f66ef03731291c63ad4ff227f9cb6e1e597.png
+file: build/tabs.js
 url: https://voice-static.oss-accelerate.aliyuncs.com/custom1/tabs-1.0.0.js

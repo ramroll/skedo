@@ -18,9 +18,8 @@ export function useGapMoving(node : Node, type : 'row' | 'column'){
 			childrenRef.current = node.getChildren()
 			setVer(x => x + 1)
 		})
-
 		ctx.editor!.on(Topic.MouseUpEventPass)
-			.subscribe(x => {
+			.subscribe(() => {
 				if(gap.current !== null) {
 					gap.current = null
 					childrenRef.current = node.getChildren()
@@ -29,7 +28,7 @@ export function useGapMoving(node : Node, type : 'row' | 'column'){
 			})
 
 		ctx.editor!.on(Topic.GeneralMovingEvent)
-			.subscribe(e => {
+			.subscribe(() => {
 				if(ctx.editor?.underState(UIStates.Moving)) {
 					const movingNode = ctx.editor.getSelection().first()
 					const rect = movingNode.absRect()

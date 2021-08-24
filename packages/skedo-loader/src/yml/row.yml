@@ -4,15 +4,20 @@ componentType: react
 imageUrl : https://voice-static.oss-accelerate.aliyuncs.com/img/4d10b18f29340958d103c152e9c8502e606ddba2.png
 title : 行容器 
 box:
-  width : 200
+  width : fill 
   height : 200
+  display : flex
+  flexDirection : row
+  container : true
+  left : 
+    value : 0
+    unit : px
+    mode : fixed
 
-containerType : flexRow
 url : local.Row
 style:
   borderWidth : 1px
   borderColor : "#eee"
-  display : flex
   
 editor : 
   groups:

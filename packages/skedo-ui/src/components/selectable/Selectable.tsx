@@ -1,13 +1,13 @@
 
-import  { MouseEvent, useRef, useMemo, useEffect, MouseEventHandler, useContext} from "react"
-import {Node} from '@skedo/meta'
+import  { MouseEvent, useRef, useMemo, useEffect, MouseEventHandler, useContext, useState} from "react"
+import {Node, Topic} from '@skedo/meta'
 import { UIEvents } from "../../object/UIModel"
 import ResizerNew from '../../object/Resizer.new'
 import RenderContext from "../render/RenderContext"
 import styles from './selectable.module.scss'
+import { useSubscribe } from "../../hooks/useSubscribe"
 
 type SelectionProps = {
-	selected : boolean,
 	children : JSX.Element,
   onSelectChanged : (selected : boolean) => void ,
   onMouseDown? : MouseEventHandler,
@@ -17,18 +17,23 @@ type SelectionProps = {
 }
 
 const Selectable = ({
-  selected,
   children,
   onSelectChanged,
   onMouseDown,
   onMouseUp,
   node
 }: SelectionProps) => {
-  const selectionValue = useRef(selected)
+  const ctx = useContext(RenderContext)
+  const [,setVer] = useState(0)
 
-  useEffect(() => {
-    selectionValue.current = selected
-  }, [selected])
+  function selected(){
+    return ctx.editor!.selection.contains(node)
+  }
+
+  useSubscribe([ctx.editor!, Topic.SelectionChanged], () => {
+    setVer((x) => x + 1)
+
+  })
 
   const handlers = useMemo(() => {
     let startSelected = false
@@ -37,11 +42,10 @@ const Selectable = ({
     return {
       onMouseDown: (e: MouseEvent) => {
         e.stopPropagation()
-        startSelected = selectionValue.current
+        startSelected = selected()
         startX = e.clientX
         startY = e.clientY
-        if (!selectionValue.current) {
-          selectionValue.current = true
+        if (!startSelected) {
           onSelectChanged(true)
         }
         onMouseDown && onMouseDown(e)
@@ -52,7 +56,6 @@ const Selectable = ({
           e.clientX !== startX || e.clientY !== startY
         if (startSelected && !moved) {
           onSelectChanged(false)
-          selectionValue.current = false
         }
         onMouseUp && onMouseUp(e)
       },
@@ -61,16 +64,17 @@ const Selectable = ({
 
   const context = useContext(RenderContext)
 
+  const selectedValue = selected()
   return (
     <div className={styles.selectable} {...handlers}>
       <div
         className={styles.selection_frame}
         style={{
-          display: selected ? "block" : "none",
+          display: selectedValue ? "block" : "none",
         }}
       />
       {children}
-      {selected &&
+      {selectedValue && node.isResizable() &&
         ResizerNew.resizerData.map(([name, type]) => {
           return (
             <div

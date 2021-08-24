@@ -1,12 +1,19 @@
 import React, { useContext, useEffect, useRef } from 'react'
-import { Bridge, Node, sizeUnitToString, NodeRenderProps, RenderedComponentProps } from '@skedo/meta'
+import { Bridge, Node,  NodeRenderProps, RenderedComponentProps, RenderOptions } from '@skedo/meta'
 import ExternalComponent from './ExternalComponent'
 import RenderContext from './RenderContext'
 import getLocalComponentByURL from '../getLocalComponentByURL'
 
-function __render(node : Node, key ? : any, childrenProps? : any){
-  return <NodeRender node={node} key={key} inheritProps={childrenProps} />
+function __render(node : Node, options : RenderOptions){
+  return (
+    <NodeRender
+      node={node}
+      key={options.key}
+      inheritProps={options.childrenProps}
+    />
+  )
 }
+
 
 function Styled({
   node,
@@ -30,10 +37,10 @@ function Styled({
     <div
       ref={ref}
       style={{
-        left : sizeUnitToString(box.left),
-        top : sizeUnitToString(box.top),
-        width: sizeUnitToString(box.width),
-        height: sizeUnitToString(box.height),
+        left : box.left.toString(),
+        top : box.top.toString(),
+        width: box.width.toString(),
+        height: box.height.toString(),
         overflow : "hidden",
         ...style,
         ...node.getStyleObject(),
@@ -55,7 +62,7 @@ function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.Elem
   return (
       <Styled
         node={node}
-        style={{ position: "absolute", ...inheritProps?.style }}
+        style={{ position: node.getBox().position, ...inheritProps?.style }}
       >
         <C bridge={bridge} {...passProps} />
       </Styled>

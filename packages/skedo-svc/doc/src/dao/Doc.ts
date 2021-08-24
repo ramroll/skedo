@@ -1,6 +1,7 @@
 import {Model, Optional, DataTypes} from 'sequelize'
 import Helper from './DB'
 
+// sql + no-sql : postgre
 interface DocAttributes {
 	id : number,
 	type : string,

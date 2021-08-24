@@ -3,10 +3,11 @@
 /** 左侧组件选择器  */
 .component-list {
   background : #ececec;
-  width : 162px; 
-  min-height: 600px;
+  width : 182px; 
+  height : 100%;
   flex-shrink: 0;
   position: relative;
+  overflow-y: scroll;
   height : 100%;
   .component-list-inner {
     position : relative;

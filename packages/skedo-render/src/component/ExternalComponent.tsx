@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from 'react'
 import {Bridge, Node} from '@skedo/meta'
 import styles from './render.module.scss'
 import { componentRemote } from '@skedo/request'
+import { Modules } from './Modules'
 const vue = require('vue')
 
 interface ExternalComponentProps {
@@ -43,9 +44,20 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 
 	}
 
+	getComponent(text : string){
+		function define(deps : Array<string>, callback : (...deps : Array<any>) => void){
+			const depTypes = deps.map(stringName => {
+				const modules = Modules.get()
+				return modules.resolve(stringName)
+			})
+			return callback(...depTypes)
+		}
+		return eval(text)
+	}
+
 	componentDidMount(){
 		const self = this
-		const componentType = this.props.node.meta.type
+		const componentType = this.props.node.meta.componentType
 
 		const cache = this.props.node.getRemoteCache(this.props.url)
 		if(cache) {
@@ -62,29 +74,17 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 			.then(text => {
 				(function(){
 					// eslint-disable-next-line
-					function define(deps : Array<string>, callback : (...deps : Array<any>) => void){
-						const depTypes = deps.map(stringName => {
-							switch(stringName) {
-								case 'react':
-									return React
-								case 'vue':
-									return vue 
-								default:
-									throw new Error(`${stringName} not installed.`)
-							}
-						})
-						return callback(...depTypes)
-					}
+
 					if(componentType === 'react') {
 						// eslint-disable-next-line
-						const ComponentC = eval(text)
+						const ComponentC = self.getComponent(text)
 						const ReactComponent = <ComponentC bridge={self.props.bridge} />
 
 						node.setRemoteCache(node.meta.url!, ReactComponent)
 						self.setState({C : ReactComponent})
 					} else if(componentType === 'vue') {
 						// eslint-disable-next-line
-						const Component = eval(text)
+						const Component = self.getComponent(text)
 						const VueComponentType = makeVueComponent(Component) 
 						const VueComponent = <VueComponentType bridge={self.props.bridge} />
 						node.setRemoteCache(node.meta.url!, VueComponent)

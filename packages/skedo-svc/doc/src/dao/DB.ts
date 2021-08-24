@@ -14,6 +14,7 @@ export default class DB{
 				storage : config.storage,
 				dialect : config.dbType as Dialect
 			})
+
 		}
 		return DB.sequelize
 	}

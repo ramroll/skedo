@@ -2,18 +2,20 @@ import { ComponentMeta } from "../meta/ComponentMeta"
 import { Logger, Rect, Emiter } from '@skedo/utils'
 import { PropMeta } from '../meta/PropMeta'
 import { Topic } from "../Topic"
-import { BoxDescriptor, NodeData} from "../standard.types"
-import { boxDescriptor, sizeUnitToNumber } from "../BoxDescriptor"
+import { NodeData, NodeInstanceJsonStructure, JsonNode} from "../standard.types"
+import { BoxDescriptor } from "../BoxDescriptor"
 import { Map as ImmutableMap, fromJS } from "immutable"
 import { MountPoint } from "./MountPoint"
 import { Bridge } from "../Bridge"
 import { CordNew } from "./Cord.new"
+import { LinkedNode } from "./LinkedNode"
 
 // reactive / hooks
 // meta (immutable, data-flow, virtualdom)
 
 class InstanceData extends Emiter<Topic> {
   protected data: NodeData
+
 	constructor(data : NodeData) {
     super()
 		this.data = data
@@ -42,7 +44,7 @@ class InstanceData extends Emiter<Topic> {
 
   
   public getBox() : BoxDescriptor{
-    return this.data.get('box').toJS()
+    return this.data.get('box')
   }
 
   public getType() {
@@ -77,48 +79,29 @@ class InstanceData extends Emiter<Topic> {
 
   public getWH() : [number, number]{
     const box = this.getBox()
-    return [box.width.value, box.height.value]
+    return [box.width.toNumber(), box.height.toNumber()]
   }
 
 
 
 
   public setXY = (x: number, y: number) => {
-    this.updateBoxValue('left', x)
-    this.updateBoxValue('top', y)
+    this.getBox().left.set(x)
+    this.getBox().top.set(y)
   }
 
   public setXYWH = (x : number, y : number, w : number, h : number) => {
-    this.updateBoxValue('left', x)
-    this.updateBoxValue("width", w)
-    this.updateBoxValue("height", h)
-    this.updateBoxValue("top", y)
+    const box = this.getBox()
+    box.left.set(x)
+    box.top.set(y)
+    box.width.set(w)
+    box.height.set(h)
   }
 
   public setWH = (w : number, h : number) => {
-    this.updateBoxValue("width", w)
-    this.updateBoxValue("height",h)
-  }
-
-  protected updateBoxValue(key : string, value : number) {
-    this.updateInstanceData('box', box => {
-      const item = box.get(key)
-      const unit = item.get('unit')
-      if(unit === 'px') {
-        box = box.setIn([key, 'value'], value)
-      }
-      else if(unit === '%') {
-        const prect = this.getParent().getRect()
-        const parentWidth = prect.width
-        const parentHeight = prect.height
-        if(['marginTop', 'marginBottom', 'top', 'height'].indexOf(key) !== -1) {
-          box = box.setIn([key, 'value'], (value / parentHeight))
-        } else {
-          box = box.setIn([key, 'value'], (value / parentWidth))
-        }
-      }
-      return box
-    })
+    const box = this.getBox()
+    box.width.set(w)
+    box.height.set(h)
   }
 }
 
@@ -135,18 +118,29 @@ export class Node extends InstanceData
   private remoteCache? : Map<string, any>
   bridgeCache? : Bridge 
   level: number = 0
+
+  private refs : Array<LinkedNode> = []
   // #region 初始化
   constructor(
     meta: ComponentMeta,
     data : NodeData
   ) {
     super(data)
+    this.getBox().setNode(this)
     this.logger = new Logger("node")
     this.meta = meta
     this.receiving = null
   }
 
   //#endregion
+
+  public addRef(node : LinkedNode) {
+    this.refs.push(node)
+  }
+
+  public getRefs() {
+    return this.refs
+  }
 
   // #region runtime
   getMountPoint() {
@@ -160,13 +154,13 @@ export class Node extends InstanceData
 
   // #region 访问器
 
-  getChildren(): Array<Node> {
-    const containerType = this.getContainerType()
+  getChildren(): Array<Node | LinkedNode> {
     const children : Array<Node> = this.data.get("children").concat()
-    if(containerType === 'flexRow') {
+    const box = this.getBox()
+    if(box.display === 'flex' && box.flexDirection === 'row') {
       children.sort((a, b) => a.absRect().left - b.absRect().left)
     }
-    else if(containerType === 'flexColumn') {
+    if(box.display === 'flex' && box.flexDirection === 'column') {
       children.sort((a, b) => a.absRect().top - b.absRect().top)
     }
     return children
@@ -174,34 +168,36 @@ export class Node extends InstanceData
   getReceiving() {
     return this.receiving
   }
+
   isContainer(): boolean {
-    return !!this.meta.containerType
+    return this.getBox().container
   }
 
   isDraggable() {
     const name = this.getName()
-    return name !== 'root' && name !== 'page'
+    return this.getBox().movable && name !== 'root' && name !== 'page'
   }
+
+  isResizable() {
+    const name = this.getName()
+    return this.getBox().resizable && name !== 'root' && name !== 'page'
+  }
+
+
 
   getRect(): Rect {
     if (!this.mountPoint) {
-      const parent = this.getParent()
-      const prect = parent ? parent.getRect() : Rect.ZERO 
-      const box = this.getBox() 
-      return new Rect(
-        Math.round(sizeUnitToNumber('left', box.left, prect.width, prect.height)),
-        Math.round(sizeUnitToNumber('top', box.top, prect.width, prect.height)),
-        Math.round(sizeUnitToNumber('width', box.width, prect.width, prect.height)),
-        Math.round(sizeUnitToNumber('height', box.height, prect.width, prect.height)),
-      )
+      return Rect.ZERO
+      // return this.getBox().toRect()
     }
     return this.mountPoint?.getRect()
   }
 
   updateFromMount(){
     const rect = this.getRect()
-    this.updateBoxValue('left', rect.left)
-    this.updateBoxValue('top', rect.top)
+    const box = this.getBox()
+    box.left.set(rect.left)
+    box.top.set(rect.top)
   }
 
 
@@ -222,8 +218,7 @@ export class Node extends InstanceData
   }
 
   public isFlex() {
-    return this.meta.containerType === 'flexRow'
-      || this.meta.containerType === 'flexColumn'
+    return this.getBox().display === 'flex'
   }
   // #endregion
 
@@ -322,8 +317,8 @@ export class Node extends InstanceData
     const rect = parent.getRect()
 
     const box = this.getBox()
-    const x = sizeUnitToNumber('left', box.left, rect.width, rect.height)
-    const y = sizeUnitToNumber('top', box.top, rect.width, rect.height)
+    const x = box.left.toNumber()
+    const y = box.top.toNumber()
     return this.setXY(x + vec[0], y + vec[1])
   }
 
@@ -332,8 +327,8 @@ export class Node extends InstanceData
     const rect = parent.getRect()
 
     const box = this.getBox()
-    const x = sizeUnitToNumber('left', box.left, rect.width, rect.height)
-    const y = sizeUnitToNumber('top', box.left, rect.width, rect.height)
+    const x = box.left.toNumber()
+    const y = box.top.toNumber()
     return [x + vec[0], y + vec[1]]
   }
 
@@ -342,30 +337,28 @@ export class Node extends InstanceData
     this.setInstanceData('isMoving', isMoving)
   }
 
-  add = (node: Node) => {
-
-    if (node.getParent() === this) {
-      return
+  public addToRelative(node : Node, position? : [number, number]){
+    if(!position) {
+      position = [node.getBox().left.toNumber(), node.getBox().top.toNumber()]
     }
-    this.logger.debug(
-      "add",
-      node.getName(),
-      node.absRect(),
-      "to",
-      this.getName(),
-      this.getRect()
-    )
-    const [x, y] = node.absPosition()
+
+    this.add(node)
+    node.setXY(...position)
+    this.sortChildren(node)
+  }
+
+  public addToAbsolute(node : Node, position? : [number, number]) {
+    if(!position) {
+      position = [node.getBox().left.toNumber(), node.getBox().top.toNumber()]
+    }
+    this.add(node)
+    const [x, y] = position 
     const [sx, sy] = this.absPosition()
-
     node.setXY(x - sx, y - sy)
-    if (node.getParent()) {
-      const p = node.getParent()
-      p.remove(node)
-    }
+    this.sortChildren(node)
+  }
 
-    node.setParent(this)
-
+  private sortChildren(node : Node){
     this.updateInstanceData(
       "children",
       (_children) => {
@@ -373,7 +366,9 @@ export class Node extends InstanceData
         children = children.concat(node)
         if (this.isFlex()) {
           children = children.sort(
-            (a, b) => a.getRect().left - b.getRect().left
+            (a, b) => {
+              return a.getRect().left - b.getRect().left
+            }
           )
         }
         return children
@@ -381,9 +376,41 @@ export class Node extends InstanceData
     )
   }
 
+  private add = (node: Node) => {
 
-  setChildren (children: Array<Node>) {
+    if(node ===  this) {
+      throw new Error("cannot add node to itself.")
+    }
+
+    if (node.getParent() === this) {
+      return
+    }
+
+    this.logger.debug(
+      "add",
+      node.getName(),
+      "to",
+      this.getName(),
+    )
+
+
+    if (node.getParent()) {
+      const p = node.getParent()
+      p.remove(node)
+    }
+
+    node.setParent(this)
+
+
+  }
+
+
+  public setChildren (children: Array<Node>) {
     this.setInstanceData('children', children)
+  }
+
+  public clearChildren() {
+    this.setInstanceData('children', [])
   }
 
 
@@ -397,12 +424,27 @@ export class Node extends InstanceData
     )
   }
 
+  public destroy() {
+    if(this.getName() === 'root' || this.getName() === 'page') {
+      return
+    }
+
+    const parent = this.getParent()
+    parent.remove(this)
+  }
+
 
   public setpassProps = (passObject: any) => {
     this.setInstanceData(
       "passProps",
       fromJS(passObject)
     )
+  }
+
+  public setPassPropValue(path: Array<string>, value : any) {
+    const passProps = this.getPassProps()
+      .setIn(path, value)
+    this.setInstanceData("passProps", passProps)
   }
 
   public setAllowDrag = (allowDrag: boolean) => {
@@ -426,10 +468,6 @@ export class Node extends InstanceData
   }
 
 
-  public getContainerType() {
-    return this.meta.containerType
-  }
-
   setReceiving(node: Node | null) {
     this.logger.debug('set-receiving', node?.getType())
     if (this.receiving !== node) {
@@ -437,6 +475,7 @@ export class Node extends InstanceData
       this.emit(Topic.NodePropUpdated)
     }
   }
+
 
   //#endregion
 
@@ -466,5 +505,13 @@ export class Node extends InstanceData
     for (let node of this.getChildren()) {
       node.print()
     }
+  }
+
+  toJSON(links = {}){
+    const data = this.getData().remove('parent')
+		const json : Partial<NodeInstanceJsonStructure> = data.toJS()
+		const newJson : any = {...json, box : json.box!.toJson()} 
+		newJson.children = this.getChildren().map(child => child.toJSON(links))
+		return newJson as JsonNode 
   }
 }

@@ -5,6 +5,7 @@
 		"outDir": "build",
 		"lib" : ["es6"],
 		"declaration": true,
+		"esModuleInterop": true,
 		"downlevelIteration": true, 
 		"moduleResolution": "node"
 	},

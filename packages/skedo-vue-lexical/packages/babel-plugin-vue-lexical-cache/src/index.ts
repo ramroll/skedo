@@ -1,5 +1,5 @@
 import * as t from "@babel/types"
-import * as BabelCore from '@babel/core'
+import BabelCore from '@babel/core'
 
 
 const createPlugin = () => {
@@ -27,6 +27,7 @@ const createPlugin = () => {
 	}
 
 	let enterCounter = 0
+	let pos = 0
 	const plugin = (api : any, options : any, dirname : any) => {
 		return {
 			name : "closure-id",
@@ -34,9 +35,7 @@ const createPlugin = () => {
 				Program : {
 	
 					enter(path : BabelCore.NodePath<t.Program>) {
-						if(enterCounter ++ == 2) {
-							throw "exit"
-						}
+						pos = 0
 					},
 					exit(path : BabelCore.NodePath<t.Program>) {
 						scopedFunctionNames.clear()
@@ -44,13 +43,20 @@ const createPlugin = () => {
 				},
 
 
-				ImportDeclaration : {
+				ImportDeclaration : { 
 					enter(path : BabelCore.NodePath<t.ImportDeclaration>) {
 						const source = path.node.source.value
 						if(source === 'vue') {
-							const identifier = path.node.specifiers[0].local
-							if(identifier.name === '_createVNode') {
-								path.node.source.value = "@skedo/lexical-cache"
+							const identifier = path.node.specifiers.find(x => x.local.name === '_createVNode')
+							if(identifier) {
+								path.node.source.value = "@skedo/vue-lexical-cache"
+							}
+						}
+						else if(source === "@skedo/vue-lexical-cache") {
+							const specifiers = path.node.specifiers
+							const specifier = specifiers.find(x => x.local.name === 'lexicalCache')
+							if(!specifiers.find(x => x.local.name === 'lexicalCache')) {
+								specifiers.push(t.importSpecifier(t.identifier("lexicalCache"), t.identifier("lexicalCache")))
 							}
 						}
 					}
@@ -60,7 +66,6 @@ const createPlugin = () => {
 	
 	
 						if('name' in path.node.callee) {
-	
 							const name = path.node.callee.name
 
 							if(name === 'lexicalScoped') {
@@ -69,18 +74,39 @@ const createPlugin = () => {
 									.forEach(x => scopedFunctionNames.add(x))
 							}
 							else if(scopedFunctionNames.has(name)) {
+								if(path.node.callee.start! <= pos) {
+									return
+								}
+
 
 								// ref(0)
-								const calledExpr = path.node
+								const calledExpr = path.node 
+
+								if(calledExpr.callee.type === "Identifier" && calledExpr.arguments.length > 0) {
+									if(calledExpr.arguments[0].type === 'ArrowFunctionExpression') {
+
+										(calledExpr.callee as t.Identifier).name = "lexicalCache"
+										path.replaceWith(bindClosureId(calledExpr))
+										return
+									}
+								}
+
+
+								// () => ref(0)
+								const withArrow = t.arrowFunctionExpression(
+									[],
+									calledExpr
+								)
 
 								// lexicalCache(ref(0))
 								const withLexicalCache = t.callExpression(
 									t.identifier("lexicalCache"),
-									[calledExpr]
+									[withArrow]
 								)
 
 								// lexicalCache.bind({_closure_id : number})(ref(0))
 								const bindedExpr = bindClosureId(withLexicalCache)
+								pos = path.node.callee.start!
 								path.replaceWith(bindedExpr)
 							} else if(name === 'lexicalCache') {
 								path.replaceWith(bindClosureId(path.node))
@@ -96,4 +122,5 @@ const createPlugin = () => {
 	
 }
 
-export default createPlugin() 
+let exportPlugin = createPlugin()
+export default exportPlugin 

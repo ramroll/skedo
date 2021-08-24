@@ -82,3 +82,7 @@ input[type='file'] {
 input[type='file']::selection {
 	background-color: none;
 }
+
+.ant-tabs,.ant-tabs-content {
+	height : 100% !important;
+}

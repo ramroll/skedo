@@ -1,10 +1,11 @@
 import { Topic } from "../Topic"
 import { Node } from "./Node"
-import { NodeType, NodeJsonStructure, BoxDescriptor, NodeData, BoxDescriptorInput} from "../standard.types"
-import { boxDescriptor } from "../BoxDescriptor"
+import { NodeType, JsonNode,  NodeData, BoxDescriptorInput, JsonPage} from "../standard.types"
+import { BoxDescriptor } from "../BoxDescriptor"
 import { Logger, Emiter } from "@skedo/utils"
 import {ComponentMeta} from '../meta/ComponentMeta'
 import {fromJS} from 'immutable'
+import { LinkedNode } from "./LinkedNode"
 
 
 
@@ -20,57 +21,55 @@ export class Page extends Emiter<Topic>{
   name : string
   logger : Logger = new Logger('page')
   loader : ComponentsLoader
+  links : Record<number, Node>
 
-  constructor(name : string, json : NodeJsonStructure, loader : ComponentsLoader ){
+  constructor(name : string, json : JsonPage, loader : ComponentsLoader ){
     super()
     this.name = name
     this.id_base = 1
     this.nodes = []
     this.loader = loader
 
-    const box = boxDescriptor({
+    const meta = this.loader.loadByName("basic", "root")
+    const box = new BoxDescriptor({
       left : 0,
       top : 0,
       width : 3200,
-      height : 3200,
-      mode : 'normal'
-    })
-    const meta = this.loader.loadByName("basic", "root")
+      height : 3200
+    }, meta)
     this.root = new Node(meta, meta.createData(this.createId(), box))
     this.linkPage(this.root)
-    const pageNode = this.fromJson(json)
+
+    this.links = {}
+    Object.keys(json.links).forEach( (id : any) => {
+      this.links[id] = this.fromJson(json.links[id])
+    })
+
+    const pageNode = this.fromJson(json.page)
     pageNode.setAllowDrag(false)
-    this.root.add(pageNode)
+    this.root.addToAbsolute(pageNode)
     this.pageNode = pageNode
     
     // @ts-ignore
     // 调试用
     window["root"] = this.root
+
+    // @ts-ignore
+    window['page'] = this
   }
 
 
-  createFromJSON = (json: NodeJsonStructure) => {
-    if(typeof json.box.width !== 'object') {
-      json.box = boxDescriptor(json.box as BoxDescriptorInput)
-    }
+  public createFromJSON = (json: JsonNode) => {
     return this.fromJson(json)
   }
 
-  createFromMetaNew(
+  public createFromMetaNew(
     meta : ComponentMeta,
     position : [number, number]
   ) {
-    const box = meta.box
-    const ipt = boxDescriptor({ 
-      left : position[0],
-      top : position[1],
-      width : box.width.isAuto ? '' : box.width.value + box.width.unit,
-      height : box.height.isAuto ? '' : box.height.value + box.height.unit,
-      mode : box.mode
-    })
-
+    const box = meta.box.clone()
     const id = this.createId()
-    const nodeData = meta.createData(id, ipt)
+    const nodeData = meta.createData(id, box)
     const node = new Node(
       meta,
       nodeData
@@ -79,34 +78,42 @@ export class Page extends Emiter<Topic>{
     return node 
   }
 
-  fromJson(
-    json: NodeJsonStructure
+  public fromJson(
+    json: JsonNode
   ): Node {
-    if(typeof json.box.width !== 'object') {
-      json.box = boxDescriptor(json.box as BoxDescriptorInput)
-    }
     const meta = this.loader.loadByName(
       json.group,
       json.name
     )
+    const box = new BoxDescriptor(json.box, meta)
+
     
     if(json.id) {
       this.id_base = Math.max(this.id_base, json.id + 1)
     }
     const id = json.id || this.createId() 
     
-    const instanceData = json.id ? 
-      fromJS(json) : meta.createData(id, json.box as BoxDescriptor) 
-    const node = new Node(meta, instanceData as NodeData)
+    let node : Node
+    if(json.id) {
+      const instanceData = meta.createDataFromJson(json) 
+      node = json.linkedId ? 
+        new LinkedNode(json.id, this.links[json.linkedId], instanceData.get('box'))
+        :new Node(meta, instanceData as NodeData)
+
+    } else {
+      const instanceData = meta.createData(id, box) 
+      node = new Node(meta, instanceData as NodeData)
+    }
+    
     this.linkPage(node)
 
     if(!json.id) {
       json.children &&
         json.children.forEach((child) => {
-          node.add(this.fromJson(child))
+          node.addToRelative(this.fromJson(child))
         })
     } else {
-      json.children &&
+      json.children && !json.linkedId &&
         node.setChildren(json.children.map(child => {
           const childNode = this.fromJson(child)
           childNode.setParent(node)
@@ -116,17 +123,23 @@ export class Page extends Emiter<Topic>{
     return node
   }
 
-  copy(source : NodeType) {
+  public createLinkNode(node : Node) {
+    const id = this.id_base++
+    const linked = new LinkedNode(id, node)
+    this.linkPage(linked)
+    return linked
+  }
+
+  public copy(source : NodeType) {
     const rect = source.getRect()
     const id = this.id_base++
 
-    const box = boxDescriptor({
+    const box = new BoxDescriptor({
       left : rect.left,
       top : rect.top,
       width : rect.width,
-      height : rect.height,
-      mode : source.getBox().mode
-    })
+      height : rect.height
+    }, source.meta)
 
 
     const data = source.meta.createData(id, box)
@@ -135,7 +148,7 @@ export class Page extends Emiter<Topic>{
       data
     )
     source.getChildren().forEach((child) => {
-      node.add(this.copy(child))
+      node.addToRelative(this.copy(child))
     })
     this.linkPage(node)
     return node

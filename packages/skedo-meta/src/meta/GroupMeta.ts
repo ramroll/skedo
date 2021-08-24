@@ -22,7 +22,9 @@ export class GroupMeta {
 		group.style = config.style
 		if (config.props) {
       config.props.forEach((prop: PropConfig) => {
-        group.propKeys.add(prop.name)
+				if(prop.name) {
+        	group.propKeys.add(prop.name)
+				}
       })
     }
 		return group

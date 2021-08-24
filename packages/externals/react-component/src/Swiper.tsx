@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import styles from "./swiper.module.scss";
-import {Bridge} from '@skedo/meta'
+import {Bridge, SkedoComponentProps} from '@skedo/meta'
 
 /**
  * 提供基于时间间隔重复调用callback的hooks
@@ -29,13 +29,9 @@ function useSlider(N, speed = 3000) {
   return slider;
 }
 
-const imgs = [
-  "https://voice-static.oss-accelerate.aliyuncs.com/img/b5a4be6a89708d481e7e57c056b5a336e0ef2b69.jpg",
-  "https://th.bing.com/th?id=OIP.qsPu-MfQrZdhoLjWf0SDKwHaEo&pid=Api&rs=1",
-  "https://th.bing.com/th?id=OIP.R_mn8O9thXZN4aXRk5XKJgHaEo&pid=Api&rs=1"
-];
 
-export default () => {
+export default ({bridge} : SkedoComponentProps) => {
+  const imgs : Array<string> = bridge.passProps().imgs
   const slider = useSlider(imgs.length);
   return (
     <div className={styles.scroller}>

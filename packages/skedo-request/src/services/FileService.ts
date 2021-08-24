@@ -2,7 +2,6 @@ import config from '../config'
 import {CustomResponse, fetchStandard} from '../standard'
 
 
-
 export class FileService {
 
 	async post1 (
@@ -11,10 +10,6 @@ export class FileService {
 		version: string,
 		content: string
 	) : Promise<CustomResponse> {
-		// @ts-ignore
-		const buffer = Buffer.from(content)
-		const base64 = buffer.toString("base64")
-		// const fileName = file.split("/").pop() || ""
 		let ext = file.split('.').pop()
 		if(ext === file) {
 			ext ='' 
@@ -30,7 +25,7 @@ export class FileService {
 			},
 			method : "POST",
 			body : JSON.stringify({
-				content: base64,
+				content,
 				file: finalFileName,
 			})
 		})
