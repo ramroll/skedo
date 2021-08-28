@@ -27,7 +27,7 @@ function makeVueComponent(Component : any) : React.ElementType<Props> {
 			const elem = ref.current
 			if(elem) {
 				try{
-					vue.createApp(Component, {bridge}).mount(elem)
+					const vNode = vue.createApp(Component, {bridge}).mount(elem)
 				}
 				catch(ex) {
 					throw new Error(`run vue component ${bridge.getNode().getName()} error:` + ex.toString())

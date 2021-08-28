@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "outDir": "build",
+    "downlevelIteration": true 
+  },
+  "include": ["src/**/*"]
+}

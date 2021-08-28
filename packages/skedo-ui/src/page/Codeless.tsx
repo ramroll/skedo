@@ -27,8 +27,7 @@ export default () => {
         <div className={style.container}>
           <Explorer project={editor!.getProject()} />
           <EditorPanel
-            code={editor.getSelectedFile()?.getContent()}
-            lang={editor.getSelectedFile()?.getLanguage()}
+            file={editor.getSelectedFile()}
           />
         </div>
       )}
@@ -37,44 +36,75 @@ export default () => {
 }
 
 
-const FileItem = ({file} : {file : FileTreeNode}) => {
-
+const FileItem = ({
+  file,
+  depth,
+}: {
+  file: FileTreeNode
+  depth: number
+}) => {
   const editor = useContext(EditorContext)
   const active = editor?.getSelectedFile() === file
-  if(file.getType() === 'file') {
+  if (file.getType() === "file") {
     return (
-      <div onClick={() => {
-        editor?.dispatch(Events.Select, file)
-      }} className={`${style["editor-file"]} ${active ? 'active' : ''}`}>
+      <div
+        style={{
+          paddingLeft : depth * 10 + 10
+        }}
+        onClick={() => {
+          editor?.dispatch(Events.Select, file)
+        }}
+        className={`${style["editor-file"]} ${
+          active ? style.active : ""
+        }`}
+      >
         {file.getName()}
       </div>
     )
   }
-  return <div className={style['editor-dir-group']}>
-    <div className={style['editor-dir']}>{file.getName()}</div>
-    {file.getChildren().map(x => {
-      return <FileItem key={x.getName()} file={x} />
-    })}
-  </div>
+  return (
+    <div className={style["editor-dir-group"]}>
+      <div
+        style={{
+          paddingLeft: depth * 10 + 10,
+        }}
+        className={style["editor-dir"]}
+      >
+        {file.getName()}
+      </div>
+      {file.getChildren().map((x) => {
+        return <FileItem depth={depth + 1} key={x.getName()} file={x} />
+      })}
+    </div>
+  )
 }
 
 const Explorer = ({project} : {project: CodeProject}) => {
   return <div className={style.explorer}>
-    <FileItem file={project.getRootNode()} />
+    <FileItem depth={0} file={project.getRootNode()} />
   </div>
 }
 
 
 
-const EditorPanel = ({code, lang} : {
-  code? : string,
-  lang? : string 
+const EditorPanel = ({file} : {
+  file? : FileTreeNode
 }) => {
   const [ver, setVer] = useState(0)
+  const editor = useContext(EditorContext)
   useEffect(() => {
     setVer(x => x + 1)
-  }, [code])
-  return <div key={ver} className={style['code-editor']}>
-    <CodeEditor code={code || ""} lang={lang || "typescript"} />
-  </div>
+  }, [file?.getContent()])
+  return (
+    <div key={ver} className={style["code-editor"]}>
+      <CodeEditor
+        onChange={e => {
+          file?.setContent(e)
+          editor?.save()
+        }}
+        code={file?.getContent() || ""}
+        lang={file?.getLanguage() || "typescript"}
+      />
+    </div>
+  )
 }

@@ -24,7 +24,6 @@ function __render(node : Node, options : RenderOptions){
     return
   }
   return reactElement
-
 }
 
 

@@ -20,4 +20,15 @@ export class CodeProjectService {
 			}
 		})
 	}
+
+	build = new BuildService()
+}
+
+class BuildService {
+	put = async (name : string) : Promise<CustomResponse> => {
+		const resp = await fetchStandard(config.codeProjectBuildURL(name), {
+			method : 'PUT'
+		})
+		return resp
+	}
 }

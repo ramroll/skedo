@@ -6,6 +6,7 @@ export class CodeProject {
   private name : string
   private type : ProjectType 
   private fileNode : FileTreeNode
+  private scriptURL? : string
 
   constructor(name : string, type : ProjectType) {
     this.name = name
@@ -20,6 +21,7 @@ export class CodeProject {
     return {
       name : this.name,
       type : this.type,
+      scriptURL : this.scriptURL,
       fileTree : this.fileNode.toJSON()
     }
   }
@@ -40,8 +42,15 @@ export class CodeProject {
     const project = new CodeProject(obj.name, obj.type)
     const fileTree = FileTreeNode.fromJSON(obj.fileTree) 
     project.fileNode = fileTree
+    project.scriptURL = obj.scriptURL 
     return project
   }
 
+  public setScriptURL(url : string){
+    this.scriptURL = url
+  }
 
+  public getScriptURL() {
+    return this.scriptURL!
+  }
 }

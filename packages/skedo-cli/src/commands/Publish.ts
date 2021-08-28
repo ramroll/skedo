@@ -52,8 +52,7 @@ export default class Publish implements Command {
 
     const json = await fileRemote.post1(
       config.group,
-      config.name + ".js",
-      config.version,
+      "js",
       fs.readFileSync(config.file, "utf-8")
     )
 
@@ -65,9 +64,8 @@ export default class Publish implements Command {
     this.ui.info("Upload file to oss success.")
     const finalConf = yaml.dump(config)
     config.yml = (await fileRemote.post1(
-      `${config.group}/${config.name}`,
-      ymlName,
-      config.version,
+      `${config.group}`,
+      "yml",
       finalConf,
     )).data
 

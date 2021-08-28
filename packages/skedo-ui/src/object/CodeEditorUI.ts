@@ -1,5 +1,5 @@
 import StateMachine from "./StateMachine";
-import {CodeProject, FileTreeNode, ProjectJson} from '@skedo/code'
+import {CodeProject, CodeProjectRepo, FileTreeNode, ProjectJson} from '@skedo/code'
 import { codeProjectRemote, fileRemote } from "@skedo/request";
 
 export enum States{
@@ -42,6 +42,9 @@ export class CodeEditorUI extends StateMachine<
     })
 
     this.load()
+
+    // @ts-ignore
+    global.codeless = this
   }
 
   private async load(){
@@ -86,5 +89,14 @@ export class CodeEditorUI extends StateMachine<
 
   public getProject(){
     return this.project
+  }
+
+  public async save(){
+    const repo = new CodeProjectRepo(this.project) 
+    await repo.save()
+  }
+
+  public async build(){
+    await codeProjectRemote.build.put(this.project.getName())
   }
 }

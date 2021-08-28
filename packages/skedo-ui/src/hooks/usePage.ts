@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import {pageRemote, fileRemote, compose,} from '@skedo/request'
-import { JsonPage } from "@skedo/meta"
+import { JsonPage, Page, Topic } from "@skedo/meta"
+import { ComponentsLoader } from "@skedo/loader"
 
 
 const json: JsonPage = {
@@ -23,9 +24,9 @@ const json: JsonPage = {
 	links : {}
 }
 
-const usePage = (pageName : string) : (JsonPage | null) => {
+const usePage = (pageName : string) : (Page | null) => {
 	
-	const [page, setPage] = useState<JsonPage | null>(null)
+	const [page, setPage] = useState<Page | null>(null)
 
 	useEffect(() => {
 
@@ -38,15 +39,29 @@ const usePage = (pageName : string) : (JsonPage | null) => {
 			})
 			const result = await svcCall(pageName)
 
+			let data : JsonPage
 			if(result.success){
-				const page = JSON.parse(result.data)
-				setPage(page)
+				data = JSON.parse(result.data)
 			} else {
-				setPage(json)
+				data = json
 			}
-		}
 
-		loadPage()
+			const page = new Page(
+        pageName,
+        data,
+        ComponentsLoader.get()
+      )
+
+			setPage(page)
+		}
+		ComponentsLoader.get().on(Topic.RemoteComponentsLoaded)
+			.subscribe(() => {
+				loadPage()
+			})
+
+
+		ComponentsLoader.get().load()
+
 
 	}, [])
 

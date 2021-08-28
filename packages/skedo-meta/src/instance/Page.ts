@@ -162,6 +162,9 @@ export class Page extends Emiter<Topic>{
     this.nodes[node.getId()] = node
   }
 
+  public getRoot(){
+    return this.root
+  }
 
   // renderExternal(node : NodeType, elem: HTMLElement) {
   //   const component = <InjectComponent node={node} editor={this.editor} />

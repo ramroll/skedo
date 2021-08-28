@@ -67,7 +67,7 @@ export class FileTreeNode {
   }
 
   public getContent() {
-    return this.content
+    return this.content || ""
   }
 
   public getUrl() {
@@ -80,7 +80,7 @@ export class FileTreeNode {
 
   public getExt() {
     const prts = this.fileName.split(".")
-    return prts.length > 1 ? prts.pop() : ""
+    return (prts.length > 1 ? prts.pop() : "")|| ""
   }
 
   public getType() {

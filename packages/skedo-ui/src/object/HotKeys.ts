@@ -13,7 +13,7 @@ export default class Hotkeys {
 
   constructor(){
     this.cmds.push(new DeleteCommand(['Delete']))
-    this.cmds.push(new DeleteCommand(['Backspace']))
+    // this.cmds.push(new DeleteCommand(['Backspace']))
   }
 
   run(keys : Array<string>, ctx : CMDContext){

@@ -6,7 +6,7 @@ export class Emiter<Topic extends number> {
 
   constructor(){
     // 不会超过20个枚举了
-    this.observers = new Array(20) 
+    this.observers = new Array(50) 
   }
 
   addObserver(topic : Topic, observer : Subscriber<any>){

@@ -1,4 +1,4 @@
-import { Bridge, LinkedNode, Node } from "@skedo/meta"
+import { Bridge, LinkedNode, Node, Topic } from "@skedo/meta"
 import { defineComponent, ref, watch } from "vue"
 import classes from './listview.module.scss'
 
@@ -53,18 +53,63 @@ export default defineComponent({
           }
         }
       }
-    }
+    } 
 
-    console.log('vue', nodes)
+
+    const bridge = props.bridge!
+
+    const v = ref(0)
+    bridge.on(Topic.MemorizedDataChanged)
+      .subscribe(() => {
+        v.value++
+        console.log('list-view', "MemorizedDataChanged")
+      })
+    
 
     return () => {
 
-      return <div class={classes.listview}>
-        {nodes.map( node => {
-          return <NodeRender node={node} bridge={props.bridge} key={node.getId()} />
-        })}
+      console.log(v.value)
+      if(bridge?.getMode() === 'editor') {
+        return <div class={classes.listview}>
+          {nodes.map( node => {
+            return (
+              <NodeRender
+                node={node}
+                bridge={props.bridge}
+                key={node.getId()}
+              />
+            )
+          })}
+        </div>
+      } else {
+        const list = bridge.getMemorizedData()
+        console.log("not render mode...", list, bridge)
+        if(!list) {
+          return null
+        }
 
-      </div>
+        return <div key={v.value} class={classes.listview}>
+          {list.map( (rowData, i) => {
+            const node = props.bridge!.createLinkNode(
+              // @ts-ignore
+              bridge.getNode().getChildren()[0].node
+            )
+            node.memory(rowData)
+            bridge.addChild(node)
+            console.log('node', node)
+            return (
+              <NodeRender
+                node={node}
+                bridge={props.bridge}
+                key={i}
+              />
+            )
+          })}
+        </div>
+
+
+      }
+
 
     }
   }
@@ -80,6 +125,7 @@ const NodeRender = defineComponent({
 
     watch(divRef, () => {
       if(divRef.value) {
+        console.log('render-dom')
         props.bridge!.render("dom", props.node!, {
           ele : divRef.value
         })

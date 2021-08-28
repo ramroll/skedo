@@ -94,9 +94,20 @@
 .explorer {
   width : 200px;
   height : 100%;
+  background: #333;
+  color : white
 }
 
 .code-editor {
   width : 100%;
   height : 100%;
+}
+
+.editor-dir, .editor-file {
+  line-height: 30px;
+  padding-left : 10px;
+}
+
+.editor-file.active{
+  background-color: #666;
 }

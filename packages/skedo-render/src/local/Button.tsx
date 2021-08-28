@@ -28,7 +28,9 @@ const Button = ({
   }
 
   return (
-    <div className={styles.button} style={style}>
+    <div onClick={() => {
+      bridge.notify("click")
+    }} className={styles.button} style={style}>
       <button>{text}</button>
     </div>
   )

@@ -1,5 +1,5 @@
 import { Node } from './instance/Node'
-import { JsonNode, RenderFor, RenderOptions } from './standard.types'
+import { JsonNode, RenderFor, RenderOptions, SkedoEventName } from './standard.types'
 import { Page } from './instance/Page'
 import invariant  from 'invariant'
 import { Topic } from './Topic'
@@ -81,5 +81,25 @@ export class Bridge {
   public addChild(node : Node) {
     this.getNode().addToRelative(node)
     return node
+  }
+
+  public notify(eventType : SkedoEventName) {
+    this.node?.emit(Topic.ExternalEventNotify, {
+      type : eventType,
+      node : this.node 
+    })
+  }
+
+  public getMemorizedData() {
+    return this.node?.getMemorizedData()
+  }
+
+  public getNodeData(){
+    const data = this.getMemorizedData()
+    const path = this.node?.getPassProps().get('dataPath')
+    debugger
+    return data[path]
+
+
   }
 }

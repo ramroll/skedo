@@ -1,17 +1,23 @@
-import React, { useContext, useEffect, useRef } from 'react'
-import { Bridge, Node,  NodeRenderProps, RenderedComponentProps, RenderOptions } from '@skedo/meta'
+import ReactDOM from 'react-dom'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { Bridge, Node,  NodeRenderProps, RenderedComponentProps, RenderOptions, Topic } from '@skedo/meta'
 import ExternalComponent from './ExternalComponent'
-import RenderContext from './RenderContext'
+import { RenderContext } from './RenderContext'
 import getLocalComponentByURL from '../getLocalComponentByURL'
 
 function __render(node : Node, options : RenderOptions){
-  return (
+  const reactElement = (
     <NodeRender
       node={node}
       key={options.key}
       inheritProps={options.childrenProps}
     />
   )
+  if(options.ele) {
+    ReactDOM.render(reactElement, options.ele)
+    return
+  }
+  return reactElement
 }
 
 
@@ -54,10 +60,19 @@ function Styled({
 }
 
 function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.ElementType}){
-  const bridge = new Bridge(node)
+  const page = useContext(RenderContext).page!
+  const bridge = new Bridge(node, page, "render")
   bridge.renderForReact = __render
   const passProps = node.getPassProps().toJS()
+  const [, setVer] = useState(0)
 
+  useEffect(() => {
+    node.on(Topic.MemorizedDataChanged)
+      .subscribe(() => {
+        console.log("event:MemorizedDataChanged")
+        setVer(x => x + 1)
+      })
+  }, [])
 
   return (
       <Styled

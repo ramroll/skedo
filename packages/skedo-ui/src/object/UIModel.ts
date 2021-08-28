@@ -319,8 +319,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents, Topic> {
       return [this.page.name, data]
     })
 
-    const fileName = this.contentHash + '.json'
-    await composedRemoteCall("/page", fileName, "1.0.0", text)
+    await composedRemoteCall("/page", "json", text)
     this.logger.log('save', json)
   }
 

@@ -130,7 +130,13 @@ editor :
       - name : name
         label : name
         type : name 
-        path : name
+        path : passProps.name
+        default : ""
+      - name : dataPath 
+        label : data-path 
+        type : name 
+        path : passProps.dataPath
+        default : ""
 
 
 

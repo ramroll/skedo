@@ -117,6 +117,7 @@ export class Node extends InstanceData
   private receiving: Node | null
   private remoteCache? : Map<string, any>
   bridgeCache? : Bridge 
+  private tmpData : any
   level: number = 0
 
   private refs : Array<LinkedNode> = []
@@ -404,6 +405,26 @@ export class Node extends InstanceData
 
   }
 
+  public memory(data : any) {
+    this.tmpData = data
+    console.log('set memory data', data)
+    this.emit(Topic.MemorizedDataChanged)
+  }
+
+  public getMemorizedData() : any{
+    console.log('get memorized data')
+    if(typeof this.tmpData !== 'undefined') {
+      return this.tmpData
+    }
+
+    if(this.getParent()) {
+      return this.getParent().getMemorizedData()
+    }
+
+    return null
+
+
+  }
 
   public setChildren (children: Array<Node>) {
     this.setInstanceData('children', children)

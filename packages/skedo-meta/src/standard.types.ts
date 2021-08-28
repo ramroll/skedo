@@ -85,3 +85,5 @@ export type RenderOptions = {
   childrenProps? : Record<string, any>,
 	ele ? : HTMLElement
 }
+
+export type SkedoEventName = "click" | "f12"

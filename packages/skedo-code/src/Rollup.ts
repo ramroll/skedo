@@ -1,5 +1,6 @@
 import { rollup } from 'rollup'
 import { RollupConfig } from './RollupConfig'
+import {execSync} from 'child_process'
 
 export class RollupPackager {
 
@@ -9,7 +10,16 @@ export class RollupPackager {
 	}
 
 
+	private preBuild(){
+
+		execSync("yarn link @skedo/runtime", {
+			cwd : this.cwd
+		})
+	}
+
 	public async build() {
+
+		this.preBuild()
 
 		try{
 				

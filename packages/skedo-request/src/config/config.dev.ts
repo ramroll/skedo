@@ -17,6 +17,9 @@ const config : ConfigAttributes = {
 	},
 	codeProjectURL : (name : string) => {
 		return `http://localhost:7002/code-project/${name}` 
+	},
+	codeProjectBuildURL : (name : string) => {
+		return `http://localhost:7004/build/${name}`
 	}
 }
 
