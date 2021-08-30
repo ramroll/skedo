@@ -71,6 +71,7 @@
   "license": "ISC",
   "skedo": {
     "type": "service",
+    "port" : "7004",
     "devLinks": []
   }
 }
