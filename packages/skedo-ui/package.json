@@ -5,23 +5,12 @@
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
     "@babel/core": "7.12.3",
+    "@monaco-editor/react": "^4.2.2",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@svgr/webpack": "5.5.0",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
-    "@types/immutable": "^3.8.7",
-    "@types/jest": "^26.0.23",
-    "@types/little-loader": "^0.2.0",
-    "@types/md5": "^2.3.1",
-    "@types/node": "^12.20.13",
-    "@types/ramda": "^0.27.40",
-    "@types/react": "^17.0.5",
-    "@types/react-color": "^3.0.4",
-    "@types/react-dom": "^17.0.5",
-    "@types/react-router-dom": "^5.1.7",
-    "@typescript-eslint/eslint-plugin": "^4.5.0",
-    "@typescript-eslint/parser": "^4.5.0",
     "antd": "^4.16.1",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.0",
@@ -119,7 +108,19 @@
   "devDependencies": {
     "@types/js-yaml": "^4.0.1",
     "eslint-plugin-autofix": "^1.0.5",
-    "typescript": "^4.3.4"
+    "typescript": "^4.3.4",
+    "@types/immutable": "^3.8.7",
+    "@types/jest": "^26.0.23",
+    "@types/little-loader": "^0.2.0",
+    "@types/md5": "^2.3.1",
+    "@types/node": "^12.20.13",
+    "@types/ramda": "^0.27.40",
+    "@types/react": "^17.0.19",
+    "@types/react-color": "^3.0.4",
+    "@types/react-dom": "^17.0.5",
+    "@types/react-router-dom": "^5.1.7",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0"
   },
   "jest": {
     "roots": [
@@ -185,7 +186,9 @@
       "@skedo/meta",
       "@skedo/render",
       "@skedo/utils",
-      "@skedo/loader"
+      "@skedo/loader",
+      "@skedo/code",
+      "@skedo/runtime"
     ]
   }
 }

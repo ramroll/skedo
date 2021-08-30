@@ -10,7 +10,6 @@ import { Node } from "./Node";
 export class LinkedNode extends Node{
 
 	node : Node
-	tmpData : any
 	constructor(id : number, node : Node, box? : BoxDescriptor) {
 		box = box || node.getBox().clone()
 		const data = node.meta.createData(id, box)
@@ -60,24 +59,5 @@ export class LinkedNode extends Node{
 		return json
 	}
 
-	
-  public memory(data : any) {
-    this.tmpData = data
-    this.emit(Topic.MemorizedDataChanged)
-  }
 
-  public getMemorizedData() : any{
-    console.log('get memorized data')
-    if(typeof this.tmpData !== 'undefined') {
-      return this.tmpData
-    }
-
-    if(this.getParent()) {
-      return this.getParent().getMemorizedData()
-    }
-
-    return null
-
-
-  }
 }
