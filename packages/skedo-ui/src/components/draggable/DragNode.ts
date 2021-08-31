@@ -7,7 +7,6 @@ export default class DragNode extends Emiter<number> {
   diffX: number = 0
   diffY: number = 0 
 
-
   update(e : MouseEvent) {
     const diffX =  e.clientX - this.startX
     const diffY =  e.clientY - this.startY

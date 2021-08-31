@@ -1253,7 +1253,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/yargs-parser@*":
+"@types/yargs-parser@*", "@types/yargs-parser@^20.2.1":
   version "20.2.1"
   resolved "https://registry.yarnpkg.com/@types/yargs-parser/-/yargs-parser-20.2.1.tgz#3b9ce2489919d9e4fea439b76916abc34b2df129"
   integrity sha512-7tFImggNeNBVMsn0vLrpn1H1uPrUBdnARPTpZoitY37ZrdJREzf7I16tMrlK3hen349gr1NYh8CmZQa7CTG6Aw==

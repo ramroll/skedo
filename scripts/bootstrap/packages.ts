@@ -102,9 +102,8 @@ class Packages {
 			this.installLinks()
 		}
 
-		this.find("@skedo/doc-service").startDev()
-		this.find("@skedo/upload-service").startDev()
-		this.find("@skedo/ui").startDev()
+		this.packages.filter(x => x.getSkedoType() === 'service')
+			.forEach(x => x.startDev())
 
 	}
 
