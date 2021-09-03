@@ -102,7 +102,7 @@ class Packages {
 			this.installLinks()
 		}
 
-		this.packages.filter(x => x.getSkedoType() === 'service')
+		this.packages.filter(x => x.getSkedoType() === 'service' || x.getSkedoType() === "app")
 			.forEach(x => x.startDev())
 
 	}
