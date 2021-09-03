@@ -23,5 +23,6 @@
     "declaration": true,
     "noEmit": true
 
-  }
+  },
+  "include": ["src/**/*", "src/react-app-env.d.ts"]
 }

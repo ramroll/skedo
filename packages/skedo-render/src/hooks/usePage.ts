@@ -1,30 +1,32 @@
 import { useEffect, useState } from "react"
 import {pageRemote, fileRemote, compose,} from '@skedo/request'
-import { boxDescriptor, JsonNode } from "@skedo/meta"
+import { JsonPage, Page, Topic } from "@skedo/meta"
+import { ComponentsLoader } from "@skedo/loader"
 
 
-const json : JsonNode = {
-  type : "react",
-	name : "page",
-  group : "basic",
-	box : boxDescriptor({
-		left : (3200-414)/2,	
-		top : 40,
-		width :414,
-		height : 736,
-		mode : 'normal'
-	}),
-  children : [
-  ],
-  style : {
-    border : "1px solid #eee",
-    backgroundColor : 'white'
+const json: JsonPage = {
+  page: {
+    type: "react",
+    name: "page",
+    group: "basic",
+    box: {
+      left: (3200 - 414) / 2,
+      top: 40,
+      width: 414,
+      height: 736,
+    },
+    children: [],
+    style: {
+      border: "1px solid #eee",
+      backgroundColor: "white",
+    },
   },
+	links : {}
 }
 
-const usePage = (pageName : string) : (JsonNode | null) => {
+export const usePage = (pageName : string) : (Page | null) => {
 	
-	const [page, setPage] = useState<JsonNode | null>(null)
+	const [page, setPage] = useState<Page | null>(null)
 
 	useEffect(() => {
 
@@ -37,21 +39,32 @@ const usePage = (pageName : string) : (JsonNode | null) => {
 			})
 			const result = await svcCall(pageName)
 
+			let data : JsonPage
 			if(result.success){
-				const page = JSON.parse(result.data)
-				setPage(page)
+				data = JSON.parse(result.data)
 			} else {
-				setPage(json)
+				data = json
 			}
-		}
 
-		loadPage()
+			const page = new Page(
+        pageName,
+        data,
+        ComponentsLoader.get()
+      )
+
+			setPage(page)
+		}
+		ComponentsLoader.get().on(Topic.RemoteComponentsLoaded)
+			.subscribe(() => {
+				loadPage()
+			})
+
+
+		ComponentsLoader.get().load()
+
 
 	}, [])
 
 	return page
 
-
 }
-
-export default usePage

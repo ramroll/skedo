@@ -24,7 +24,7 @@ const json: JsonPage = {
 	links : {}
 }
 
-const usePage = (pageName : string) : (Page | null) => {
+export const usePage = (pageName : string) : (Page | null) => {
 	
 	const [page, setPage] = useState<Page | null>(null)
 

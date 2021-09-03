@@ -19,11 +19,11 @@
   "dependencies": {
     "js-yaml": "^4.1.0",
     "jsonschema": "^1.4.0",
-    "ramda": "^0.27.1"
+    "ramda": "^0.27.1",
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.2",
     "@types/ramda": "^0.27.44"
   }
-
 }
