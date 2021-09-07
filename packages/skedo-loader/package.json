@@ -19,7 +19,8 @@
   "dependencies": {
     "js-yaml": "^4.1.0",
     "jsonschema": "^1.4.0",
-    "ramda": "^0.27.1"
+    "ramda": "^0.27.1",
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "@babel/runtime": "^7.15.4",

@@ -1,8 +1,5 @@
-import {Page} from "@skedo/meta"
-
 import { NodeRender } from "./NodeRender"
-import { usePage } from "../hooks/usePage"
-import {ComponentsLoader} from '@skedo/loader'
+import {usePage} from "../hooks/usePage"
 
 const Preview = ({pageName} : {pageName : string}) => {
 
@@ -11,6 +8,7 @@ const Preview = ({pageName} : {pageName : string}) => {
   if(page === null) {
     return null
   }
+
   return (
 		<div>
        <NodeRender node={page.root} />

@@ -67,5 +67,4 @@ export const usePage = (pageName : string) : (Page | null) => {
 
 	return page
 
-
 }
