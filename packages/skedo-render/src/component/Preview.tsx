@@ -1,21 +1,19 @@
 import {Page} from "@skedo/meta"
 
 import { NodeRender } from "./NodeRender"
-import usePage from "./hooks/usePage"
+import { usePage } from "../hooks/usePage"
 import {ComponentsLoader} from '@skedo/loader'
 
 const Preview = ({pageName} : {pageName : string}) => {
 
-  const pageData = usePage(pageName) 
+  const page = usePage(pageName) 
 
-  if(pageData === null) {
+  if(page === null) {
     return null
   }
-  const pageObj = new Page(pageName, pageData, ComponentsLoader)
-
   return (
 		<div>
-       <NodeRender node={pageObj.root} />
+       <NodeRender node={page.root} />
     </div>
   )
 }

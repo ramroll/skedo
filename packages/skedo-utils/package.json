@@ -13,5 +13,8 @@
   "license": "ISC",
   "skedo": {
     "type": "lib"
+  },
+  "devDependencies": {
+    "@babel/runtime": "^7.15.4"
   }
 }

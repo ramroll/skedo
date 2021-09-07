@@ -22,8 +22,9 @@
     "ramda": "^0.27.1"
   },
   "devDependencies": {
+    "@babel/runtime": "^7.15.4",
     "@types/js-yaml": "^4.0.2",
-    "@types/ramda": "^0.27.44"
+    "@types/ramda": "^0.27.44",
+    "url": "^0.11.0"
   }
-
 }

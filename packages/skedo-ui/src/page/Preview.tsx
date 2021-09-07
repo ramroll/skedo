@@ -2,7 +2,7 @@ import { useParams } from "react-router"
 import TitleBar from "../components/frame/TitleBar"
 import style from  "./ui.module.scss"
 import { NodeRender } from '@skedo/render'
-import usePage from "../hooks/usePage"
+import { usePage } from "@skedo/render"
 import {CordNew, Page} from "@skedo/meta"
 import { ComponentsLoader } from "@skedo/loader"
 import { useEffect } from "react"
@@ -72,7 +72,11 @@ const Preview = () => {
       const result = await fileRemote.get(url)
       console.log('script loaded.', project.getScriptURL(), result)
       const content = result.data
-      runScript(content, new SkedoContext(page!))
+      try{
+        runScript(content, new SkedoContext(page!))
+      }catch(ex) {
+        console.error(ex)
+      }
     }
     run()
   }, [page])

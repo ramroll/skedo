@@ -166,6 +166,7 @@ export class Node extends InstanceData
     }
     return children
   }
+
   getReceiving() {
     return this.receiving
   }

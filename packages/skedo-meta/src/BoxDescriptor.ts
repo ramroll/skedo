@@ -46,13 +46,16 @@ export class SizeUnit{
 		this.unit = unit
 	}
 
-	public toString(){
+	public toString(unit = ''){
 		if(this.mode === 'auto') {
 			return ''
 		}
 
 		if(this.mode === 'fill') {
 			return '100%'
+		}
+		if(unit) {
+			return this.value + unit
 		}
 		return this.value + this.unit
 	}
@@ -333,6 +336,7 @@ export class BoxDescriptor {
       this.height.toString(),
     ].join(",")
 	}
+
 
 }
 

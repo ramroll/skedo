@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "outDir": "build",
+    "downlevelIteration": true,
+    "jsx" : "react-jsx",
+    "esModuleInterop": true 
+  },
+  "include": ["src/**/*"]
+}
