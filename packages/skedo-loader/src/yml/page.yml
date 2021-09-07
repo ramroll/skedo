@@ -10,10 +10,6 @@ box :
   position : absolute
   container : true 
 intrinsic : true
-style:
-  borderWidth : 1
-  borderColor : "#eee"
-  background : white
 editor : 
   groups:
     - name: shape

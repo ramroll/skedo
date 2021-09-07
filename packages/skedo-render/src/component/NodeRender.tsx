@@ -13,9 +13,9 @@ function __render(node : Node, options : RenderOptions){
       inheritProps={options.childrenProps}
     />
   )
-  if(options.ele) {
+  if(options.ele)  {
     ReactDOM.render(reactElement, options.ele)
-    return
+    return null
   }
   return reactElement
 }
@@ -37,7 +37,6 @@ function Styled({
   useEffect(() => {
     node.mount(ref.current!, context.cord)
   },[])
-
 
   return (
     <div

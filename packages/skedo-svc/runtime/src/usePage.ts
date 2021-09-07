@@ -69,5 +69,3 @@ export const usePage = (pageName : string) : (Page | null) => {
 
 
 }
-
-export default usePage

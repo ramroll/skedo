@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Container from './Container'
+import App from './App'
 
-ReactDOM.hydrate(
-  <Container pageName="test1" />,
+ReactDOM.render(
+  <App />,
   document.getElementById("root")
 )

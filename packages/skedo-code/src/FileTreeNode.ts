@@ -4,6 +4,8 @@ export class FileTreeNode {
   private type: FileType
   private fileName: string
 
+  private hidden : boolean = false
+
   // OSS (Object Storage Service)
   private url?: string
 

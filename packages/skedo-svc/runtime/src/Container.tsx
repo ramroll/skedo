@@ -1,12 +1,15 @@
-import React from 'react'
-import {NodeRender, usePage} from '@skedo/render'
+import {NodeRender} from '@skedo/render'
+import {usePage} from './usePage'
 
-export default ({pageName } : {
-  pageName : string
-}) => {
-  const page = usePage(pageName) 
+
+export default () => {
+  const page = usePage("test1")
   if(page === null) {
-    return null 
+    return null
   }
-  return <NodeRender node={page.root} />
+
+  const node = page.getRoot().getChildren()[0]
+  node.setXY(0, 0)
+  // return <div className={classes.block}>123</div>
+  return <NodeRender node={node} />
 }

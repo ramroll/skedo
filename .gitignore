@@ -2,6 +2,7 @@
 
 .skedo
 skedo.*
+*.lock
 
 # dependencies
 node_modules

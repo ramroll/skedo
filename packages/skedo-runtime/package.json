@@ -11,6 +11,9 @@
   "author": "",
   "license": "ISC",
   "skedo" : {
-    "type" : "lib"
+    "type" : "lib",
+    "devLinks" : [
+      "@skedo/meta"
+    ]
   }
 }

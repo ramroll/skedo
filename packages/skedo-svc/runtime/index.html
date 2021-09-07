@@ -1,8 +1,16 @@
 <html>
 	<head>
-		<script defer="defer" src="/static/bundle.js"></script>
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+		<meta name="viewport" content="width=414px, initial-scale=1.0">
+		<script defer="defer" src="/bundle.js"></script>
 	</head>
 	<body>
-		<div id="root">{{ssr}}</div>
+		<div id="root">{ssr}</div>
+		<script>
+						// var vw = Math.max(
+						// 	document.documentElement.clientWidth || 0, 
+						// 	window.innerWidth || 0);
+						// document.documentElement.style.fontSize=(vw/414) + 'px';
+		</script>
 	</body>
 </html>

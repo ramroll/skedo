@@ -1,4 +1,3 @@
-import { timeStamp } from 'console'
 import {CodeProject} from './CodeProject'
 import {codeProjectRemote, fileRemote} from '@skedo/request'
 export class CodeProjectRepo {
