@@ -65,7 +65,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch './src/**/ts' src/index.ts"
+    "dev": "nodemon --watch './src/**/*.ts' --watch '../../skedo-code/src' --exec ts-node src/index.ts"
   },
   "author": "",
   "license": "ISC",

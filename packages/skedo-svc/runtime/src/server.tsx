@@ -1,8 +1,8 @@
 import express from 'express'
 import fs from 'fs'
 import path from 'path'
-import ReactDOMServer from 'react-dom/server'
-import App from './App'
+// import ReactDOMServer from 'react-dom/server'
+// import App from './App'
 
 const app = express()
 
@@ -19,14 +19,14 @@ app.get('/', (req, res) => {
   const ssr = req.query.ssr
   if(ssr) {
 
-    let str = fs.readFileSync(path.resolve(__dirname, "../index.html"), 'utf-8')
+    // let str = fs.readFileSync(path.resolve(__dirname, "../index.html"), 'utf-8')
 
-    const rootStr = ReactDOMServer.renderToString(<App />)
+    // // const rootStr = ReactDOMServer.renderToString(<App />)
 
-    const jsonp = `<script>cache("abc", {expired, data})</script>`
-    str = str.replace("{ssr}", rootStr)
-    str = str.replace("{data}", jsonp)
-    res.send(str)
+    // const jsonp = `<script>cache("abc", {expired, data})</script>`
+    // str = str.replace("{ssr}", rootStr)
+    // str = str.replace("{data}", jsonp)
+    // res.send(str)
 
 
   } else {

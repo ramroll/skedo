@@ -10,10 +10,16 @@
     margin : 0;   
     font-family: sans-serif;
     color : white;
+    width : 170px;
     letter-spacing: 3px;
   }
+  .cmds {
+    padding-left: 40px;
+    border-left : 1px solid #666;
+    flex : 1;
+  }
   .router {
-    margin-left : 40px; 
+    margin-right : 40px; 
     display: flex;
     flex-direction: row;
   }

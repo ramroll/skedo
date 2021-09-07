@@ -12,7 +12,13 @@
   "license": "ISC",
   "skedo": {
     "type": "service",
-    "port": 3003
+    "port": 3003,
+    "devLinks" : [
+      "@skedo/render",
+      "@skedo/loader",
+      "@skedo/meta",
+      "@skedo/request"
+    ]
   },
   "dependencies": {
     "@types/express": "^4.17.13",

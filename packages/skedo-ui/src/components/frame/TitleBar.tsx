@@ -18,13 +18,17 @@ const Route = ({ src, active, path }: RouteProps) => {
   )
 }
 
-const TitleBar = ({pageName, name} : {
+const TitleBar = ({pageName, name, children = null} : {
   pageName : string,
-  name : string
+  name : string,
+  children? : JSX.Element[] | JSX.Element | null
 }) => {
   return (
     <header className={style.titlebar}>
       <h2>SKEDO</h2>
+      <div className={style.cmds}>
+        {children}
+      </div>
       <div className={style.router}>
         <Route
           active={name === "skedo"}
@@ -37,7 +41,8 @@ const TitleBar = ({pageName, name} : {
           src="https://voice-static.oss-accelerate.aliyuncs.com//img/8ff6fd7149b9def759a1f1c6760ac1beaf18557d.png"
         />
         <Route
-          active={false}
+          active={name === 'faas'}
+          path={`/faas/${pageName}`}
           src="https://voice-static.oss-accelerate.aliyuncs.com//img/7d614228eaaa473246435d58e5c51700732d88f8.png"
         />
         <Route

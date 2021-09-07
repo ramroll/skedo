@@ -1,0 +1,1 @@
+export {fn1} from './fn1'

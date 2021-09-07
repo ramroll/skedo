@@ -3,7 +3,7 @@ import path from 'path'
 import { CodeProject } from "./CodeProject"
 import { FileTreeNode } from "./FileTreeNode"
 import {codeProjectRemote, fileRemote} from '@skedo/request'
-import { ProjectJson } from './type'
+import { ProjectJson, ProjectType } from './type'
 
 export class CodeProjectFS {
   private cwd : string
@@ -90,7 +90,9 @@ export class CodeProjectFS {
 
   public async download(name : string){
     /* 从RDBMS中获取项目 */
+    console.log("fs---download", name)
     const result = await codeProjectRemote.get(name)
+    console.log(result)
     const json : ProjectJson = result.data
     const project = CodeProject.fromJSON(json)
 
@@ -99,9 +101,28 @@ export class CodeProjectFS {
     return project
   }
 
+  public addDirectory(project : CodeProject, dir : string, name : string) {
+    const node = this.createFileNode(dir, name)
+    const root = project.getRootNode()
+    root.add(node)
+  }
+
+  public static async createTemplates() {
+
+    for(let key in CodeProject.TemplateNames) {
+      const template = CodeProject.TemplateNames[key]
+
+      const project = new CodeProject(template, key as ProjectType)
+
+      const fs = new CodeProjectFS(
+        path.resolve(__dirname, "../template/", key)
+      )
+
+      await fs.upload(project)
+    }
+
+  }
 
 
-  // public async download() : Promise<CodeProject> {
 
-  // }
 }

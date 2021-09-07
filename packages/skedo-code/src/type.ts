@@ -1,4 +1,4 @@
-export type ProjectType = "codeless" | "fass"
+export type ProjectType = "codeless" | "faas"
 
 export type FileType = "file" | "dir"
 

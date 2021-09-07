@@ -1,5 +1,5 @@
 import StateMachine from "./StateMachine";
-import {CodeProject, CodeProjectRepo, FileTreeNode, ProjectJson} from '@skedo/code'
+import {CodeProject, CodeProjectRepo, FileTreeNode, ProjectJson, ProjectType} from '@skedo/code'
 import { codeProjectRemote, fileRemote } from "@skedo/request";
 
 export enum States{
@@ -25,9 +25,11 @@ export class CodeEditorUI extends StateMachine<
   private project: CodeProject
   private selectedFile?: FileTreeNode
   private loaded : boolean = false
+  private type : ProjectType
 
-  constructor(page : string) {
+  constructor(page : string, type : ProjectType) {
     super(0)
+    this.type = type
     this.project = new CodeProject(page, "codeless")
     this.describe("这里是选中逻辑", () => {
       this.register(
@@ -51,9 +53,11 @@ export class CodeEditorUI extends StateMachine<
 
     /* 获取RDBMS */
     let result = await codeProjectRemote.get(this.project.getName())
+    let copyFromTemplate = false
     if(!result.data) {
-      result = await codeProjectRemote.get("codeless-template")
+      result = await codeProjectRemote.get(CodeProject.TemplateNames[this.type])
       result.data.name = this.project.getName()
+      copyFromTemplate = true
     }
     const json : ProjectJson = result.data
     this.project = CodeProject.fromJSON(json)
@@ -73,6 +77,9 @@ export class CodeEditorUI extends StateMachine<
     }
 
     this.loaded = true
+    if(copyFromTemplate) {
+      await this.save()
+    }
     this.emit(Topic.Loaded)
   }
 

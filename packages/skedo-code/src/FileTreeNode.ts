@@ -54,7 +54,12 @@ export class FileTreeNode {
   }
 
   public add(node: FileTreeNode) {
-    this.children.push(node)
+    const idx = this.children.findIndex(x => x.getName() === node.getName())
+    if(idx === -1) {
+      this.children.push(node)
+    } else {
+      this.children[idx] = node
+    }
   }
 
   public setContent(content: string) {

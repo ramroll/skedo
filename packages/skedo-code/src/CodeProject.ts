@@ -3,50 +3,64 @@ import { ProjectJson, ProjectType } from "./type"
 
 
 export class CodeProject {
-  private name : string
-  private type : ProjectType 
-  private fileNode : FileTreeNode
-  private scriptURL? : string
+  public static TemplateNames: {
+    [key in ProjectType]: string
+  } = {
+    codeless: "codeless-template",
+    faas: "faas-template",
+  }
 
-  constructor(name : string, type : ProjectType) {
+  // public static TemplateNames: Record<ProjectType, string> =
+  //   {
+  //     codeless: "codeless-template",
+  //     faas: "faas-template",
+  //   }
+
+  private name: string
+  private type: ProjectType
+  private fileNode: FileTreeNode
+  private scriptURL?: string
+
+  constructor(name: string, type: ProjectType) {
     this.name = name
     this.type = type
     this.fileNode = new FileTreeNode("dir", "root")
   }
 
-
-
-  public toJSON (){
-
+  public toJSON() {
     return {
-      name : this.name,
-      type : this.type,
-      scriptURL : this.scriptURL,
-      fileTree : this.fileNode.toJSON()
+      name: this.name,
+      type: this.type,
+      scriptURL: this.scriptURL,
+      fileTree: this.fileNode.toJSON(),
     }
   }
 
-  public setRootNode(node : FileTreeNode){
+  public setRootNode(node: FileTreeNode) {
     this.fileNode = node
   }
 
-  public getRootNode(){
+  public getRootNode() {
     return this.fileNode
   }
 
-  public getName(){
+  public getName() {
     return this.name
   }
 
-  public static fromJSON(obj : ProjectJson) {
+  public getType(){
+    return this.type
+  }
+
+  public static fromJSON(obj: ProjectJson) {
     const project = new CodeProject(obj.name, obj.type)
-    const fileTree = FileTreeNode.fromJSON(obj.fileTree) 
+    const fileTree = FileTreeNode.fromJSON(obj.fileTree)
     project.fileNode = fileTree
-    project.scriptURL = obj.scriptURL 
+    project.scriptURL = obj.scriptURL
     return project
   }
 
-  public setScriptURL(url : string){
+  public setScriptURL(url: string) {
     this.scriptURL = url
   }
 

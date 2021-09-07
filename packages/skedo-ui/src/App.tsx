@@ -4,6 +4,7 @@ import {
   Route,
 } from "react-router-dom"
 import Codeless from './page/Codeless'
+import FaaS from './page/FaaS'
 
 import Editor from './page/Editor'
 import Preview from './page/Preview'
@@ -19,6 +20,9 @@ const App = () => {
      </Route>
      <Route path="/codeless/:page" >
        <Codeless />
+     </Route>
+     <Route path="/faas/:page" >
+       <FaaS />
      </Route>
      <Route path="/" exact>
        <Editor />
