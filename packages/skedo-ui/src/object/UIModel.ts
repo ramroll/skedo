@@ -23,7 +23,7 @@ import SelectionNew from './Selection.new'
 import ResizerNew from './Resizer.new'
 import PageExporter from './PageExporter'
 import { fileRemote, pageRemote, compose } from '@skedo/request'
-import { getFlexGap } from '../util/getFlexGap'
+import { getFlexGapnew } from '../util/getFlexGap'
 import Hotkeys from './HotKeys'
 
 export enum UIStates{
@@ -151,10 +151,29 @@ export class UIModel extends StateMachine<UIStates, UIEvents, Topic> {
 
     this.describe("大家好！我是小师叔，这里在处理拖拽的逻辑", (register) => {
 
-      let receiver : Node | null
+      let lastReceiver : Node | null
+
+      function selectForDrop(
+        container: Node,
+        rect : Rect,
+        exclude: Node | null
+      ) {
+        let receiver = NodeSelector.selectForDrop(
+          container,
+          [rect.centerX(), rect.centerY()],
+          exclude
+        )
+        if( receiver && !receiver.absRect().contains(rect) ){
+          const parent = receiver.getParent()
+          if(parent.isFlex()) {
+            receiver = parent
+          }
+        }
+        return receiver
+      }
       const handlerSyncMoving = throttle((node : Node, vec : [number, number]) => {
         const absRect = node.absRect()
-        receiver = NodeSelector.selectForDrop(this.root, [absRect.centerX(), absRect.centerY()], node)
+        let receiver = selectForDrop(this.root, absRect, node)
         // 如果是flex布局，这里需要对children更换顺序
 
         if(receiver && receiver.isFlex()) {
@@ -162,17 +181,19 @@ export class UIModel extends StateMachine<UIStates, UIEvents, Topic> {
           let gapIndex
 
           if(receiver.getBox().flexDirection === 'row') {
-            gapIndex = getFlexGap(children, node, "row")
+            gapIndex = getFlexGapnew(children, node, "row")
           } else {
-            gapIndex = getFlexGap(children, node, "column")
+            gapIndex = getFlexGapnew(children, node, "column")
           }
           receiver.emit(Topic.NodeGapIndexChanged, gapIndex)
-        } else {
-          if(receiver) {
-            receiver.emit(Topic.NodeGapIndexChanged, null)
-            receiver = null
-          } 
+        } 
+        if(receiver !== lastReceiver) {
+          if(lastReceiver) {
+            lastReceiver.emit(Topic.NodeGapIndexChanged, null)
+          }
+          lastReceiver = receiver
         }
+        
 
         // 对齐线
         const lines = this.assistLine.calculateLines(absRect, node, receiver!)
@@ -197,15 +218,16 @@ export class UIModel extends StateMachine<UIStates, UIEvents, Topic> {
       })
   
       register(UIStates.Moved, UIStates.Selected, UIEvents.AUTO, () => {
-        if(receiver) {
-          receiver.emit(Topic.NodeGapIndexChanged, null)
-          receiver = null
+        if(lastReceiver) {
+          lastReceiver.emit(Topic.NodeGapIndexChanged, null)
+          lastReceiver = null
         }
         this.selection.forEach(node => {
 
           const absRect = node.absRect()
           const position : [number, number] = [absRect.left, absRect.top] 
-          const receiver = NodeSelector.selectForDrop(this.root, position, node)
+          const receiver = selectForDrop(this.root, absRect, node)
+          console.log('receiver', receiver?.getName())
           const nodeParent = node.getParent()
           if(receiver !== nodeParent) {
             receiver!.addToAbsolute(node, position)

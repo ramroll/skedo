@@ -1,17 +1,17 @@
-group : basic
+group : container 
 name: div
 componentType: react
 imageUrl : https://voice-static.oss-accelerate.aliyuncs.com//img/5aee98f58f9584472592617cdd4182391f59820d.png
-title : 矩形容器
+title : 自由布局 
 url : local.Div
+style :
+  borderWidth : 1
+  borderColor : "#f2f2f2"
 box :
   width : 200
   height : 100
   position : absolute
   container : true
-style:
-  border: "1px solid #eee"
-  background : white
 editor:
   groups:
   - name : for-test 

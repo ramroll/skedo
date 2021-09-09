@@ -57,24 +57,26 @@ function Styled({
   })
 
 
+
   return (
     <div
       ref={ref}
       draggable={draggable}
-      {...{"data-skedo-type" : node.getName()}}
+      className={'skedo-' + node.getName()}
+      {...{ "data-skedo-type": node.getName() }}
       style={{
         width: box.width.toString(),
         height: box.height.toString(),
-        display : box.display,
-        flexDirection : box.flexDirection,
+        display: box.display,
+        flexDirection: box.flexDirection,
+        position: box.position,
         ...style,
-        position : box.position,
         ...node.getStyleObject(),
       }}
     >
       {React.cloneElement(children, {
-        ...children.props, 
-        onMouseDown : dragHandlers?.onMouseDown,
+        ...children.props,
+        onMouseDown: dragHandlers?.onMouseDown,
       })}
     </div>
   )
@@ -91,7 +93,15 @@ function InnerRender({node, C, inheritProps} : NodeRenderProps & {C : React.Elem
 
   useSubscribe(
     [
-      [node, [Topic.Resized, Topic.NodeMoved, Topic.NodePropUpdated, Topic.NodeChildrenChanged]],
+      [
+        node,
+        [
+          Topic.Resized,
+          Topic.NodeMoved,
+          Topic.NodePropUpdated,
+          Topic.NodeChildrenChanged,
+        ],
+      ],
     ],
     () => {
       setVer((x) => x + 1)

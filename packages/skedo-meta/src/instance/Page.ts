@@ -30,7 +30,7 @@ export class Page extends Emiter<Topic>{
     this.nodes = []
     this.loader = loader
 
-    const meta = this.loader.loadByName("basic", "root")
+    const meta = this.loader.loadByName("container", "root")
     const box = new BoxDescriptor({
       left : 0,
       top : 0,

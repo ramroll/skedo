@@ -42,7 +42,8 @@ export class Bridge {
   }
 
   public setPropValue(path: Array<string>, value : any) {
-    return this.getNode().setPassPropValue(path, value)
+    this.getNode().setPassPropValue(path, value)
+    this.getNode().emit(Topic.NodePropUpdated)
   }
 
   public getMode(){

@@ -20,8 +20,8 @@ editor:
       props: 
         style:
           width : 120
-      selections:
-      - value: off 
-        text: 单行 
-      - value: on 
-        text: 多行 
+        selections:
+        - value: off 
+          text: 单行 
+        - value: on 
+          text: 多行 

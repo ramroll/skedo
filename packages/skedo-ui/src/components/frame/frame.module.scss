@@ -3,12 +3,13 @@
 .titlebar {
   display : flex;
   align-items: center;
-  height : 48px;
+  height : 60px;
   padding-left : 10px;
   background:#456;
   h2 {
     margin : 0;   
     font-family: sans-serif;
+    font-size : 36px;
     color : white;
     width : 170px;
     letter-spacing: 3px;
@@ -27,8 +28,8 @@
   
 
   .btn {
-    width : 36px;
-    height : 36px;
+    width : 48px;
+    height : 48px;
     background-color: #467;
     margin-right: 3px;
     display : flex;

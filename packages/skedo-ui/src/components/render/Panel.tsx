@@ -5,6 +5,7 @@ import RenderContext from './RenderContext'
 import Shadow from './Shadow'
 import UIModel, { UIEvents } from '../../object/UIModel'
 import classes from './render.module.scss'
+import "./render.scss"
 import {throttle, Rect, debounce} from '@skedo/utils'
 import AssistLineSVG from '../assistline/AssistLineSVG'
 import { useSubscribe } from '../../hooks/useSubscribe'

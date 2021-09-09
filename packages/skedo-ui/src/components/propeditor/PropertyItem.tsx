@@ -83,6 +83,7 @@ function render(type : string, props : PropComponentProps, key : any) : (JSX.Ele
         />
       )
     case "select" :
+      console.log(props)
       return (
         <Select
           key={key}

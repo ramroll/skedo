@@ -11,6 +11,7 @@ export class Modules {
   }
 
   resolve(name : string){
+    console.log('resolve name:' + name)
     switch(name) {
       case 'react':
         return React

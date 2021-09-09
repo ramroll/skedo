@@ -67,12 +67,13 @@ const Preview = () => {
     }
 
     async function run(){
-      const project = await CodeProjectRepo.load(pageName)
-      const url = project.getScriptURL()
-      const result = await fileRemote.get(url)
-      console.log('script loaded.', project.getScriptURL(), result)
-      const content = result.data
+
       try{
+        const project = await CodeProjectRepo.load(pageName)
+        const url = project.getScriptURL()
+        const result = await fileRemote.get(url)
+        console.log('script loaded.', project.getScriptURL(), result)
+        const content = result.data
         runScript(content, new SkedoContext(page!))
       }catch(ex) {
         console.error(ex)

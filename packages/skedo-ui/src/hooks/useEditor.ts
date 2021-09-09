@@ -8,7 +8,7 @@ const json: JsonPage = {
   page: {
     type: "react",
     name: "page",
-    group: "basic",
+    group: "container",
     box: {
       left: (3200 - 414) / 2,
       top: 40,
