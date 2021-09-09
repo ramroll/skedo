@@ -58,6 +58,10 @@ export class Page extends Emiter<Topic>{
     window['page'] = this
   }
 
+  public getNodeById(id : number){
+    return this.nodes[id]
+  }
+
 
   public createFromJSON = (json: JsonNode) => {
     return this.fromJson(json)

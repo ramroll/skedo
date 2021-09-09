@@ -11,6 +11,7 @@ import Panel from '../components/render/Panel'
 import NodeRender from '../components/render/NodeRender'
 import TitleBar from '../components/frame/TitleBar'
 import { useParams } from 'react-router-dom'
+import {PageStructure} from '../components/PageStructure'
 
 const { TabPane } = Tabs
 
@@ -68,6 +69,7 @@ const RightTabs = ({editor} : RightTabsProps) => {
       <PropEditor editor={editor} />
     </TabPane>
     <TabPane tab="页面结构" key="2">
+      <PageStructure editor={editor} />
     </TabPane>
   </Tabs>
 }
