@@ -1,10 +1,22 @@
-import {Page} from '@skedo/meta'
+import {Page, Topic} from '@skedo/meta'
 import { SkedoNodeProxy } from './SkedoNodeProxy'
 export class SkedoContext {
   private page : Page
 
+  private prepareHandler? : Function
+  private loadHandler ? : Function
+
   constructor(page : Page) {
     this.page = page
+
+    this.page.on(Topic.Initialize)
+      .subscribe(() => {
+        this.prepareHandler && this.prepareHandler()
+      })
+    this.page.on(Topic.Loaded)
+      .subscribe(() => {
+        this.loadHandler && this.loadHandler()
+      })
   }
 
   public select(name : string) {
@@ -19,4 +31,15 @@ export class SkedoContext {
     }
     return null 
   }
+
+  prepare(handler : Function){
+    this.prepareHandler = handler
+  }
+
+  loaded(handler : Function){
+
+    this.loadHandler = handler
+  }
+
+  
 }

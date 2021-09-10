@@ -20,5 +20,9 @@ export enum Topic {
 
   ShadowReceiverChanged,
   MemorizedDataChanged,
-  ExternalEventNotify
+  ExternalEventNotify,
+
+  // 一些通用的语义
+  Initialize,
+  Loaded
 }

@@ -4,6 +4,7 @@ import { Bridge, Node,  NodeRenderProps, RenderedComponentProps, RenderOptions, 
 import ExternalComponent from './ExternalComponent'
 import { RenderContext } from './RenderContext'
 import getLocalComponentByURL from '../getLocalComponentByURL'
+import classes from './render.module.scss'
 
 function __render(node : Node, options : RenderOptions){
   const reactElement = (
@@ -41,6 +42,7 @@ function Styled({
   return (
     <div
       ref={ref}
+      className={classes['skedo-' + node.getName()]}
       style={{
         left : box.left.toString(),
         top : box.top.toString(),

@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {pageRemote, fileRemote, compose,} from '@skedo/request'
 import { JsonPage, Page, Topic } from "@skedo/meta"
 import { ComponentsLoader } from "@skedo/loader"
-
+import { CodeProjectRepo } from "@skedo/code"
+import * as runtime from "@skedo/runtime"
+import { SkedoContext } from "@skedo/runtime"
 
 const json: JsonPage = {
   page: {
@@ -24,10 +26,67 @@ const json: JsonPage = {
 	links : {}
 }
 
+
+class Modules {
+
+  static inst = new Modules()
+
+  public static get() {
+    return Modules.inst
+  }
+
+  resolve(name : string){
+    switch(name) {
+      case '@skedo/runtime':
+        return runtime 
+      default:
+
+				throw new Error(`unable to resolve ${name}.`)
+
+    }
+
+  }
+}
+
+function runScript(text : string, ctx : any){
+  function define(deps : Array<string>, callback : (...deps : Array<any>) => void){
+    if(!callback) {
+      // @ts-ignore
+      callback = deps  
+      deps = []
+    }
+    console.log('deps', deps)
+    const depTypes = deps.map(stringName => {
+      const modules = Modules.get()
+      return modules.resolve(stringName)
+    })
+    const r = callback(...depTypes)
+    // @ts-ignore
+    r(ctx)
+  }
+  return eval(text)
+}
+
+
 export const usePage = (pageName : string) : (Page | null) => {
 	
 	const [page, setPage] = useState<Page | null>(null)
 
+	const ctx = useRef<SkedoContext | null>(null)
+
+	async function run(page : Page){
+
+		try{
+			const project = await CodeProjectRepo.load(pageName)
+			const url = project.getScriptURL()
+			const result = await fileRemote.get(url)
+			const content = result.data
+			ctx.current = new SkedoContext(page!)
+			runScript(content, ctx.current)
+		}catch(ex) {
+			console.error(ex)
+		}
+	}
 	useEffect(() => {
 
 		async function loadPage(){
@@ -52,6 +111,8 @@ export const usePage = (pageName : string) : (Page | null) => {
         ComponentsLoader.get()
       )
 
+			await run(page)
+			page.emit(Topic.Initialize)
 			setPage(page)
 		}
 		ComponentsLoader.get().on(Topic.RemoteComponentsLoaded)

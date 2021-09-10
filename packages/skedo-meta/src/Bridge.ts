@@ -98,9 +98,9 @@ export class Bridge {
   public getNodeData(){
     const data = this.getMemorizedData()
     const path = this.node?.getPassProps().get('dataPath')
-    debugger
-    return data[path]
-
-
+    if(!path) {
+      return data
+    }
+    return data? data[path] : null
   }
 }

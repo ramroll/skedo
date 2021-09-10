@@ -86,9 +86,13 @@
 
 
 .preview-container {
-  width : 414px;
+  width : 100%;
   position: relative;
   margin : 0 auto;
+  background-color : #ccc;
+  min-height: 100%;
+  padding-bottom: 100px;
+  padding-top : 20px;
 }
 
 .explorer {

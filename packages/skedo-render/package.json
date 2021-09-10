@@ -24,7 +24,9 @@
       "@skedo/request",
       "@skedo/meta",
       "@skedo/utils",
-      "@skedo/loader"
+      "@skedo/loader",
+      "@skedo/code",
+      "@skedo/runtime"
     ]
   },
   "dependencies": {

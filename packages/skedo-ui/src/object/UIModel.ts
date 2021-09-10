@@ -138,6 +138,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents, Topic> {
 
     this.describe("大家好！我是小师叔，这里在处理选中的逻辑", register => {
       register([UIStates.Start, UIStates.Selected], UIStates.Selected, UIEvents.EvtSelected, (node : Node) => {
+
         this.selection.replace(node)
         this.emit(Topic.SelectionChanged)
       })

@@ -408,7 +408,6 @@ export class Node extends InstanceData
 
   public memory(data : any) {
     this.tmpData = data
-    console.log('set memory data', data)
     this.emit(Topic.MemorizedDataChanged)
   }
 
