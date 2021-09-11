@@ -12,6 +12,9 @@ export class FCBuilder {
     const execPromise = promisify(exec)
 
     try{
+      await execPromise("yarn", {
+        cwd : this.cwd
+      })
       const result = await execPromise("tsc", {
         cwd : this.cwd
       })

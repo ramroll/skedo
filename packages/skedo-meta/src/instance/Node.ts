@@ -139,6 +139,7 @@ export class Node extends InstanceData
     this.refs.push(node)
   }
 
+
   public getRefs() {
     return this.refs
   }
@@ -412,7 +413,6 @@ export class Node extends InstanceData
   }
 
   public getMemorizedData() : any{
-    console.log('get memorized data')
     if(typeof this.tmpData !== 'undefined') {
       return this.tmpData
     }
@@ -535,4 +535,6 @@ export class Node extends InstanceData
 		newJson.children = this.getChildren().map(child => child.toJSON(links))
 		return newJson as JsonNode 
   }
+
+  
 }

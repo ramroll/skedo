@@ -13,7 +13,7 @@ export default class Hotkeys {
 
   constructor(){
     this.cmds.push(new DeleteCommand(['Delete']))
-    // this.cmds.push(new DeleteCommand(['Backspace']))
+    this.cmds.push(new EditCommand(['F2']))
   }
 
   run(keys : Array<string>, ctx : CMDContext){
@@ -39,6 +39,18 @@ class Command{
     throw new Error("Not Implemented.")
   }
 }
+
+class EditCommand extends Command {
+  run(ctx : CMDContext){
+    const selection = ctx.editor.getSelection()
+    selection.forEach(node => {
+      node.emit(Topic.EditMode)
+    })
+    ctx.editor.clearSelection()
+  }
+}
+
+
 
 class DeleteCommand extends Command {
   run(ctx : CMDContext){

@@ -1,7 +1,10 @@
-import { CodeProject } from "./CodeProject";
 import { CodeProjectFS } from "./CodeProjectFS";
+import {exec} from 'child_process'
 import fs from 'fs'
 import path from 'path'
+import {promisify} from 'util'
+
+const execPromise = promisify(exec)
 
 export class CodeRunner{
 
@@ -33,6 +36,9 @@ export class CodeRunner{
     console.log('start download...')
     await projectFS.download(this.name)
     console.log('downloaded.')
+    await execPromise("yarn", {
+      cwd : this.cwd 
+    })
   }
 
   async run(fnName : string, ...args : Array<any>) {

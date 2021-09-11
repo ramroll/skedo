@@ -14,5 +14,6 @@ export type ProjectJson = {
   name : string, 
   type : ProjectType,
   fileTree : FileNodeJson ,
-  scriptURL: string
+  scriptURL: string,
+  version : number
 }

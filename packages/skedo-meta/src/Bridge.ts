@@ -13,6 +13,7 @@ export class Bridge {
   private node?: Node
   private page?: Page
   private mode : BridgeMode
+  private dataChangeHandlers : Function[] = [] 
 
   
   renderForReact?: (
@@ -24,6 +25,9 @@ export class Bridge {
     this.node = node
     this.page = page
     this.mode = mode
+    node?.on(Topic.MemorizedDataChanged).subscribe(() => {
+      this.dataChangeHandlers.forEach((h) => h())
+    })
   }
 
 
@@ -102,5 +106,17 @@ export class Bridge {
       return data
     }
     return data? data[path] : null
+  }
+
+  public cloneNode(node : Node) : Node {
+    return this.page!.cloneNode(node)
+  }
+
+  public sendToCodeless(msg : any) {
+    this.page?.emit(Topic.ContextMessage, msg)
+  }
+
+  public onDataChanged(handler : Function){
+    this.dataChangeHandlers.push(handler)
   }
 }

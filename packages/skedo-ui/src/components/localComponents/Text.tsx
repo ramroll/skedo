@@ -29,8 +29,8 @@ const Text: React.FC<TextProps> = ({
 
   useEffect(() => {
     const sub = bridge.on(Topic.EditMode)
-      .subscribe((value : any) => {
-        setState(value ? 1 : 0)
+      .subscribe(() => {
+        setState(1)
       })
     return () => {
       sub.unsubscribe()

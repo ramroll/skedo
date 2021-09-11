@@ -170,6 +170,24 @@ export class Page extends Emiter<Topic>{
     return this.root
   }
 
+  public cloneNode(node : Node, parent? : Node) {
+    const meta = node.meta
+    const data = node.getData()
+      .set('id', this.createId())
+
+    const newNode = new Node(meta, data)
+    if(parent) {
+      newNode.setParent(parent)
+    }
+    this.linkPage(newNode)
+
+    const children = newNode.getChildren() 
+      .map(child => this.cloneNode(child, newNode))
+    newNode.setChildren(children)
+    return newNode
+
+  }
+
   // renderExternal(node : NodeType, elem: HTMLElement) {
   //   const component = <InjectComponent node={node} editor={this.editor} />
   //   this.logger.log("render external", elem, component)

@@ -10,20 +10,16 @@ export class CodeProject {
     faas: "faas-template",
   }
 
-  // public static TemplateNames: Record<ProjectType, string> =
-  //   {
-  //     codeless: "codeless-template",
-  //     faas: "faas-template",
-  //   }
-
   private name: string
   private type: ProjectType
   private fileNode: FileTreeNode
   private scriptURL?: string
+  private version : number
 
   constructor(name: string, type: ProjectType) {
     this.name = name
     this.type = type
+    this.version = 0
     this.fileNode = new FileTreeNode("dir", "root")
   }
 
@@ -33,6 +29,7 @@ export class CodeProject {
       type: this.type,
       scriptURL: this.scriptURL,
       fileTree: this.fileNode.toJSON(),
+      version : this.version
     }
   }
 
@@ -57,6 +54,7 @@ export class CodeProject {
     const fileTree = FileTreeNode.fromJSON(obj.fileTree)
     project.fileNode = fileTree
     project.scriptURL = obj.scriptURL
+    project.version = obj.version
     return project
   }
 
@@ -66,5 +64,13 @@ export class CodeProject {
 
   public getScriptURL() {
     return this.scriptURL!
+  }
+
+  public incrVer(){
+    this.version ++
+  }
+
+  public getVersion(){
+    return this.version
   }
 }

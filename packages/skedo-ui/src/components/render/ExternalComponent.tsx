@@ -4,7 +4,6 @@ import {Bridge, Node} from '@skedo/meta'
 import styles from './render.module.scss'
 import { componentRemote } from '@skedo/request'
 import { Modules } from '@skedo/render'
-const vue = require('vue')
 
 interface ExternalComponentProps {
 	url : string ,
@@ -27,7 +26,7 @@ function makeVueComponent(Component : any) : React.ElementType<Props> {
 			const elem = ref.current
 			if(elem) {
 				try{
-					const vNode = vue.createApp(Component, {bridge}).mount(elem)
+					Modules.get().resolve('vue').createApp(Component, {bridge}).mount(elem)
 				}
 				catch(ex) {
 					throw new Error(`run vue component ${bridge.getNode().getName()} error:` + ex.toString())
@@ -84,15 +83,6 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 		componentRemote.external.get(this.props.url)
 			.then(text => {
 				(function(){
-					// eslint-disable-next-line
-					function define(deps : Array<string>, callback : (...deps : Array<any>) => void){
-						const depTypes = deps.map(stringName => {
-							
-							const modules = Modules.get()
-							return modules.resolve(stringName)
-						})
-						return callback(...depTypes)
-					}
 
 					if(componentType === 'react') {
 						// eslint-disable-next-line

@@ -9,7 +9,8 @@ interface ImageProps {
 }
 
 const Image = ({img, bridge} : ImageProps) => {
-	return <img className={classes.img} src={img} /> 
+  const data = bridge.getNodeData()
+	return <img className={classes.img} src={data || img} /> 
 }
 
 export default Image

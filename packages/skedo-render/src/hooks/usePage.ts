@@ -77,7 +77,7 @@ export const usePage = (pageName : string) : (Page | null) => {
 	async function run(page : Page){
 
 		try{
-			const project = await CodeProjectRepo.load(pageName)
+			const project = await CodeProjectRepo.load('codeless-' + pageName)
 			const url = project.getScriptURL()
 			const result = await fileRemote.get(url)
 			const content = result.data

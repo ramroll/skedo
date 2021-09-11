@@ -18,12 +18,11 @@ export default ({type} : {
 
   const { page: pageName } =
     useParams<{ [key: string]: string }>()
-  const editor = useCodeEditor(pageName, type) 
+  const editor = useCodeEditor(type + '-' + pageName, type) 
 
   const json = editor.getJSON()
   const show = json !== null
 
-  console.log('render....', editor.getSelectedFile()?.getContent())
   return (
     <EditorContext.Provider value={editor}>
       <TitleBar pageName={pageName} name={type}>

@@ -3,6 +3,7 @@ import { SkedoNodeProxy } from './SkedoNodeProxy'
 export class SkedoContext {
   private page : Page
 
+  private handlers : Function[] = []
   private prepareHandler? : Function
   private loadHandler ? : Function
 
@@ -16,6 +17,10 @@ export class SkedoContext {
     this.page.on(Topic.Loaded)
       .subscribe(() => {
         this.loadHandler && this.loadHandler()
+      })
+    this.page.on(Topic.ContextMessage) 
+      .subscribe((msg) => {
+        this.handlers.forEach(h => h(msg))
       })
   }
 
@@ -37,9 +42,11 @@ export class SkedoContext {
   }
 
   loaded(handler : Function){
-
     this.loadHandler = handler
   }
 
+  onMessage(handler : Function) {
+    this.handlers.push(handler)
+  }
   
 }

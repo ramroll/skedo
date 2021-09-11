@@ -24,5 +24,6 @@ export enum Topic {
 
   // 一些通用的语义
   Initialize,
-  Loaded
+  Loaded,
+  ContextMessage
 }

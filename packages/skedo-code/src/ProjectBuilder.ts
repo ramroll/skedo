@@ -12,7 +12,7 @@ export class ProjectBuilder {
     const projectFS = new CodeProjectFS(cwd)
     const project = await projectFS.download(name)
   
-    console.log("project downloaded...")
+    console.log("project downloaded...", cwd)
 
     switch(project.getType() as ProjectType | 'default') {
 

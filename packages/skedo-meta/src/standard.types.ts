@@ -86,4 +86,4 @@ export type RenderOptions = {
 	ele ? : HTMLElement
 }
 
-export type SkedoEventName = "click" | "f12"
+export type SkedoEventName = "click" | "f12" | "data"
