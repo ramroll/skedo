@@ -1,5 +1,4 @@
 import { PropComponentProps } from "./propeditor.types"
-import {range} from 'ramda'
 import classes from './prop-editor.module.scss'
 import { useEffect, useState } from "react"
 import {lensPath, set, path} from 'ramda'

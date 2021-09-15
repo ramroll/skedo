@@ -106,11 +106,9 @@
     ]
   },
   "devDependencies": {
-    "@types/js-yaml": "^4.0.1",
-    "eslint-plugin-autofix": "^1.0.5",
-    "typescript": "^4.3.4",
     "@types/immutable": "^3.8.7",
     "@types/jest": "^26.0.23",
+    "@types/js-yaml": "^4.0.1",
     "@types/little-loader": "^0.2.0",
     "@types/md5": "^2.3.1",
     "@types/node": "^12.20.13",
@@ -120,7 +118,10 @@
     "@types/react-dom": "^17.0.5",
     "@types/react-router-dom": "^5.1.7",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
-    "@typescript-eslint/parser": "^4.5.0"
+    "@typescript-eslint/parser": "^4.5.0",
+    "cross-env": "^7.0.3",
+    "eslint-plugin-autofix": "^1.0.5",
+    "typescript": "^4.3.4"
   },
   "jest": {
     "roots": [

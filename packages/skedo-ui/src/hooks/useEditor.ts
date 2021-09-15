@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react"
 import UIModel from "../object/UIModel"
 import {pageRemote, fileRemote, compose} from '@skedo/request'
-import { BoxDescriptor, JsonNode, JsonPage, Topic } from "@skedo/meta"
+import {
+  JsonPage,
+  Topic,
+} from "@skedo/meta"
 import {ComponentsLoader} from '@skedo/loader'
 
 const json: JsonPage = {

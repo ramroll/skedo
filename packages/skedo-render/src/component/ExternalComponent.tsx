@@ -50,6 +50,7 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 	}
 
 	getComponent(text : string){
+		// @ts-ignore
 		function define(deps : Array<string>, callback : (...deps : Array<any>) => void){
 			const depTypes = deps.map(stringName => {
 				const modules = Modules.get()
@@ -58,6 +59,7 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 			return callback(...depTypes)
 		}
 		try{
+			// @ts-ignore
 			return eval(text)
 		}
 		catch(ex) {
@@ -83,25 +85,11 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 		componentRemote.external.get(this.props.url)
 			.then(text => {
 				(function(){
-					// eslint-disable-next-line
-					function define(deps : Array<string>, callback : (...deps : Array<any>) => void){
-						const depTypes = deps.map(stringName => {
-							
-							const modules = Modules.get()
-							return modules.resolve(stringName)
-						})
-						return callback(...depTypes)
-					}
-
 					if(componentType === 'react') {
-						// eslint-disable-next-line
 						const ComponentC = self.getComponent(text)
-
 						node.meta.cache.set(node.meta.url!, ComponentC)
-						console.log('build remove component--')
 						self.setState({C : ComponentC})
 					} else if(componentType === 'vue') {
-						// eslint-disable-next-line
 						const Component = self.getComponent(text)
 						const VueComponentType = makeVueComponent(Component) 
 						// const VueComponent = <VueComponentType bridge={self.props.bridge} />

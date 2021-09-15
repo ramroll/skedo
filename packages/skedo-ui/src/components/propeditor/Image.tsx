@@ -1,7 +1,6 @@
 import { PropComponentProps } from "./propeditor.types"
 import classes from './prop-editor.module.scss'
 import { fileRemote } from '@skedo/request'
-import { useState } from "react"
 
 export default ({
   onChange,

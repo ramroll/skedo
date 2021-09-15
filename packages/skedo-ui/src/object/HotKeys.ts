@@ -1,5 +1,5 @@
 import UIModel from "./UIModel";
-import {equals, keys} from 'ramda'
+import { equals } from "ramda"
 import { Topic } from "@skedo/meta";
 
 

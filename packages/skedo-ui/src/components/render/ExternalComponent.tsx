@@ -50,6 +50,7 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 	}
 
 	getComponent(text : string){
+		// @ts-ignore
 		function define(deps : Array<string>, callback : (...deps : Array<any>) => void){
 			const depTypes = deps.map(stringName => {
 				const modules = Modules.get()
@@ -58,6 +59,7 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 			return callback(...depTypes)
 		}
 		try{
+			// @ts-ignore
 			return eval(text)
 		}
 		catch(ex) {

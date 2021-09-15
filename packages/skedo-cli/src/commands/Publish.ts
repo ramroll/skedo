@@ -4,11 +4,10 @@ import path from 'path'
 import UI from "../helper/UI";
 import yaml from 'js-yaml'
 import FatalError from "../helper/FatalError";
-import {fileRemote, componentRemote, CustomResponse} from '@skedo/request/es'
-import YML from '../helper/Yml'
+import {fileRemote, componentRemote, CustomResponse} from '@skedo/request'
 import { loadConfig, validateConfig } from "../helper/loadConfig";
 import Rollup from "./Rollup";
-import { ComponentMetaConfig } from "@skedo/meta/es";
+import { ComponentMetaConfig } from "@skedo/meta";
 
 
 export default class Publish implements Command {

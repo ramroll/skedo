@@ -1,6 +1,10 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { CodeProject, FileNodeJson, FileTreeNode, ProjectJson, ProjectType } from "../../../skedo-code/src"
+import {
+  CodeProject,
+  FileTreeNode,
+  ProjectType,
+} from "../../../skedo-code/src"
 import CodeEditor from "../components/CodeEditor"
 import TitleBar from "../components/frame/TitleBar"
 import { useCodeEditor } from "../hooks/useCodeEditor"

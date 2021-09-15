@@ -1,11 +1,8 @@
 import {Input, Select} from 'antd'
-import Checkbox from 'antd/lib/checkbox/Checkbox'
 import { PropComponentProps } from './propeditor.types'
 import classes from './prop-editor.module.scss'
 import { SizeUnit } from '@skedo/meta'
 import { useState } from 'react'
-interface SizeInputProps {
-}
 
 const Option = Select.Option
 const SizeInput = ({
@@ -19,7 +16,7 @@ const SizeInput = ({
 
   const [value ,setValue] = useState(sizeUnit.getValue())
   const [unit,setUnit] = useState(sizeUnit.getUnit())
-  const [fixed, setFixed] = useState(sizeUnit.getMode() === 'fixed')
+  const [mode, setMode] = useState(sizeUnit.getMode())
 
   return (
     <div className={classes["size-input"]}>
@@ -54,11 +51,21 @@ const SizeInput = ({
         <Option value="%">%</Option>
       </Select>
       <span style={{ width: "10px" }}></span>
-      <span>fixed</span>
-      <Checkbox
-        checked={fixed}
+      <span>mode</span>
+      <Select
+        value={mode}
+        onChange={(mode) => {
+          sizeUnit.setMode(mode)
+          onChange(sizeUnit)
+          setMode(mode)
+        }}
         disabled={disabled}
-      ></Checkbox>
+      >
+        <Option value="auto">auto</Option>
+        <Option value="fill">fill</Option>
+        <Option value="fixed">fixed</Option>
+        <Option value="value">value</Option>
+      </Select>
     </div>
   )
 }

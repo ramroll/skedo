@@ -1,6 +1,5 @@
 import {CodeProject} from './CodeProject'
 import {codeProjectRemote, fileRemote} from '@skedo/request'
-import {ProjectVer} from '@skedo/dao'
 export class CodeProjectRepo {
   project : CodeProject 
 
@@ -24,8 +23,6 @@ export class CodeProjectRepo {
 
     if(updated) {
       this.project.incrVer()
-      // 在Redis处更新版本
-      await ProjectVer.getInst().incVer(this.project.getName())
     }
 
     await codeProjectRemote.put(
@@ -41,8 +38,6 @@ export class CodeProjectRepo {
     
     const result = await codeProjectRemote.get(name)
     const project = CodeProject.fromJSON(result.data)
-    // 回写Redis版本
-    await ProjectVer.getInst().setVer(name, project.getVersion())
     return project
 
   }
