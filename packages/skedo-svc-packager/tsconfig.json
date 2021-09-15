@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "outDir": "build",
+    "outDir": "es",
     "downlevelIteration": true,
-    "esModuleInterop": true 
+    "esModuleInterop": true
   },
   "include": ["src/**/*"]
 }

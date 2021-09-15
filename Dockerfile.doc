@@ -1,0 +1,14 @@
+FROM node:14
+
+WORKDIR /usr/app
+
+COPY . .
+
+RUN yarn global add ts-node 
+RUN yarn install
+RUN npm run install-dep -- --name @skedo/doc-service
+RUN npm run install-link -- --name @skedo/doc-service
+
+EXPOSE 7002
+
+CMD npm run serve -- --name @skedo/doc-service  

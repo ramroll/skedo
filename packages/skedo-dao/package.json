@@ -17,6 +17,7 @@
   "dependencies": {
     "@types/redis": "^2.8.32",
     "@types/sequelize": "^4.28.10",
+    "mysql2": "^2.3.0",
     "redis": "^4.0.0-rc.1",
     "sequelize": "^6.6.5",
     "sqlite3": "^5.0.2"

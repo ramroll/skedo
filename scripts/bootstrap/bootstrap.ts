@@ -2,7 +2,7 @@ import { loadProjects } from "./scan"
 import parser from 'yargs-parser'
 import fs from 'fs'
 import inquirer = require('inquirer')
-import Packages from "./Packages"
+import Packages from "./packages"
 import { Package } from "./package"
 import { resolve } from "path"
 import chalk = require("chalk")
@@ -21,11 +21,14 @@ async function run() {
     case "reinstall":
       projects.reinstall()
       break
+    case 'clear':
+      projects.npmClear()
+      break
     case "install" :
       projects.install()
       break
     case "install-link":
-      projects.installLinks()
+      projects.installLinks(argv.name)
       break
     case "use-lib-es":
       projects.switchLibsTo('es')
@@ -35,6 +38,15 @@ async function run() {
       break
     case "build-ts":
       projects.buildTS(argv.name)
+      break
+    case "build":
+      projects.build(argv.name)
+      break
+    case "install-dep":
+      projects.installDep(argv.name)
+      break
+    case "serve":
+      projects.serve(argv.name)
       break
     case "dev":
       let name = argv.name

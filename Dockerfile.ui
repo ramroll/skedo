@@ -1,0 +1,15 @@
+FROM node:14
+
+WORKDIR /usr/app
+
+COPY . .
+
+RUN yarn global add ts-node 
+RUN yarn install
+RUN npm run install-dep -- --name @skedo/ui
+RUN npm run install-link -- --name @skedo/ui
+RUN npm run build -- --name @skedo/ui
+
+EXPOSE 5000 
+
+CMD npm run serve -- --name @skedo/ui

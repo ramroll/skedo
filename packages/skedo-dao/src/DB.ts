@@ -8,7 +8,6 @@ export default class DB{
 
 	static getSequelize() {
 		if(!DB.sequelize) {
-			console.log(config)
 			DB.sequelize = new Sequelize(config.dbName, config.uname, config.passwd,  {
 				host : config.dbHost,
 				storage : config.storage,

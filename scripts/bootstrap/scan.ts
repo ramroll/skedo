@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { Package } from './package'
-import Packages from './Packages'
+import Packages from './packages'
 
 function *walk(pattern : RegExp, dir : string, exclude : RegExp) : Generator<any> {
 

@@ -1,6 +1,5 @@
 import {Observable, Subscriber} from 'rxjs'
 
-
 export class Emiter<Topic extends number> {
   observers : Array<Array<Subscriber<any>>>
 

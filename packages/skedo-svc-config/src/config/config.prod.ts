@@ -4,7 +4,7 @@ import {resolve} from 'path'
 const config : ConfigAttributes = {
 
 	dbHost : "localhost",
-	dbType : 'sqlite',
+	dbType : 'mysql',
 	dbName : "skedo",
 	uname : 'root',
 	passwd : '123456',

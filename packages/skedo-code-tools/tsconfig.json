@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "es6"],
+    "target": "ES6",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "downlevelIteration": true,
+    "declaration": true,
+    "outDir": "es"
+  },
+  "include": ["src/**/*"]
+}

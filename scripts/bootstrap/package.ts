@@ -232,4 +232,11 @@ export class Package{
 		return this.json.skedo?.localInstall
 	}
 
+	public async build(){
+		await this.exec("npm run build")
+	}
+	public async serve(){
+		await this.exec('npm run serve')
+	}
+
 }

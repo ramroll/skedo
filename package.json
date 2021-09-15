@@ -8,11 +8,15 @@
     "reinstall": "ts-node ./scripts/bootstrap/bootstrap.ts reinstall",
     "install-link": "ts-node ./scripts/bootstrap/bootstrap.ts install-link",
     "list": "ts-node ./scripts/bootstrap/bootstrap.ts list",
+    "npm-clear": "ts-node ./scripts/bootstrap/bootstrap.ts clear",
     "dev": "ts-node ./scripts/bootstrap/bootstrap.ts dev",
+    "build": "ts-node ./scripts/bootstrap/bootstrap.ts build",
     "set-all-ver": "ts-node ./scripts/bootstrap/bootstrap.ts set-all-ver",
-    "use-lib-es" : "ts-node ./scripts/bootstrap/bootstrap.ts use-lib-es",
-    "build-ts" : "ts-node ./scripts/bootstrap/bootstrap.ts build-ts",
-    "use-lib-ts" : "ts-node ./scripts/bootstrap/bootstrap.ts use-lib-ts",
+    "use-lib-es": "ts-node ./scripts/bootstrap/bootstrap.ts use-lib-es",
+    "build-ts": "ts-node ./scripts/bootstrap/bootstrap.ts build-ts",
+    "use-lib-ts": "ts-node ./scripts/bootstrap/bootstrap.ts use-lib-ts",
+    "install-dep": "ts-node ./scripts/bootstrap/bootstrap.ts install-dep",
+    "serve": "ts-node ./scripts/bootstrap/bootstrap.ts serve",
     "help": "ts-node ./scripts/bootstrap/bootstrap.ts help"
   },
   "repository": {
@@ -28,6 +32,7 @@
     "inquirer": "^8.1.2",
     "ramda": "^0.27.1",
     "rxjs": "^7.3.0",
+    "typescript": "^4.4.3",
     "yargs-parser": "^20.2.9"
   },
   "devDependencies": {

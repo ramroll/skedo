@@ -103,6 +103,33 @@ class Packages {
 				lib.save()
 			})
 	}
+
+	public async installDep(name : string, resolved : Set<string> = new Set()) {
+		const pkg = this.packages.find(x => x.getName() === name)
+
+		if(resolved.has(pkg.getName())) {
+			return
+		}
+
+		for(let link of pkg.getDevLinks()) {
+			await this.installDep(link, resolved)
+		}
+
+		await pkg.npmInstall()
+		resolved.add(pkg.getName())
+
+
+	}
+
+	public async serve(name : string) {
+		const pkg = this.packages.find(x => x.getName() === name)
+		await pkg.serve()
+	}
+
+	public async build(name : string) {
+		const pkg = this.packages.find(x => x.getName() === name)
+		await pkg.build()
+	}
 	
 	public async buildTS(name? : string) {
 
@@ -115,18 +142,23 @@ class Packages {
 		const pkgs = this.packages.filter(x => x.getSkedoType() === 'lib') 
 
 		const resolved = new Set()
-		let i = pkgs.length
-		let c = 0
-		while(c !== i) {
-			for(const pkg of pkgs) {
-				if(pkg.getDevLinks().find(x => !resolved.has(x))) {
+
+		while(resolved.size !== pkgs.length) {
+
+			for(let pkg of pkgs) {
+
+				if(resolved.has(pkg.getName())) {
 					continue
 				}
-				resolved.add(pkg.getName())
-				await pkg.buildES()
-				c++
+
+				if ( !pkg.getDevLinks().find(x => !resolved.has(x))  ) {
+					await pkg.buildES()
+					resolved.add(pkg.getName())
+				}
 			}
+
 		}
+
 	}
 
 	public start(){
@@ -186,7 +218,28 @@ class Packages {
 
 	}
 
-	public async installLinks(){
+	private async installLink(name : string, level : number = 0) {
+
+		const pkg = this.packages.find(x => x.getName() === name) 
+
+		for(let link of pkg.getDevLinks()) {
+			await this.installLink(link, level + 1)
+		}
+		await pkg.linkDev()
+
+		if(level > 0) {
+			await pkg.link()
+		}
+
+
+		
+	}
+
+	public async installLinks(name? : string){
+		if(name) {
+			this.installLink(name)
+			return
+		}
 		const links = new Set()
 		for(let pkg of this.packages) {
 			for (let link of pkg.getDevLinks()) {
@@ -195,6 +248,7 @@ class Packages {
           if (!pkgToLink) {
             throw new Error("Cannot find link:" + link)
           }
+					// yark link
           await pkgToLink.link()
         }
         links.add(link)
@@ -203,10 +257,17 @@ class Packages {
 		}
 
 		for(let pkg of this.packages) {
+			// yarn link xxx
 			await pkg.linkDev()
 		}
 		this.marks["linked"] = true
 		this.saveMark()
+	}
+
+	public async npmClear(){
+		for(let pkg of this.packages) {
+			await pkg.npmClear()
+		}
 	}
 
 	public async reinstall() {
