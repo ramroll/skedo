@@ -34,7 +34,7 @@ async function run() {
       projects.switchLibsTo('ts')
       break
     case "build-ts":
-      projects.buildTS()
+      projects.buildTS(argv.name)
       break
     case "dev":
       let name = argv.name

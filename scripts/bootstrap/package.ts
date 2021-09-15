@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import R from 'ramda'
 import {runCmd} from './cmdRunner'
+import {copy} from './copy'
 
 interface PackageJSON{
 	name : string,
@@ -201,7 +202,17 @@ export class Package{
 		}
 
 		console.log(chalk.bold(chalk.yellow("build:" + this.getName())))
+		
 		await this.exec("tsc")
+
+		console.log('copy static files',)
+		copy(
+      path.resolve(this.dir, "src"),
+      path.resolve(this.dir, "es"),
+			{
+				include : /.(scss|css|jpg|jpeg|yml|json)$/
+			}
+    )
 	}
 
 	public setDep(key : string, version :string) {

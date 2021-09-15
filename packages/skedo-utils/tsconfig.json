@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
+    "module": "commonjs",
     "outDir": "es",
     "lib": [
       "dom",
@@ -10,10 +11,8 @@
     "rootDir": "src",
     "allowJs": false,
     "downlevelIteration": true,
-    // "esModuleInterop": true,
     "noImplicitAny": true,
     "strict": true,
-    "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
   },

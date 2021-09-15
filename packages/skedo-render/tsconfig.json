@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "module": "commonjs",
     "lib": [
       "dom",
       "dom.iterable",
@@ -14,15 +15,13 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "experimentalDecorators" : true,
     "isolatedModules": true,
     "jsx": "react-jsx",
     "declaration": true,
-    "noEmit": true
-
+    "outDir": "es"
   },
   "include": ["src/**/*", "src/react-app-env.d.ts"]
 }

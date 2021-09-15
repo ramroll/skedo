@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
+    "target": "ES5",
+    "module" : "CommonJS",
     "outDir": "es",
-    "downlevelIteration": true 
+    "downlevelIteration": true,
+    "declaration": true
   },
   "include": ["src/**/*"]
 }

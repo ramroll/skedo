@@ -4,7 +4,7 @@ import {
   CodeProject,
   FileTreeNode,
   ProjectType,
-} from "../../../skedo-code/src"
+} from "@skedo/code"
 import CodeEditor from "../components/CodeEditor"
 import TitleBar from "../components/frame/TitleBar"
 import { useCodeEditor } from "../hooks/useCodeEditor"

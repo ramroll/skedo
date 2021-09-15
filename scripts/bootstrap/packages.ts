@@ -104,7 +104,13 @@ class Packages {
 			})
 	}
 	
-	public async buildTS() {
+	public async buildTS(name? : string) {
+
+		if(name) {
+			const pkg = this.packages.find(x => x.getName() === name)
+			await pkg.buildES()
+			return
+		}
 
 		const pkgs = this.packages.filter(x => x.getSkedoType() === 'lib') 
 
