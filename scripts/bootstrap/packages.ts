@@ -92,6 +92,37 @@ class Packages {
 
 	}
 
+	public switchLibsTo(type : 'es' | 'ts'){
+		this.packages.filter(x => x.getSkedoType() === "lib")
+			.forEach(lib => {
+				if(type === 'es') {
+					lib.toES()
+				} else {
+					lib.toTS()
+				}
+				lib.save()
+			})
+	}
+	
+	public async buildTS() {
+
+		const pkgs = this.packages.filter(x => x.getSkedoType() === 'lib') 
+
+		const resolved = new Set()
+		let i = pkgs.length
+		let c = 0
+		while(c !== i) {
+			for(const pkg of pkgs) {
+				if(pkg.getDevLinks().find(x => !resolved.has(x))) {
+					continue
+				}
+				resolved.add(pkg.getName())
+				await pkg.buildES()
+				c++
+			}
+		}
+	}
+
 	public start(){
 
 		if(!this.marks['installed']) {

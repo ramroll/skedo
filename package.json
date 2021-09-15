@@ -10,6 +10,9 @@
     "list": "ts-node ./scripts/bootstrap/bootstrap.ts list",
     "dev": "ts-node ./scripts/bootstrap/bootstrap.ts dev",
     "set-all-ver": "ts-node ./scripts/bootstrap/bootstrap.ts set-all-ver",
+    "use-lib-es" : "ts-node ./scripts/bootstrap/bootstrap.ts use-lib-es",
+    "build-ts" : "ts-node ./scripts/bootstrap/bootstrap.ts build-ts",
+    "use-lib-ts" : "ts-node ./scripts/bootstrap/bootstrap.ts use-lib-ts",
     "help": "ts-node ./scripts/bootstrap/bootstrap.ts help"
   },
   "repository": {

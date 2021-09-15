@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "build",
+    "outDir": "es",
     "downlevelIteration": true 
   },
   "include": ["src/**/*"]

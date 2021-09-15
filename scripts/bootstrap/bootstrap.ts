@@ -27,8 +27,14 @@ async function run() {
     case "install-link":
       projects.installLinks()
       break
-    case "deps":
-      projects.deps()
+    case "use-lib-es":
+      projects.switchLibsTo('es')
+      break
+    case "use-lib-ts":
+      projects.switchLibsTo('ts')
+      break
+    case "build-ts":
+      projects.buildTS()
       break
     case "dev":
       let name = argv.name

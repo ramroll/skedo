@@ -5,8 +5,7 @@
     "esModuleInterop": true,
     "downlevelIteration": true,
     "noImplicitThis": true,
+    "outDir": "es",
     "module": "commonjs",
-
-    
   },
 }

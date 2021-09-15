@@ -20,5 +20,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "declaration": true,
-  }
+    "outDir": "es"
+  },
+  "include": ["src/**/*"]
 }

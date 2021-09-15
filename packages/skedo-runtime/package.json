@@ -2,7 +2,7 @@
   "name": "@skedo/runtime",
   "version": "0.0.2",
   "description": "",
-  "main": "src/index.ts",
+  "main": "es/index.js",
   "dependencies": {},
   "devDependencies": {},
   "scripts": {
@@ -10,9 +10,9 @@
   },
   "author": "",
   "license": "ISC",
-  "skedo" : {
-    "type" : "lib",
-    "devLinks" : [
+  "skedo": {
+    "type": "lib",
+    "devLinks": [
       "@skedo/meta"
     ]
   }

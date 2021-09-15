@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "es6"],
+    "target": "ES6",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "downlevelIteration": true,
+    "outDir": "es"
+  },
+  "include": ["src/**/*"]
+}

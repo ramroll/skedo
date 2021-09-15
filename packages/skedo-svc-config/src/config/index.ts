@@ -2,5 +2,8 @@
 import devConfig from './config.dev'
 import prodConfig from './config.prod'
 
-let config = devConfig
+
+const config = process.env.NODE_ENV === 'production' 
+ ? prodConfig : devConfig
+
 export default config

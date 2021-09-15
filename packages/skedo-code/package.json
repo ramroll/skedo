@@ -2,7 +2,7 @@
   "name": "@skedo/code",
   "version": "0.0.2",
   "description": "",
-  "main": "src/index.ts",
+  "main": "es/index.js",
   "dependencies": {
     "@types/redis": "^2.8.32",
     "balanced-match": "^1.0.2",
@@ -51,7 +51,10 @@
     "universalify": "^0.1.2",
     "wrappy": "^1.0.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^20.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.4"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

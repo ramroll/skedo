@@ -7,6 +7,7 @@ import {runCmd} from './cmdRunner'
 interface PackageJSON{
 	name : string,
 	version : [number, number, number],
+	main : string,
 	skedo? : {
 		devLinks? : string[],
 		type? : "service" | "app" | "lib" | "cli",
@@ -70,6 +71,16 @@ export class Package{
 		return (this.json.skedo?.devLinks) || []
 	}
 
+	public toES(){
+		this.dirty = true
+		this.json.main = 'es/index.js'
+	}
+
+	public toTS(){
+		this.dirty = true
+		this.json.main = 'src/index.ts'
+	}
+
 	public save() {
 		if(!this.dirty) {
 			return
@@ -94,6 +105,7 @@ export class Package{
 	public async link(){
 		console.log(chalk.cyanBright(`link ${this.getName()}`))
 		if(this.getSkedoType() !== 'cli') {
+			await this.exec('yarn unlink')
 			await this.exec('yarn link')
 		} else {
 			await this.exec("npm link --force")
@@ -181,6 +193,15 @@ export class Package{
 				break
     }
 		
+	}
+
+	public async buildES(){
+		if(this.getSkedoType() !== "lib") {
+			return
+		}
+
+		console.log(chalk.bold(chalk.yellow("build:" + this.getName())))
+		await this.exec("tsc")
 	}
 
 	public setDep(key : string, version :string) {
