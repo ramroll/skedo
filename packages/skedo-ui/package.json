@@ -193,5 +193,6 @@
       "@skedo/code",
       "@skedo/runtime"
     ]
-  }
+  },
+  "homepage" : "https://s.weavinghorse.com"
 }

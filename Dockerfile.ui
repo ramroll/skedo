@@ -10,6 +10,7 @@ RUN npm run install-dep -- --name @skedo/ui
 RUN npm run install-link -- --name @skedo/ui
 RUN npm run build-ts -- --name @skedo/ui
 RUN npm run build -- --name @skedo/ui
+RUN npm run upload-static   
 
 EXPOSE 5000 
 
