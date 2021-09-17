@@ -1,5 +1,5 @@
 {
-  "name": "@skedo/svc-packager",
+  "name": "@skedo/packager-service",
   "version": "0.0.2",
   "description": "",
   "main": "index.js",
@@ -73,7 +73,7 @@
     "type": "service",
     "port" : "7004",
     "devLinks": [
-      "@skedo/code",
+      "@skedo/code-tools",
       "@skedo/request"
     ]
   }

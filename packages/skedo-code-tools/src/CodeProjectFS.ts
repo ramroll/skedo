@@ -1,9 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import { CodeProject } from "./CodeProject"
-import { FileTreeNode } from "./FileTreeNode"
+import { CodeProject, FileTreeNode, ProjectJson, ProjectType } from "@skedo/code"
 import {codeProjectRemote, fileRemote} from '@skedo/request'
-import { ProjectJson, ProjectType } from './type'
 
 export class CodeProjectFS {
   private cwd : string

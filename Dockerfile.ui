@@ -9,7 +9,11 @@ RUN yarn install
 RUN npm run install-dep -- --name @skedo/ui
 RUN npm run install-link -- --name @skedo/ui
 RUN npm run build -- --name @skedo/ui
+RUN cp -r packages/skedo-ui/build ./ 
+RUN rm -rf node_modules
+RUN rm -rf packages 
+RUN yarn global add serve  
 
 EXPOSE 5000 
 
-CMD npm run serve -- --name @skedo/ui
+CMD serve ./build 

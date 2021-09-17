@@ -3,9 +3,8 @@ import fs from 'fs'
 import { CodeProjectFS } from './CodeProjectFS'
 import { RollupPackager } from './Rollup'
 import { fileRemote } from '@skedo/request'
-import { CodeProjectRepo } from './CodeProjectRepo'
+import { CodeProjectRepo, ProjectType } from '@skedo/code'
 import { FCBuilder } from './FCBuilder'
-import { ProjectType } from './type'
 export class ProjectBuilder {
 
   async build(name : string, cwd : string) {

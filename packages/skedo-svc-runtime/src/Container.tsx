@@ -1,7 +1,6 @@
 import {NodeRender} from '@skedo/render'
 import {usePage} from './usePage'
 
-
 export default () => {
   const page = usePage("test1")
   if(page === null) {

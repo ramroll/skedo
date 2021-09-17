@@ -13,7 +13,7 @@
   "skedo": {
     "type": "service",
     "port": 3003,
-    "devLinks" : [
+    "devLinks": [
       "@skedo/render",
       "@skedo/loader",
       "@skedo/meta",
