@@ -46,7 +46,7 @@ export class FileService {
 				success : true,
 				httpCode : resp.status
 			}
-		} catch(ex) {
+		} catch(ex : any) {
 			return {
 				message : ex.toString(),
 				success : false,

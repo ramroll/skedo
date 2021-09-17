@@ -11,7 +11,7 @@ export async function analyzeResponse(resp : Response){
     try{
       return await resp.json()
     }
-    catch(ex) {
+    catch(ex : any) {
       return {
         message : ex.toString(),
         success :false,

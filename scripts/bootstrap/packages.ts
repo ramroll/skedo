@@ -130,16 +130,30 @@ class Packages {
 		const pkg = this.packages.find(x => x.getName() === name)
 		await pkg.build()
 	}
+
+	private getDeps(name : string, s = new Set<string>()) : Set<string> {
+
+		const pkg = this.packages.find(x => x.getName() === name)
+		s.add(pkg.getName())
+
+		for(let link of pkg.getDevLinks()) {
+			s.add(link)
+			this.getDeps(link, s)
+		}
+		return s
+	}
+
 	
 	public async buildTS(name? : string) {
 
+		let pkgs : Array<Package>
 		if(name) {
-			const pkg = this.packages.find(x => x.getName() === name)
-			await pkg.buildES()
-			return
+			const deps = this.getDeps(name)
+			pkgs = this.packages.filter(x => deps.has(x.getName()))
+		} else {
+			pkgs = this.packages.filter(x => x.getSkedoType() === 'lib') 
 		}
 
-		const pkgs = this.packages.filter(x => x.getSkedoType() === 'lib') 
 
 		const resolved = new Set()
 
