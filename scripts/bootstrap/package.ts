@@ -197,7 +197,7 @@ export class Package{
 	}
 
 	public async buildES(){
-		if(this.getSkedoType() !== "lib") {
+		if(["app", "cli"].indexOf( this.getSkedoType()) !== -1) {
 			return
 		}
 

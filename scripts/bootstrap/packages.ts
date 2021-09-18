@@ -149,7 +149,7 @@ class Packages {
 		let pkgs : Array<Package>
 		if(name) {
 			const deps = this.getDeps(name)
-			pkgs = this.packages.filter(x => deps.has(x.getName()))
+			pkgs = this.packages.filter(x => deps.has(x.getName())) 
 		} else {
 			pkgs = this.packages.filter(x => x.getSkedoType() === 'lib') 
 		}
