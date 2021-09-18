@@ -26,6 +26,6 @@
 
   },
   "include": [
-    "src/**/*", "../skedo-core/src/instance/Cord.ts", "../skedo-core/src/instance/Page.ts",
+    "src/**/*"
   ]
 }

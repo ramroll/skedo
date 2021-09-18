@@ -390,51 +390,61 @@ module.exports = function (webpackEnv) {
                 name: 'static/media/[name].[hash:8].[ext]',
               },
             },
-            // Process application JS with Babel.
-            // The preset includes JSX, Flow, TypeScript, and some ESnext features.
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
-              exclude : /node_modules\/(?!@skedo)/,
-              // include: [paths.appSrc, paths.coreSrc, paths.requestSrc, paths.renderSrc],
-              loader: require.resolve('babel-loader'),
-              options: {
-                customize: require.resolve(
-                  'babel-preset-react-app/webpack-overrides'
-                ),
-                presets: [
-                  [
-                    require.resolve('babel-preset-react-app'),
-                    {
-                      runtime: hasJsxRuntime ? 'automatic' : 'classic',
-                    },
-                  ],
-                ],
-                
-                plugins: [
-                  [
-                    require.resolve('babel-plugin-named-asset-import'),
-                    {
-                      loaderMap: {
-                        svg: {
-                          ReactComponent:
-                            '@svgr/webpack?-svgo,+titleProp,+ref![path]',
-                        },
-                      },
-                    },
-                  ],
-                  isEnvDevelopment &&
-                    shouldUseReactRefresh &&
-                    require.resolve('react-refresh/babel'),
-                ].filter(Boolean),
-                // This is a feature of `babel-loader` for webpack (not Babel itself).
-                // It enables caching results in ./node_modules/.cache/babel-loader/
-                // directory for faster rebuilds.
-                cacheDirectory: true,
-                // See #6846 for context on why cacheCompression is disabled
-                cacheCompression: false,
-                compact: isEnvProduction,
-              },
+              //exclude : /node_modules\/(?!@skedo)/,
+              exclude : /node_modules/,
+              loader : "esbuild-loader",
+              options : {
+                loader : 'tsx',
+                target : "es2015"
+              }
             },
+            // Process application JS with Babel.
+            // The preset includes JSX, Flow, TypeScript, and some ESnext features.
+            // {
+            //   test: /\.(js|mjs|jsx|ts|tsx)$/,
+            //   exclude : /node_modules\/(?!@skedo)/,
+            //   // include: [paths.appSrc, paths.coreSrc, paths.requestSrc, paths.renderSrc],
+            //   loader: require.resolve('babel-loader'),
+            //   options: {
+            //     customize: require.resolve(
+            //       'babel-preset-react-app/webpack-overrides'
+            //     ),
+            //     presets: [
+            //       [
+            //         require.resolve('babel-preset-react-app'),
+            //         {
+            //           runtime: hasJsxRuntime ? 'automatic' : 'classic',
+            //         },
+            //       ],
+            //     ],
+                
+            //     plugins: [
+            //       [
+            //         require.resolve('babel-plugin-named-asset-import'),
+            //         {
+            //           loaderMap: {
+            //             svg: {
+            //               ReactComponent:
+            //                 '@svgr/webpack?-svgo,+titleProp,+ref![path]',
+            //             },
+            //           },
+            //         },
+            //       ],
+            //       isEnvDevelopment &&
+            //         shouldUseReactRefresh &&
+            //         require.resolve('react-refresh/babel'),
+            //     ].filter(Boolean),
+            //     // This is a feature of `babel-loader` for webpack (not Babel itself).
+            //     // It enables caching results in ./node_modules/.cache/babel-loader/
+            //     // directory for faster rebuilds.
+            //     cacheDirectory: true,
+            //     // See #6846 for context on why cacheCompression is disabled
+            //     cacheCompression: false,
+            //     compact: isEnvProduction,
+            //   },
+            // },
             {
               test : /\.(ya?ml)$/,
               exclude: /node_modules\/(?!@skedo)/,
