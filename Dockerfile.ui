@@ -4,12 +4,7 @@ WORKDIR /usr/app
 
 COPY . .
 
-RUN yarn global add ts-node 
-RUN yarn install
-RUN npm run install-dep -- --name @skedo/ui
-RUN npm run install-link -- --name @skedo/ui
-RUN npm run build-ts -- --name @skedo/ui
-RUN npm run build -- --name @skedo/ui
+RUN sh scripts/build-skedo-ui.sh
 
 EXPOSE 5000 
 
