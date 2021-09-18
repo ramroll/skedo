@@ -8,4 +8,4 @@ RUN sh scripts/build-skedo-ui.sh
 
 EXPOSE 5000 
 
-CMD npm run serve -- --name @skedo/ui 
+CMD serve ./build 

@@ -3,4 +3,5 @@ WORKDIR /usr/app
 COPY . .
 RUN sh ./scripts/build-doc.sh
 EXPOSE 7002
-CMD serve ./build 
+
+CMD npm run serve -- --name @skedo/doc-service
