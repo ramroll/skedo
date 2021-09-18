@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --watch './src/**/*.ts' --exec ts-node src/index.ts",
-    "serve": "cross-env NODE_ENV=production nodemon --exec node es/index.js"
+    "serve": "cross-env NODE_ENV=production nodemon ./es/index.js"
   },
   "author": "",
   "license": "ISC",
