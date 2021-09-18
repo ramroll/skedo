@@ -2,11 +2,11 @@
   "name": "@skedo/doc-service",
   "version": "0.0.2",
   "description": "",
-  "main": "index.js",
+  "main": "es/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --watch './src/**/*.ts' --exec ts-node src/index.ts",
-    "serve": "cross-env NODE_ENV=production nodemon ./es/index.js"
+    "serve": "cross-env NODE_ENV=production nodemon"
   },
   "author": "",
   "license": "ISC",
