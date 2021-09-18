@@ -5,7 +5,8 @@ export interface ConfigAttributes {
 	dbName : string,
 	uname : string,
 	passwd : string,
-	storage : string,
+	// sqlite only
+	storage? : string,
 	redisPort : number,
 	redisHost : string
 }

@@ -3,12 +3,11 @@ import {resolve} from 'path'
 
 const config : ConfigAttributes = {
 
-	dbHost : "localhost",
+	dbHost : "rm-2zez6pwqx3dv4hxr7.mysql.rds.aliyuncs.com",
 	dbType : 'mysql',
 	dbName : "skedo",
-	uname : 'root',
-	passwd : '123456',
-	storage : resolve(__dirname, 'skedo.db'),
+	uname : 'skedo',
+	passwd : '1qaz2wsx',
 	redisPort : 6379,
 	redisHost : "127.0.0.1"
 
