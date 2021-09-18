@@ -10,5 +10,4 @@ npm run install-link -- --name @skedo/ui
 npm run build-ts -- --name @skedo/ui
 npm run build -- --name @skedo/ui
 cp -r ./packages/skedo-ui/build ./
-rm -rf ./node_modules
 rm -rf ./packages
