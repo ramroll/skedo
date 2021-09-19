@@ -124,6 +124,7 @@
     "cross-env": "^7.0.3",
     "esbuild-loader": "^2.15.1",
     "eslint-plugin-autofix": "^1.0.5",
+    "speed-measure-webpack-plugin": "^1.5.0",
     "typescript": "^4.3.4"
   },
   "jest": {
