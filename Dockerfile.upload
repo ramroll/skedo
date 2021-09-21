@@ -1,0 +1,7 @@
+FROM node:14
+WORKDIR /usr/app
+COPY . .
+RUN sh ./scripts/build-upload.sh
+EXPOSE 7001
+
+CMD npm run serve -- --name @skedo/upload-service

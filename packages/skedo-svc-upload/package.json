@@ -8,7 +8,7 @@
     "declarations": true
   },
   "scripts": {
-    "start": "egg-scripts start --env=prod --title=egg-server-upload",
+    "serve": "egg-scripts start --env=prod --title=egg-server-upload",
     "stop": "egg-scripts stop --title=egg-server-upload",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
