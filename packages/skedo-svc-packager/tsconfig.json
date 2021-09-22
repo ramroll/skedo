@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
+    "target": "ES6",
+    "lib": ["DOM", "ESNext"],
+    "module": "commonjs",
     "outDir": "es",
     "downlevelIteration": true,
+    "moduleResolution": "node",
     "esModuleInterop": true
   },
   "include": ["src/**/*"]

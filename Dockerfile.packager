@@ -1,0 +1,7 @@
+FROM node:14
+WORKDIR /usr/app
+COPY . .
+RUN sh ./scripts/build-packager.sh
+EXPOSE 7004
+
+CMD npm run serve -- --name @skedo/packager-service
