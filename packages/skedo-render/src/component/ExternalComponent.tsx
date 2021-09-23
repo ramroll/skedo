@@ -29,7 +29,7 @@ function makeVueComponent(Component : any) : React.ElementType<Props> {
 				try{
 					const vNode = vue.createApp(Component, {bridge}).mount(elem)
 				}
-				catch(ex) {
+				catch(ex : any) {
 					throw new Error(`run vue component ${bridge.getNode().getName()} error:` + ex.toString())
 				}
 			}

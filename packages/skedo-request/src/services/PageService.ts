@@ -1,4 +1,4 @@
-import config from "../config/config.dev";
+import config from "../config";
 import { fetchStandard } from "../standard";
 
 export class PageService{

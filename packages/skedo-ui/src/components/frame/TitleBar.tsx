@@ -1,18 +1,22 @@
 import style from  "./frame.module.scss"
-import {Tooltip } from 'antd'
+import {Tooltip, message } from 'antd'
 
 interface RouteProps {
   src : string,
   active? :boolean,
   path ? : string,
-  title : string
+  title : string,
+  onClick? : Function
 }
 
-const Route = ({ src, active, path, title }: RouteProps) => {
+const Route = ({ src, active, path, title, onClick}: RouteProps) => {
   return (
     <Tooltip placement="bottom" title={title}>
       <div
         onClick={(e) => {
+          if(onClick) {
+            onClick()
+          }
           if (path) {
             window.location.href = path
           }
@@ -63,6 +67,9 @@ const TitleBar = ({pageName, name, children = null} : {
         />
         <Route 
           title="上线平台"
+          onClick={() => {
+            message.info("目前预览和发布功能需要手动启动@skedo/runtime才能使用（未购课同学购课后获得源码可以使用）")
+          }}
           src="https://voice-static.oss-accelerate.aliyuncs.com//img/7e463508667bfc093130e8cd84690c12396cc2c2.png" />
       </div>
     </header>

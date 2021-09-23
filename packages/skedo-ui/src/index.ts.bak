@@ -1,0 +1,3 @@
+import {config} from '@skedo/request'
+
+console.log(config)

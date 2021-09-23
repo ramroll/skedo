@@ -9,3 +9,5 @@ export const componentRemote = new ComponentService()
 export const pageRemote = new PageService()
 export const codeProjectRemote = new CodeProjectService()
 export * from "./compose"
+
+export * as config from './config'
