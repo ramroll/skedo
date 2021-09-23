@@ -8,6 +8,11 @@ import Command from "./interface/Command"
 import FormData from 'form-data'
 import fetch from 'node-fetch'
 
+if(process.env.NODE_ENV !== 'development') {
+  process.env.NODE_ENV = 'production'
+}
+
+
 
 // @ts-ignore
 global.fetch = fetch 
