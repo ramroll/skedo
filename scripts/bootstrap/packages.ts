@@ -30,6 +30,12 @@ class Packages {
 		pkg.setVer(ver)
 	}
 
+	public async publish(name : string, type : "major" | "minor" | "hotfix") {
+		const pkg = this.packages.find(x => x.getName() === name)
+		await pkg.buildES()
+		await pkg.publish(type)
+	}
+
 	public async deps(){
 
 		function depsCountMap(mDeps: Map<string,[number, string]>, deps : any){

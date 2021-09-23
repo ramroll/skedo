@@ -42,6 +42,9 @@ async function run() {
     case "build":
       projects.build(argv.name)
       break
+    case "publish":
+      projects.publish(argv.name, argv.type)
+      break
     case "install-dep":
       projects.installDep(argv.name)
       break

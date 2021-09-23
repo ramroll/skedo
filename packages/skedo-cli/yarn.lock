@@ -1048,11 +1048,13 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
-"@skedo/meta@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@skedo/meta/-/meta-0.0.2.tgz#7b7635d00fbc5c34596408dd1c6d989784e9776a"
-  integrity sha512-0iT6mX07h/qU+KdfpvvBZtWK3+6hfkf3ISD4l+aj3aXE6dpFww+QECrlr98x8RdqJtAGgOD9rCkPDDW8woRFqw==
+"@skedo/meta@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@skedo/meta/-/meta-0.0.3.tgz#0c8805d1394a5b3613337577c14b0740438a1c83"
+  integrity sha512-mImkHPBmr8/A1bCKJlin7G30MlbWaTIBchMu0Q8Gdfe8cIjO0syMoJFudc2WG3NrPNMuFfx5CwhGkdQWhUXaog==
   dependencies:
+    "@skedo/request" "^0.0.2"
+    "@skedo/utils" "^0.0.2"
     "@types/immutable" "^3.8.7"
     "@types/invariant" "^2.2.34"
     "@types/js-yaml" "^4.0.2"
@@ -1071,6 +1073,11 @@
   dependencies:
     "@types/md5" "^2.3.1"
     md5 "^2.3.0"
+
+"@skedo/utils@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@skedo/utils/-/utils-0.0.2.tgz#0e5aa517affbaddd72f078a38a9ff1907085f4f3"
+  integrity sha512-tOBsyYbbANjgcb1LaH38gUJ3oRN42H0IL4R4zpsc0PGDZqepo5WQ8Gd424pNBZ1QHUSrrkSBJ9PeEw47j700Uw==
 
 "@types/babel__core@^7.1.15":
   version "7.1.15"

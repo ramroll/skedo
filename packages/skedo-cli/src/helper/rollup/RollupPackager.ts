@@ -1,4 +1,4 @@
-import { ComponentMetaConfig } from '@skedo/meta/es'
+import { ComponentMetaConfig } from '@skedo/meta'
 import path from 'path'
 import fs from 'fs'
 import { rollup } from 'rollup'

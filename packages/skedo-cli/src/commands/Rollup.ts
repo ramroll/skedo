@@ -1,4 +1,4 @@
-import { ComponentMetaConfig } from "@skedo/meta/es"
+import { ComponentMetaConfig } from "@skedo/meta"
 import { loadConfig } from "../helper/loadConfig"
 import RollupPackager from "../helper/rollup/RollupPackager"
 import Command from "../interface/Command"

@@ -72,6 +72,29 @@ export class Package{
 		return (this.json.skedo?.devLinks) || []
 	}
 
+	public async publish(type : "major" | "minor" | "hotfix"){
+		const ver = this.getVer()
+		switch(type) {
+			case "major":
+				ver[0]++
+				this.setVer([...ver])
+				break
+			case "minor":
+				ver[1] ++
+				this.setVer([...ver])
+				break
+			case "hotfix":
+				ver[2] ++
+				this.setVer([...ver])
+				break
+			default:
+				throw new Error("unsupported type")
+		}
+		this.save()
+
+		await this.exec("npm publish")
+	}
+
 	public toES(){
 		this.dirty = true
 		this.json.main = 'es/index.js'

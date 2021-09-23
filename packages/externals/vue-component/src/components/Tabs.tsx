@@ -77,11 +77,12 @@ const TabPanel = defineComponent({
 
     let node : Node
     if(props.node) {
+      console.log('use exists node')
       node = props.node
     } else {
       node = bridge!.createExternalNode({
           name: "div",
-          group: "basic",
+          group: "container",
           box: {
             movable: false,
             resizable: false,
@@ -91,6 +92,7 @@ const TabPanel = defineComponent({
             height: "fill",
           },
         })
+      console.log('add child')
       bridge.addChild(node)
     }
 

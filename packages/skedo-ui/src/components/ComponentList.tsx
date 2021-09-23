@@ -15,7 +15,8 @@ const ComponentList = ({editor} : ComponentListProps) => {
   const groupTitle : any = {
     basic : "基础组件",
     container : "容器组件",
-    custom : "外部组件"
+    "custom-react" : "外部React组件",
+    "custom-vue" : "外部Vue组件",
   }
 
   const groupList = Object.values(groupBy(x => x.group, loader.current.list))

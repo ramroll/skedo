@@ -1,18 +1,34 @@
 
-const localComponentsMap : {[key:string] : React.ComponentClass} = {}  
+const localComponentsMap: {
+  [key: string]: Function 
+} = {}  
 
-// @ts-ignore
-require.context('./local', true, /\.tsx$/)
-	.keys()
-	.forEach( (key : string) => {
-		key = key.replace('./', '')
-		const [a,] = key.split('.')
-		localComponentsMap['local.' + a] = require(`./local/${key}`).default
-	})
+import React from 'react'
+// // @ts-ignore
+// require.context('./local', true, /\.tsx$/)
+// 	.keys()
+// 	.forEach( (key : string) => {
+// 		key = key.replace('./', '')
+// 		const [a,] = key.split('.')
+// 		localComponentsMap['local.' + a] = require(`./local/${key}`).default
+// 	})
 
+import Div from './local/Div'
+import Icon from './local/Icon'
+import Image from './local/Image'
+import Input from './local/Input'
+import Page from './local/Page'
+import Text from './local/Text'
 
-function getLocalComponentByURL(url: string) : React.ComponentClass {
-	return localComponentsMap[url] || null
+localComponentsMap['local.Div'] = Div
+localComponentsMap['local.Icon'] = Icon 
+localComponentsMap['local.Image'] = Image 
+localComponentsMap['local.Input'] = Input 
+localComponentsMap['local.Page'] = Page 
+localComponentsMap['local.Text'] = Text 
+
+function getLocalComponentByURL(url: string) : React.ComponentType {
+	return localComponentsMap[url] as React.ComponentType || null
 }
 
 export default getLocalComponentByURL

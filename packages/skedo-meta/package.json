@@ -1,6 +1,6 @@
 {
   "name": "@skedo/meta",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "es/index.js",
   "scripts": {
@@ -12,6 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@skedo/request": "^0.0.2",
+    "@skedo/utils": "^0.0.2",
     "@types/immutable": "^3.8.7",
     "@types/invariant": "^2.2.34",
     "@types/js-yaml": "^4.0.2",
@@ -35,9 +37,6 @@
     "vue": "^3.1.5"
   },
   "skedo": {
-    "type": "lib",
-    "devLinks": [
-      "@skedo/utils"
-    ]
+    "type": "lib"
   }
 }
