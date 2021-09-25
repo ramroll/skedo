@@ -110,3 +110,16 @@ svg {
   height : 20px;
   background-color :lightgrey 
 }
+
+
+.txt-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width : 100%;
+  * {
+    text-align: center;
+    width: 100%;
+  }
+}

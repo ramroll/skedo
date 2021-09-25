@@ -1,6 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react'
 import styles from './component.module.scss'
 import {Bridge, Topic} from '@skedo/meta'
+import {TextInput} from './TextInput'
 
 
 interface TextProps {
@@ -22,33 +23,7 @@ const Text: React.FC<TextProps> = ({
   fontFamily,
   bridge,
 }: TextProps) => {
-  const [state, setState] = useState(0)
-  const [txt, setText] = useState(text)
-  const ref = useRef<HTMLDivElement>(null)
-  const iptRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    const sub = bridge.on(Topic.EditMode)
-      .subscribe(() => {
-        setState(1)
-      })
-    return () => {
-      sub.unsubscribe()
-    }
-  }, [])
-
-  useEffect(() => {
-    if (txt !== text) {
-      bridge.setPropValue(["text"], txt)
-    }
-  }, [txt])
-
-  useEffect(() => {
-    if (state === 1) {
-      iptRef.current?.focus()
-    }
-    // bridge.triggerAutoResizing()
-  }, [state])
 
   const style: any = {
     fontFamily: fontFamily,
@@ -66,27 +41,11 @@ const Text: React.FC<TextProps> = ({
 
   return (
     <div className={styles.text} style={style}>
-      <div
-        style={{
-          display: state === 0 ? "block" : "none",
+      <TextInput 
+        onTextChange={(text: string) => {
+          bridge.setPropValue(["text"], text)
         }}
-        ref={ref}
-      >
-        {txt}
-      </div>
-      <input
-        ref={iptRef}
-        value={txt}
-        onChange={(e) => {
-          setText(
-            (s) => (e.target as HTMLInputElement).value
-          )
-        }}
-        style={{ display: state === 0 ? "none" : "block" }}
-        onBlur={() => {
-          setState(0)
-        }}
-      />
+        text={text} />
     </div>
   )
 }

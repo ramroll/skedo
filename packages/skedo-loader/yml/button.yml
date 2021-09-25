@@ -14,10 +14,6 @@ defaultProps : {
 style :
   borderWidth : 1
   backgroundColor : white
-  borderTopLeftRadius : 3
-  borderTopRightRadius : 3
-  borderBottomLeftRadius : 3
-  borderBottomRightRadius : 3
 url : local.Button
 editor : 
   groups:
@@ -25,6 +21,38 @@ editor :
     props :  
       - name : border-color
         default : "#eee"
+      - name : border-top-left-radius
+        default : 3
+      - name : border-top-right-radius
+        default : 3
+      - name : border-bottom-right-radius
+        default : 3
+      - name : border-bottom-left-radius
+        default : 3
+      
+  - name : padding
+    title : 内边距
+    props :
+      - name : border-top
+        default : 3px
+        type : integer
+        path : passProps.style.paddingTop
+      - name : border-right
+        type : integer
+        default : 3px
+        path : passProps.style.paddingRight
+      - name : border-bottom
+        type : integer
+        default : 3px
+        path : passProps.style.paddingBottom
+      - name : border-left
+        type : integer
+        default : 3px
+        path : passProps.style.paddingLeft
+
+
+
+
   - name : font
     title : 字体
     props : 

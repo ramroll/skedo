@@ -16,8 +16,9 @@ global.FormData = FormData
 const app = express()
 app.use(cors())
 
-app.put('/build/:name', async (req, res) => {
+app.put('/build/:user/:name', async (req, res) => {
   const name = req.params.name
+  const user = req.params.user
 
   const cwd = path.resolve(__dirname, "../tmp")
   console.log('start build...')

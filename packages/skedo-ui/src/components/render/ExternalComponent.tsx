@@ -63,7 +63,9 @@ export default class ExternalComponent extends React.Component<ExternalComponent
 			return eval(text)
 		}
 		catch(ex) {
-			throw new Error("eval error:" + text)
+			console.error(ex)
+			// throw new Error("eval error:" + text)
+			return null
 		}
 	}
 

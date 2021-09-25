@@ -40,7 +40,8 @@ const useEditor = (pageName : string) : [UIModel | null] => {
 				}
 				return [data.url]
 			})
-			const result = await svcCall(pageName)
+			const user = localStorage['x-user']
+			const result = await svcCall(user, pageName)
 
 			if(!result.success) {
 				setEditor(new UIModel(json, pageName))

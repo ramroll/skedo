@@ -2,8 +2,8 @@ import config from "../config";
 import { fetchStandard } from "../standard";
 
 export class PageService{
-	public async put(name : string, url : string) {
-		return await fetchStandard(config.pageUrl(name), {
+	public async put(user : string, name : string, url : string) {
+		return await fetchStandard(config.pageUrl(user, name), {
 			method : "PUT",
 			headers : {
 				'content-type' : 'application/json'
@@ -14,7 +14,7 @@ export class PageService{
 		})
 	}
 
-	public async get(name : string) {
-		return await fetchStandard(config.pageUrl(name))
+	public async get(user : string, name : string) {
+		return await fetchStandard(config.pageUrl(user, name))
 	}
 }

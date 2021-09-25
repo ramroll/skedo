@@ -96,7 +96,8 @@ export const usePage = (pageName : string) : (Page | null) => {
 				}
 				return [data.url]
 			})
-			const result = await svcCall(pageName)
+      const user = localStorage['x-user']
+			const result = await svcCall(user, pageName)
 
 			let data : JsonPage
 			if(result.success){

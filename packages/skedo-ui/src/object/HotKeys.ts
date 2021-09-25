@@ -13,6 +13,7 @@ export default class Hotkeys {
 
   constructor(){
     this.cmds.push(new DeleteCommand(['Delete']))
+    this.cmds.push(new DeleteCommand(['Backspace']))
     this.cmds.push(new EditCommand(['F2']))
   }
 
@@ -53,7 +54,14 @@ class EditCommand extends Command {
 
 
 class DeleteCommand extends Command {
+
   run(ctx : CMDContext){
+    const activeElement = document.activeElement
+    if(['INPUT', "TEXTAREA"].indexOf(activeElement?.tagName || '') !== -1) {
+      return
+    }
+
+
     const selection = ctx.editor.getSelection()
     selection.forEach(node => {
       node.destroy()

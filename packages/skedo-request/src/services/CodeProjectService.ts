@@ -2,8 +2,8 @@ import config from '../config'
 import { CustomResponse, fetchStandard } from '../standard'
 
 export class CodeProjectService {
-  public async put(name : string, values : any) : Promise<CustomResponse> {
-		return await fetchStandard(config.codeProjectURL(name), {
+  public async put(user : string, name : string, values : any) : Promise<CustomResponse> {
+		return await fetchStandard(config.codeProjectURL(user, name), {
 			method : 'PUT',
 			headers : {
 				'content-type' : 'application/json'
@@ -12,8 +12,8 @@ export class CodeProjectService {
 		})
 	}
 
-	public async get(name : string) : Promise<CustomResponse> {
-		return await fetchStandard(config.codeProjectURL(name), {
+	public async get(user : string, name : string) : Promise<CustomResponse> {
+		return await fetchStandard(config.codeProjectURL(user, name), {
 			method : 'GET',
 			headers : {
 				'content-type' : 'application/json'
@@ -25,8 +25,8 @@ export class CodeProjectService {
 }
 
 class BuildService {
-	put = async (name : string) : Promise<CustomResponse> => {
-		const resp = await fetchStandard(config.codeProjectBuildURL(name), {
+	put = async (user : string, name : string) : Promise<CustomResponse> => {
+		const resp = await fetchStandard(config.codeProjectBuildURL(user, name), {
 			method : 'PUT'
 		})
 		return resp

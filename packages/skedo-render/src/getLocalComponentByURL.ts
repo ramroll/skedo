@@ -4,6 +4,7 @@ const localComponentsMap: {
 } = {}  
 
 import React from 'react'
+import Button from './local/Button'
 // // @ts-ignore
 // require.context('./local', true, /\.tsx$/)
 // 	.keys()
@@ -26,6 +27,7 @@ localComponentsMap['local.Image'] = Image
 localComponentsMap['local.Input'] = Input 
 localComponentsMap['local.Page'] = Page 
 localComponentsMap['local.Text'] = Text 
+localComponentsMap['local.Button'] = Button 
 
 function getLocalComponentByURL(url: string) : React.ComponentType {
 	return localComponentsMap[url] as React.ComponentType || null

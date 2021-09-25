@@ -27,7 +27,6 @@
   "skedo": {
     "type": "service",
     "port": 7002,
-    "bootstrap": "./es/force_build_db.ts",
     "devLinks": [
       "@skedo/svc-config",
       "@skedo/dao"

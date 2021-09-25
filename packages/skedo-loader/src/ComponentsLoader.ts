@@ -25,20 +25,20 @@ function validateConfig(file : string, config : ComponentMetaConfig) {
 }
 
 // @ts-ignore
-require.context('./', true, /\.yml$/)
+require.context('../yml', true, /\.yml$/)
 	.keys()
 	.forEach( (key : string) => {
 		key = key.replace('./', '')
 		const [a,] = key.split('.')
 		const n = a.split('/').pop()
 		if(n && n !== 'default') {
-			const config : ComponentMetaConfig = require(`./${key}`)
+			const config : ComponentMetaConfig = require(`../yml/${key}`)
 			ymls[config.group + '.' + config.name] = config 
   }
 	})
 
 function loadDefault(){
-	const def : ComponentMetaConfig = require('./yml/default.yml')
+	const def : ComponentMetaConfig = require('../yml/default.yml')
   return def
 }
 

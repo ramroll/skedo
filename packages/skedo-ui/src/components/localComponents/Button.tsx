@@ -1,6 +1,7 @@
 import {useState, useRef, useEffect} from 'react'
 import styles from './component.module.scss'
-import { Bridge } from "@skedo/meta"
+import { Bridge, Topic } from "@skedo/meta"
+import {TextInput} from './TextInput'
 
 interface ButtonProps {
   text : string,
@@ -9,58 +10,51 @@ interface ButtonProps {
   fontFamily : string ,
   fontStyle : Set<string>,
   align : "left" | "right" | "center",
-  fontSize : number
+  fontSize : number,
+  style : any
 }
 
-const Button = ({text, fontSize, fontStyle = new Set<string>(), align, color, fontFamily, bridge}  : ButtonProps) => {
-  const [state, setState] = useState(0)
-  const [txt, setText] = useState(text)
-  const ref = useRef<HTMLButtonElement>(null)
-  const iptRef = useRef<HTMLInputElement>(null)
-
-
-
-  useEffect(() => {
-    if(state === 1) {
-      iptRef.current?.focus()
-    }
-  }, [state])
-
-  useEffect(() => {
-    if(txt !== text) {
-      bridge.setPropValue(['text'], txt)
-    }
-  }, [txt])
-
-  const style : any = {
-    fontFamily : fontFamily,
+const Button = ({
+  text,
+  fontSize,
+  fontStyle = new Set<string>(),
+  align,
+  color,
+  fontFamily,
+  bridge,
+}: ButtonProps) => {
+  const style = bridge.passProps().style
+  const applyStyle : any = {
+    fontFamily: fontFamily,
     fontSize,
     textAlign: align,
-    color 
+    color,
+    ...style,
   }
 
-  if(fontStyle.has("bold")) {
+  if (fontStyle.has("bold")) {
     style.fontWeight = "bold"
   }
-  if(fontStyle.has("italic")) {
+  if (fontStyle.has("italic")) {
     style.fontStyle = "italic"
   }
 
-  return <div className={styles.button} style={style}>
-    <button
-      style={{
-        display: state === 0 ? "block" : "none", 
-      }} 
-      ref={ref}>{txt}
-    </button>
-    <input  ref={iptRef} value={txt} onChange={e => {
-      setText(s => (e.target as HTMLInputElement).value)
-    }} style={{display: state === 0 ? "none" : "block"}} onBlur={() => {
-      setState(0)
-    }} />
-
-  </div>
-
+  return (
+    <div className={styles.button} style={applyStyle}>
+      <TextInput
+        onStateChange={(state: string) => {
+          if (state === "display") {
+            // bridge.getNode().getBox().width.setMode("auto")
+            // bridge.getNode().emit(Topic.NodePropUpdated)
+          }
+        }}
+        onTextChange={(text: string) => {
+          bridge.setPropValue(["text"], text)
+        }}
+        text={text}
+      />
+    </div>
+  )
 }
 
 export default Button

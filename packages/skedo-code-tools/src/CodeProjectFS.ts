@@ -28,7 +28,7 @@ export class CodeProjectFS {
 
   }
 
-  public async upload(project : CodeProject) {
+  public async upload(user : string, project : CodeProject) {
 
     const fileNode = this.createFileNode(this.cwd)
 
@@ -49,9 +49,18 @@ export class CodeProjectFS {
     /* 上传项目的JSON */
     const json = project.toJSON()
     console.log(JSON.stringify(json, null, 2))
-    await codeProjectRemote.put(project.getName(), json)
+    await codeProjectRemote.put(
+      user,
+      project.getName(),
+      json
+    )
 
-    console.log(await codeProjectRemote.get(project.getName()))
+    console.log(
+      await codeProjectRemote.get(
+        user,
+        project.getName()
+      )
+    )
 
   }
 
@@ -86,10 +95,13 @@ export class CodeProjectFS {
 
   }
 
-  public async download(name : string){
+  public async download(user : string, name : string){
     /* 从RDBMS中获取项目 */
     console.log("fs---download", name)
-    const result = await codeProjectRemote.get(name)
+    const result = await codeProjectRemote.get(
+      user,
+      name
+    )
     console.log(result)
     const json : ProjectJson = result.data
     const project = CodeProject.fromJSON(json)
@@ -116,7 +128,7 @@ export class CodeProjectFS {
         path.resolve(__dirname, "../template/", key)
       )
 
-      await fs.upload(project)
+      await fs.upload('template', project)
     }
 
   }

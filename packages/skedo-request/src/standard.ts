@@ -44,10 +44,23 @@ export async function analyzeResponse(resp : Response){
   }
 }
 
+
 export const fetchStandard = async (
     url: RequestInfo,
     init?: RequestInit | undefined
   ): Promise<CustomResponse> => {
+
+  if(!init) {
+    init = {}
+  }
+  if(!init.headers) {
+    init.headers = {}
+  }
+
+  init.headers = {
+    ...init.headers,
+    'x-user' : localStorage['x-user']
+  }
   
   return await analyzeResponse(await fetch(url, init))
 }

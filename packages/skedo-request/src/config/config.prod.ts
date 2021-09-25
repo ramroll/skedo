@@ -1,25 +1,25 @@
 import { ConfigAttributes } from "./ConfigAttributes";
 
 const config : ConfigAttributes = {
-	pageUrl: (name ? : string) => {
+	pageUrl: (user ? : string, name ? : string) => {
 		if(!name) {
 			return "https://api.weavinghorse.com/doc/page"
 		}
-		return "https://api.weavinghorse.com/doc/page/" + name
+		return `https://api.weavinghorse.com/doc/page/${user}/${name}`
 	},
 	uploadFileObject : "https://api.weavinghorse.com/upload/by-object",
 	uploadFileText : `https://api.weavinghorse.com/upload/by-content`,
-	componentUrl : (group? : string, name? : string) => {
-		if(!group || !name) {
+	componentUrl : (user ? : string, group? : string, name? : string) => {
+		if(!group || !name || !user) {
 			return "https://api.weavinghorse.com/doc/component "
 		}
-		return "https://api.weavinghorse.com/doc/component/" + group + "/" + name 
+		return `http://api.weavinghorse.com/component/${user}/${group}/${name}`
 	},
-	codeProjectURL : (name : string) => {
-		return `https://api.weavinghorse.com/doc/code-project/${name}` 
+	codeProjectURL : (user : string, name : string) => {
+		return `https://api.weavinghorse.com/doc/code-project/${user}/${name}` 
 	},
-	codeProjectBuildURL : (name : string) => {
-		return `https://api.weavinghorse.com/runtime/build/${name}`
+	codeProjectBuildURL : (user : string, name : string) => {
+		return `https://api.weavinghorse.com/runtime/build/${user}/${name}`
 	}
 }
 

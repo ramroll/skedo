@@ -141,8 +141,8 @@ export class UIModel extends StateMachine<UIStates, UIEvents, Topic> {
         this.emit(Topic.SelectionChanged)
       })
       register(UIStates.Selected, UIStates.Start, UIEvents.EvtCancelSelect, (node : Node) => {
-        this.selection.remove(node)
-        this.emit(Topic.SelectionChanged)
+        // this.selection.remove(node)
+        // this.emit(Topic.SelectionChanged)
       })
    
     })
@@ -336,8 +336,9 @@ export class UIModel extends StateMachine<UIStates, UIEvents, Topic> {
     this.contentHash = contentHash
     
     
+    const user = localStorage['x-user']
     const composedRemoteCall  = compose(fileRemote.post1, pageRemote.put, (data) => {
-      return [this.page.name, data]
+      return [user, this.page.name, data]
     })
 
     await composedRemoteCall("/page", "json", text)

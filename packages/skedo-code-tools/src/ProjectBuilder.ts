@@ -7,9 +7,9 @@ import { CodeProjectRepo, ProjectType } from '@skedo/code'
 import { FCBuilder } from './FCBuilder'
 export class ProjectBuilder {
 
-  async build(name : string, cwd : string) {
+  async build(user : string, name : string, cwd : string) {
     const projectFS = new CodeProjectFS(cwd)
-    const project = await projectFS.download(name)
+    const project = await projectFS.download(user, name)
   
     console.log("project downloaded...", cwd)
 

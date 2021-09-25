@@ -29,7 +29,7 @@ export default function routers(app : Express) {
       })
     }
   }
-	app.put('/component/:group/:name', (req, res) => {
+	app.put('/component/:user/:group/:name', (req, res) => {
     const docSvc = new DocService("component", req.params)
     ssi(docSvc.put.bind(docSvc), res, req.body)
   });
@@ -39,27 +39,27 @@ export default function routers(app : Express) {
     ssi(docSvc.get.bind(docSvc), res)
   });
 
-  app.delete('/component/:group/:name', (req, res) => {
+  app.delete('/component/:user/:group/:name', (req, res) => {
     const docSvc = new DocService("component", req.params)
     ssi(docSvc.get.bind(docSvc), res)
   });
 
-  app.put('/page/:name', (req, res) => {
+  app.put('/page/:user/:name', (req, res) => {
     const docSvc = new DocService("page", req.params)
     ssi(docSvc.put.bind(docSvc), res, req.body)
   });
 
-  app.get('/page/:name', (req, res) => {
+  app.get('/page/:user/:name', (req, res) => {
     const docSvc = new DocService("page", req.params)
     ssi(docSvc.get.bind(docSvc), res)
   });
 
-  app.put('/code-project/:name', (req, res) => {
+  app.put('/code-project/:user/:name', (req, res) => {
     const docSvc = new DocService('code-project', req.params)
     ssi(docSvc.put.bind(docSvc), res, req.body)
   })
 
-  app.get('/code-project/:name', (req, res) => {
+  app.get('/code-project/:user/:name', (req, res) => {
     const docSvc = new DocService('code-project', req.params)
     ssi(docSvc.get.bind(docSvc), res, req.body)
   })

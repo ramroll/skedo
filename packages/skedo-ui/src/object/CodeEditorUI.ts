@@ -52,10 +52,16 @@ export class CodeEditorUI extends StateMachine<
   private async load(){
 
     /* 获取RDBMS */
-    let result = await codeProjectRemote.get(this.project.getName())
+    let result = await codeProjectRemote.get(
+      localStorage["x-user"],
+      this.project.getName()
+    )
     let copyFromTemplate = false
     if(!result.data) {
-      result = await codeProjectRemote.get(CodeProject.TemplateNames[this.type])
+      result = await codeProjectRemote.get(
+        'template',
+        CodeProject.TemplateNames[this.type]
+      )
       result.data.name = this.project.getName()
       copyFromTemplate = true
     }
@@ -104,6 +110,9 @@ export class CodeEditorUI extends StateMachine<
   }
 
   public async build(){
-    await codeProjectRemote.build.put(this.project.getName())
+    await codeProjectRemote.build.put(
+      localStorage['x-user'],
+      this.project.getName()
+      )
   }
 }
