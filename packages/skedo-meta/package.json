@@ -22,8 +22,7 @@
     "invariant": "^2.2.4",
     "js-yaml": "^4.1.0",
     "jsonschema": "^1.4.0",
-    "ramda": "^0.27.1",
-    "rxjs": "^7.1.0"
+    "ramda": "^0.27.1"
   },
   "devDependencies": {
     "@babel/runtime": "^7.15.4",

@@ -27,6 +27,7 @@
       "@skedo/request",
       "@skedo/code",
       "@skedo/dao"
-    ]
+    ],
+    "bootstrap" : "src/scripts/upload_templates.ts"
   }
 }

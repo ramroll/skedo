@@ -12,7 +12,8 @@
     "type": "lib",
     "devLinks": [
       "@skedo/svc-config"
-    ]
+    ],
+    "bootstrap" : "src/force_build_db.ts"
   },
   "dependencies": {
     "@types/redis": "^2.8.32",

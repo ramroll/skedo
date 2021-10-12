@@ -295,9 +295,11 @@ class Packages {
 			await pkg.reNpmInstall()
 		}
 		await this.installLinks()
-		for(let pkg of this.packages) {
-			await pkg.runBootstrapScript()
-		}
+		await this.buildTS()
+		// for(let pkg of this.packages) {
+		// 	await pkg.runBootstrapScript()
+		// }
+
 
 		this.marks['installed'] = true
 		this.saveMark()
