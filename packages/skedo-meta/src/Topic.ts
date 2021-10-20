@@ -2,7 +2,7 @@ export enum Topic {
 
   RemoteComponentsLoaded,
   EditMode,
-  PropertyEditorUpdated,
+  PropertyModelUpdated,
   // New Event System
   Resized,
   PropertyChanged,

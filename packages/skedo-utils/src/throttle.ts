@@ -17,6 +17,5 @@ export function throttle(fn : FN, interval = 13, defValue : any = null) {
 		}
 		return defValue 
 	}
-
 	
 }

@@ -62,7 +62,8 @@ export default class StateMachine<
     }
 
     const [fn, nextS] = adjTable.get(action)!
-    fn(...data)
+    fn(...data
+    )
     this.s = nextS
 
     // Try all auto actions

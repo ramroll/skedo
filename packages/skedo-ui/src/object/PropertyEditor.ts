@@ -18,7 +18,7 @@ export default class PropertyEditor extends Emiter<Topic>{
     editor.on(Topic.SelectionChanged)
       .subscribe(() => {
         this.handleSelectionChange(this.selection)
-        this.emit(Topic.PropertyEditorUpdated)
+        this.emit(Topic.PropertyModelUpdated)
         this.getProps().forEach(prop => {
           prop.update()
         })

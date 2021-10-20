@@ -16,7 +16,7 @@ const ComponentPropEditor = ({editor} : PropEditorProps) => {
 
   const [ver, setVer] = useState(0)
   useEffect(() => {
-    const sub = editor.propertyEditor.on(Topic.PropertyEditorUpdated)
+    const sub = editor.propertyEditor.on(Topic.PropertyModelUpdated)
       .subscribe(() => {
         setVer(v => v + 1)
       })

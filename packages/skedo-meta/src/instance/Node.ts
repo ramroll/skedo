@@ -13,6 +13,10 @@ import { LinkedNode } from "./LinkedNode"
 // reactive / hooks
 // meta (immutable, data-flow, virtualdom)
 
+/**
+ * 节点数据
+ * Immutable管理可以让数据的存储、回滚变简单
+ */
 class InstanceData extends Emiter<Topic> {
   protected data: NodeData
 
