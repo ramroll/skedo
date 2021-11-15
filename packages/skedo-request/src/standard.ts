@@ -45,6 +45,12 @@ export async function analyzeResponse(resp : Response){
 }
 
 
+function getXUser(){
+  if(!global.localStorage) {
+    return ''
+  }
+  return localStorage['x-user']
+}
 export const fetchStandard = async (
     url: RequestInfo,
     init?: RequestInit | undefined
@@ -59,7 +65,7 @@ export const fetchStandard = async (
 
   init.headers = {
     ...init.headers,
-    'x-user' : localStorage['x-user']
+    'x-user' : getXUser() 
   }
   
   return await analyzeResponse(await fetch(url, init))

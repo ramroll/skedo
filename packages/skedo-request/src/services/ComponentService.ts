@@ -15,7 +15,7 @@ export class ComponentService{
 	}
 
 	public async put(group : string, name : string, values : any) : Promise<CustomResponse> {
-		return await fetchStandard(config.componentUrl(group, name), {
+		return await fetchStandard(config.componentUrl('system', group, name), {
 			method : 'PUT',
 			headers : {
 				'content-type' : 'application/json'

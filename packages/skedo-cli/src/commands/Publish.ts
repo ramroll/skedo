@@ -108,6 +108,9 @@ export default class Publish implements Command {
       url: config.url,
       yml: config.yml, 
     })
+    if(!result.success) {
+      throw new Error("doc service error:" + result.message)
+    }
     return result
   }
 
