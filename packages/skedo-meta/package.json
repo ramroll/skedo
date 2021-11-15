@@ -36,6 +36,9 @@
     "vue": "^3.1.5"
   },
   "skedo": {
-    "type": "lib"
+    "type": "lib",
+    "devLinks" : [
+      "@skedo/utils"
+    ]
   }
 }
