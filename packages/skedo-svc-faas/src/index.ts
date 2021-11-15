@@ -13,8 +13,9 @@ global.fetch = fetch
 
 const cache : Record<string, CodeRunner> = {}
 
-app.get('/faas/:page', async (req, res) => {
+app.get('/faas/:user/:page', async (req, res) => {
   const name = 'faas-' + req.params.page
+  const user = req.params.user
   const fn = (req.query.fn as string) || "default"
   
   let runner : CodeRunner
@@ -24,6 +25,7 @@ app.get('/faas/:page', async (req, res) => {
   }
   else {
     runner = new CodeRunner(
+      user,
       name,
       path.resolve(__dirname, "../runners")
     )

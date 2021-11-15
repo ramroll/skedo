@@ -9,9 +9,10 @@ const execPromise = promisify(exec)
 export class CodeRunner{
 
   cwd : string
+  user : string
   name : string
   prepared : boolean = false
-  constructor(name : string, base : string) {
+  constructor(user : string, name : string, base : string) {
     this.cwd = path.resolve(base, name) 
     this.name = name
   }
@@ -34,7 +35,7 @@ export class CodeRunner{
     fs.mkdirSync(this.cwd)
     const projectFS = new CodeProjectFS(this.cwd)
     console.log('start download...')
-    await projectFS.download(this.name)
+    await projectFS.download(this.user, this.name)
     console.log('downloaded.')
     await execPromise("yarn", {
       cwd : this.cwd 
