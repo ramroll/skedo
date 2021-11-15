@@ -194,7 +194,7 @@ export class Package{
       case "app": {
 				const script = path.resolve(__dirname, './start-service.js')
 				await this.exec(
-          `pm2 start --name ${this.getName()} --watch=true ${script}`,
+          `pm2 start --name ${this.getName()} --watch=true --exp-backoff-restart-delay=10000 ${script}`,
           true
         )
 				// await this.exec('npm run dev')
@@ -206,7 +206,7 @@ export class Package{
 					break
 				}
 				const script = path.resolve(__dirname, './start-service.js')
-				await this.exec(`pm2 start --name ${this.getName()} --watch=true ${script}`, true, {
+				await this.exec(`pm2 start --name ${this.getName()} --exp-backoff-restart-delay=10000 ${script}`, true, {
 					PORT : this.json.skedo.port
 				})
 				await this.exec(`pm2 list`)

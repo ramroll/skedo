@@ -41,7 +41,6 @@
     "@types/yargs-parser": "^20.2.1",
     "autod": "^3.0.1",
     "eslint-plugin-autofix": "^1.0.5",
-    "pm2": "^5.1.0",
     "typescript-plugin-css-modules": "^3.4.0"
   }
 }
