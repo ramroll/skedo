@@ -28,6 +28,7 @@ app.put('/build/:user/:name', async (req, res) => {
   }
 
   const builder = new ProjectBuilder()
+  // @ts-ignore
   await builder.build(name, cwd)
   res.send({
     success : true
