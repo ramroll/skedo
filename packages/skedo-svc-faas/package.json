@@ -11,7 +11,8 @@
     "type": "service",
     "port": "7005",
     "devLinks": [
-      "@skedo/code"
+      "@skedo/code",
+      "@skedo/code-tools"
     ]
   },
   "author": "",

@@ -4,7 +4,7 @@ box:
   width: 100%
   height: 100px
 url: >-
-  https://voice-static.oss-accelerate.aliyuncs.com/custom1/6ac4853c7ffe315be73d1637843c6a24.js
+  https://voice-static.oss-accelerate.aliyuncs.com/custom-react/c14e733ea308d6b38c5fda466e17803c.js
 image: swiper.png
 author: null
 src: .\src\Swiper.tsx

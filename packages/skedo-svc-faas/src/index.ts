@@ -1,6 +1,6 @@
 import express from 'express'
 import path from 'path'
-import {CodeRunner} from '@skedo/code/src/CodeRunner'
+import {CodeRunner} from '@skedo/code-tools'
 import fetch from 'node-fetch'
 import cors from 'cors'
 
