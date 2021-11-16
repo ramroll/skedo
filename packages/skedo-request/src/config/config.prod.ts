@@ -1,26 +1,31 @@
 import { ConfigAttributes } from "./ConfigAttributes";
 
+const uploadServiceURL = "http://api.weavinghorse.com"
+const docServiceURL = "https://api.weavinghorse.com/doc"
+const buildServiceURL = "https://api.weavinghorse.com/runtime"
+
 const config : ConfigAttributes = {
-	pageUrl: (user ? : string, name ? : string) => {
-		if(!name) {
-			return "https://api.weavinghorse.com/doc/page"
+	pageUrl: (user? : string, name ? : string) => {
+		if(!name || !user) {
+			return `${docServiceURL}/page`
 		}
-		return `https://api.weavinghorse.com/doc/page/${user}/${name}`
+		return `${docServiceURL}/page/${user}/${name}`
 	},
-	uploadFileObject : "https://api.weavinghorse.com/upload/by-object",
-	uploadFileText : `https://api.weavinghorse.com/upload/by-content`,
+	uploadFileObject : `${uploadServiceURL}/by-object`,
+	uploadFileText : `${uploadServiceURL}/by-content`,
 	componentUrl : (user ? : string, group? : string, name? : string) => {
 		if(!group || !name || !user) {
-			return "https://api.weavinghorse.com/doc/component "
+			return `${docServiceURL}/component`
 		}
-		return `http://api.weavinghorse.com/component/${user}/${group}/${name}`
+		return `${docServiceURL}/component/${user}/${group}/${name}`
 	},
 	codeProjectURL : (user : string, name : string) => {
-		return `https://api.weavinghorse.com/doc/code-project/${user}/${name}` 
+		return `${docServiceURL}/code-project/${user}/${name}` 
 	},
 	codeProjectBuildURL : (user : string, name : string) => {
-		return `https://api.weavinghorse.com/runtime/build/${user}/${name}`
+		return `${buildServiceURL}/build/${user}/${name}`
 	}
 }
+
 
 export default config

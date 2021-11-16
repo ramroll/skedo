@@ -1,25 +1,30 @@
 import { ConfigAttributes } from "./ConfigAttributes";
 
+
+const uploadServiceURL = "http://localhost:7001"
+const docServiceURL = "http://localhost:7002"
+const buildServiceURL = "http://localhost:7004/"
+
 const config : ConfigAttributes = {
 	pageUrl: (user? : string, name ? : string) => {
 		if(!name || !user) {
-			return "http://localhost:7002/page"
+			return `${docServiceURL}/page`
 		}
-		return `http://localhost:7002/page/${user}/${name}`
+		return `${docServiceURL}/page/${user}/${name}`
 	},
-	uploadFileObject : "http://localhost:7001/by-object",
-	uploadFileText : `http://localhost:7001/by-content`,
+	uploadFileObject : `${uploadServiceURL}/by-object`,
+	uploadFileText : `${uploadServiceURL}/by-content`,
 	componentUrl : (user ? : string, group? : string, name? : string) => {
 		if(!group || !name || !user) {
-			return "http://localhost:7002/component "
+			return `${docServiceURL}/component`
 		}
-		return `http://localhost:7002/component/${user}/${group}/${name}`
+		return `${docServiceURL}/component/${user}/${group}/${name}`
 	},
 	codeProjectURL : (user : string, name : string) => {
-		return `http://localhost:7002/code-project/${user}/${name}` 
+		return `${docServiceURL}/code-project/${user}/${name}` 
 	},
 	codeProjectBuildURL : (user : string, name : string) => {
-		return `http://localhost:7004/build/${user}/${name}`
+		return `${buildServiceURL}/build/${user}/${name}`
 	}
 }
 

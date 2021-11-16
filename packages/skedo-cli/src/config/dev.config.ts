@@ -1,16 +1,16 @@
 import { ConfigAttrs } from "./ConfigAttrs";
 
+const uploadServiceURL = "http://localhost:/7001"
+const docServiceURL = "http://localhost:7002"
+
 const conf : ConfigAttrs = {
-	uploadImg : `http://localhost:7001/`,
-	uploadOssUrl : `http://localhost:7001/component`,
-	componentUrl : "http://localhost:7002/component",
+	uploadImg : `${uploadServiceURL}`,
+	uploadOssUrl : `${uploadServiceURL}/component`,
+	componentUrl : `${docServiceURL}/component`,
 	componentUrlWithName : (group, name) => {
-		return "http://localhost:7002/component/" + group + "/" + name 
+		return `${docServiceURL}/component/" + group + "/" + name `
 	},
-	listUrl : "http://localhost:7002/components",
-
-
-
+	listUrl : `${docServiceURL}/components`,
 }
 
 export default conf
