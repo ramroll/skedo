@@ -8,6 +8,8 @@ import fetch from 'node-fetch'
 import FormData from 'form-data'
 
 // @ts-ignore
+global.localStorage = {}
+// @ts-ignore
 global.fetch = fetch
 
 // @ts-ignore
@@ -29,7 +31,7 @@ app.put('/build/:user/:name', async (req, res) => {
 
   const builder = new ProjectBuilder()
   // @ts-ignore
-  await builder.build(name, cwd)
+  await builder.build(user, name, cwd)
   res.send({
     success : true
   })

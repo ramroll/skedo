@@ -3,7 +3,7 @@ import { ConfigAttributes } from "./ConfigAttributes";
 
 const uploadServiceURL = "http://localhost:7001"
 const docServiceURL = "http://localhost:7002"
-const buildServiceURL = "http://localhost:7004/"
+const buildServiceURL = "http://localhost:7004"
 
 const config : ConfigAttributes = {
 	pageUrl: (user? : string, name ? : string) => {

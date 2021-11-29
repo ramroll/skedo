@@ -13,6 +13,7 @@ export class CodeProjectService {
 	}
 
 	public async get(user : string, name : string) : Promise<CustomResponse> {
+		console.log('fetch---', config.codeProjectURL(user, name))
 		return await fetchStandard(config.codeProjectURL(user, name), {
 			method : 'GET',
 			headers : {
@@ -26,6 +27,7 @@ export class CodeProjectService {
 
 class BuildService {
 	put = async (user : string, name : string) : Promise<CustomResponse> => {
+
 		const resp = await fetchStandard(config.codeProjectBuildURL(user, name), {
 			method : 'PUT'
 		})

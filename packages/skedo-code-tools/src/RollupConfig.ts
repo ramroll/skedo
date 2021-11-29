@@ -25,14 +25,18 @@ export class RollupConfig {
   public inputOptions() : InputOptions{
     return {
       input : path.resolve(this.cwd, "src/main.ts"), 
-      plugins: this.plugins()
+      plugins: this.plugins(),
+      external : ["@skedo/runtime"]
     }
   }
 
 
   public plugins(){
     return [
-      typescript(),
+      typescript({
+        typescript : require('typescript'),
+        tsconfig : path.resolve(this.cwd, "tsconfig.json")
+      }),
       commonjs(),
       resolve({ 
         extensions : ['.ts']

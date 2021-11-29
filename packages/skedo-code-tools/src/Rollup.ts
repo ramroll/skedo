@@ -23,7 +23,9 @@ export class RollupPackager {
 
 		try{
 				
+			console.log('start building')
 			const config = new RollupConfig(this.cwd)
+			console.log(config.inputOptions())
 			const bundle = await rollup(config.inputOptions())
 			const {output} = await bundle.generate(config.outputOptions())
 
@@ -41,7 +43,9 @@ export class RollupPackager {
 
 		}
 		catch(ex) {
+			console.log("rollup build error")
 			console.log(ex)
+			throw ex
 		}
 
 	}
