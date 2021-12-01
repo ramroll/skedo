@@ -1,1 +1,0 @@
-export {fn1, fn2, news} from './fn1'
