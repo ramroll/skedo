@@ -17,9 +17,12 @@ export class FileTreeNode {
   // 是否最新
   private dirty: boolean = false
 
-  constructor(type: FileType, fileName: string) {
+  private parent? : FileTreeNode
+
+  constructor(type: FileType, fileName: string, parent? : FileTreeNode) {
     this.type = type
     this.fileName = fileName
+    this.parent = parent
   }
 
   public *getFiles(
@@ -51,6 +54,10 @@ export class FileTreeNode {
       url: this.url || "",
       children: this.children.map((x) => x.toJSON()),
     }
+  }
+
+  public getParent(){
+    return this.parent
   }
 
   public add(node: FileTreeNode) {
@@ -95,18 +102,39 @@ export class FileTreeNode {
   }
 
   public getChildren() {
-    return this.children
+    const children = this.children.slice()
+    children.sort((a, b) => {
+      if(a.getType() === b.getType()) {
+        return a.getName() < b.getName() ? -1 : 1
+      }
+      if(a.getType() === 'dir') {
+        return -1
+      }
+      return 1
+    })
+    return children
+  }
+
+  public rename(name : string){
+    if(!name || name === '' || name.trim() === '') {
+      return
+    }
+    if(name === this.fileName) {
+      return
+    }
+    this.fileName = name
+    this.dirty = true
   }
 
   public updated() {
     this.dirty = false
   }
 
-  public static fromJSON(obj: FileNodeJson) {
-    const node = new FileTreeNode(obj.type, obj.fileName)
+  public static fromJSON(obj: FileNodeJson, parent? : FileTreeNode) {
+    const node = new FileTreeNode(obj.type, obj.fileName, parent)
     node.url = obj.url
     node.children = obj.children.map((x) =>
-      FileTreeNode.fromJSON(x)
+      FileTreeNode.fromJSON(x, node)
     )
     return node
   }
@@ -117,6 +145,10 @@ export class FileTreeNode {
         return "typescript"
       case "json":
         return "json"
+      case "js" :
+        return "javascript"
+      case "" :
+        return "text"
       default:
         throw new Error("unknown ext type:" + this.getExt())
     }

@@ -7,9 +7,15 @@ export function useCodeEditor(page : string, type : ProjectType){
   const [, setVer] = useState(0)
 
   useEffect(() => {
-    editor.on([Topic.SelectionChanged, Topic.Loaded])
+    editor
+      .on([
+        Topic.SelectionChanged,
+        Topic.Loaded,
+        Topic.FileAdded,
+        Topic.FileRenamed,
+      ])
       .subscribe(() => {
-        setVer(x => x + 1)
+        setVer((x) => x + 1)
       })
   }, [])
 

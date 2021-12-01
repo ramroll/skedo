@@ -9,12 +9,16 @@ export enum States{
 
 export enum Events{
   AUTO,
-  Select
+  Select,
+  NewFile,
+  Rename
 }
 
 export enum Topic {
   SelectionChanged,
-  Loaded
+  Loaded,
+  FileAdded,
+  FileRenamed
 }
 
 export class CodeEditorUI extends StateMachine<
@@ -42,6 +46,41 @@ export class CodeEditorUI extends StateMachine<
         }
       )
     })
+
+
+    // 新增文件
+    this.register(
+      [States.Selected],
+      States.Selected,
+      Events.NewFile,
+      () => {
+        if(this.selectedFile) {
+          if(this.selectedFile.getType() === "dir") {
+            this.selectedFile.add(new FileTreeNode("file", "unnamed"))
+          }
+          else {
+            this.selectedFile
+              .getParent()
+              .add(new FileTreeNode("file", "unnamed"))
+          }
+
+          this.emit(Topic.FileAdded)
+        }
+      }
+    )
+
+    // rename
+    this.register(
+      [States.Selected],
+      States.Selected,
+      Events.Rename,
+      (filename : string) => {
+        if(this.selectedFile) {
+          this.selectedFile.rename(filename)
+          this.emit(Topic.FileRenamed)
+        }
+      }
+    )
 
     this.load()
 

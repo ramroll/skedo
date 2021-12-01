@@ -34,6 +34,8 @@ export class ProjectBuilder {
         const fcBuilder = new FCBuilder(cwd) 
         await fcBuilder.build()
         projectFS.addDirectory(project, path.resolve(cwd, 'build'), 'build')
+        const repo = new CodeProjectRepo(project)
+        await repo.save(user)
  
         break
       case 'default':

@@ -1,0 +1,30 @@
+{
+  "name": "@skedo/faas-service",
+  "version": "0.0.2",
+  "description": "",
+  "main": "es/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --watch ./src/**/*.ts --exec ts-node src/index.ts",
+    "serve": "cross-env NODE_ENV=production nodemon"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.3.0"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "node-fetch": "2",
+    "nodemon": "^2.0.10"
+  },
+  "skedo": {
+    "type": "service",
+    "port": 7005,
+    "devLinks": [
+      "@skedo/code",
+      "@skedo/code-tools"
+    ]
+  }
+}

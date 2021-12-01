@@ -7,6 +7,7 @@ import Codeless from './page/Codeless'
 
 import Editor from './page/Editor'
 import Preview from './page/Preview'
+import FaaS from './page/FaaS'
 
 /**
  * 为每个访问的人生成一个临时的用户
@@ -34,6 +35,10 @@ const App = () => {
      <Route path="/codeless/:page" >
        <Codeless />
      </Route>
+     <Route path="/faas/:page" >
+       <FaaS />
+     </Route>
+
      <Route path="/" exact>
        <Editor />
      </Route>

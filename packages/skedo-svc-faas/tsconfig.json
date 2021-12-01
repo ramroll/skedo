@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib" : ["es6"],
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "noImplicitThis": true,
+    "module": "commonjs",
+    "outDir": "es"
+    
+  },
+}

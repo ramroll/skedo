@@ -99,7 +99,13 @@
   width : 200px;
   height : 100%;
   background: #333;
-  color : white
+  color : white;
+  input {
+    outline : none;
+    background: #333;
+    color : white;
+    border : none;
+  }
 }
 
 .code-editor {
@@ -113,5 +119,8 @@
 }
 
 .editor-file.active{
+  background-color: #666;
+}
+.editor-dir.active {
   background-color: #666;
 }
