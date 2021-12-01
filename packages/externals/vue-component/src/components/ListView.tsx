@@ -95,6 +95,7 @@ const ListViewRender = ({
   const data = bridge.getMemorizedData()
   return (
     <div class={classes.listview}>
+      {/* [{img, h1}, {img , h1}] */}
       {(data || []).map((item: any) => {
         const node = bridge.cloneNode(template)
         bridge.addChild(node)

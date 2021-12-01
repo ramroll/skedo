@@ -25,8 +25,8 @@ export class ProjectBuilder {
           fs.readFileSync(path.resolve(cwd, 'build/index.js'), 'utf-8')
         )
         project.setScriptURL(uploadResult.data)
-        // const repo = new CodeProjectRepo(project)
-        // await repo.save()
+        const repo = new CodeProjectRepo(project)
+        await repo.save(user)
         break
       }
       case "faas":
@@ -39,7 +39,5 @@ export class ProjectBuilder {
       case 'default':
         throw new Error(`type ${project.getType()} not supported.`)
     }
-    const repo = new CodeProjectRepo(project)
-    await repo.save()
   }
 }

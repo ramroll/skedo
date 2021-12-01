@@ -19,7 +19,7 @@ export default ({
       }, 2000)}
       defaultValue={code}
       options={{
-        fontSize: 32,
+        fontSize: 24,
       }}
     />
   )

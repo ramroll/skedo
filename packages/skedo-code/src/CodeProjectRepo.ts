@@ -7,7 +7,7 @@ export class CodeProjectRepo {
     this.project = project
   }
 
-  public async save(){
+  public async save(user:string){
 
     let updated = false
     for(let update of this.project.getRootNode().getUpdates()) {
@@ -26,11 +26,12 @@ export class CodeProjectRepo {
     }
 
     await codeProjectRemote.put(
-      localStorage['x-user'],
+      user,
       this.project.getName(),
       this.project.toJSON()
     )
 
+    console.log('user', user)
     console.log('project saved.', this.project.toJSON())
 
   }
