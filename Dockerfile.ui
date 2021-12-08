@@ -4,7 +4,7 @@ WORKDIR /usr/app
 
 COPY . .
 
-RUN sh scripts/build-skedo-ui.sh
+RUN sh scripts/build-skedo-ui.sh 
 
 EXPOSE 5000 
 

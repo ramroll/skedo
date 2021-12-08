@@ -1,8 +1,10 @@
 const fs = require('fs')
 const path = require('path')
 const express = require('express')
+const cors = require('cors')
 const app = express()
 
+app.use(cors())
 const dir = process.argv[2]
 const port = process.argv[3]
 

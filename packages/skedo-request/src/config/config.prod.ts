@@ -1,6 +1,6 @@
 import { ConfigAttributes } from "./ConfigAttributes";
 
-const uploadServiceURL = "http://api.weavinghorse.com"
+const uploadServiceURL = "https://api.weavinghorse.com"
 const docServiceURL = "https://api.weavinghorse.com/doc"
 const buildServiceURL = "https://api.weavinghorse.com/runtime"
 

@@ -1,7 +1,10 @@
 #!/bin/bash
+
 set -e
-BASEDIR=$(dirname "$0")
-cd BASEDIR/../
+
+BASEDIR=$(dirname $0)
+cd $BASEDIR/../
+
 yarn global add ts-node
 yarn install
 yarn global add serve
