@@ -92,7 +92,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents, Topic> {
     // 调试用
     window["ui"] = this
 
-    this.describe("大家好！我是小师叔，这里在处理拖拽新元素的逻辑", (register) => {
+    this.describe("拖拽新元素的逻辑", (register) => {
       register([UIStates.Start, UIStates.Selected], UIStates.StartAdd, UIEvents.EvtStartDragAdd, (meta : ComponentMeta) => {
         this.dropCompoentMeta = meta
       })
@@ -134,7 +134,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents, Topic> {
  
     })
 
-    this.describe("大家好！我是小师叔，这里在处理选中的逻辑", register => {
+    this.describe("处理选中的逻辑", register => {
       register([UIStates.Start, UIStates.Selected], UIStates.Selected, UIEvents.EvtSelected, (node : Node) => {
 
         this.selection.replace(node)
@@ -148,7 +148,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents, Topic> {
     })
 
 
-    this.describe("大家好！我是小师叔，这里在处理拖拽的逻辑", (register) => {
+    this.describe("处理拖拽的逻辑", (register) => {
 
       let lastReceiver : Node | null
 
@@ -255,7 +255,7 @@ export class UIModel extends StateMachine<UIStates, UIEvents, Topic> {
 
 
 
-    this.describe("大家好！我是小师叔！这里是调整大小的交互逻辑", register => {
+    this.describe("调整大小的交互逻辑", register => {
 
       let resizeNode : Node | null = null
       let startRect :Rect | null= null

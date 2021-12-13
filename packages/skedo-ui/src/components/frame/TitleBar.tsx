@@ -68,7 +68,7 @@ const TitleBar = ({pageName, name, children = null} : {
         <Route 
           title="上线平台"
           onClick={() => {
-            message.info("目前预览和发布功能需要手动启动@skedo/runtime才能使用（未购课同学购课后获得源码可以使用）")
+            message.info("暂不支持")
           }}
           src="https://voice-static.oss-accelerate.aliyuncs.com//img/7e463508667bfc093130e8cd84690c12396cc2c2.png" />
       </div>

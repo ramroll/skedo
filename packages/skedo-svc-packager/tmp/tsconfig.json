@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES5",
     "esModuleInterop": true ,
-    "downlevelIteration": true,
-    "moduleResolution": "node",
-    "outDir": "build"
+    "downlevelIteration": true 
+
   },
   "include": ["src/**/*"]
 
