@@ -1,0 +1,11 @@
+{
+	"compilerOptions": {
+		"target": "ES5",
+		"outDir": "build",
+		"lib" : ["es6" ,"dom"],
+		"declaration": true,
+		"downlevelIteration": true, 
+	},
+	"include": ["./src/**/*.ts"],
+	"exclude": ["./packages"]
+}

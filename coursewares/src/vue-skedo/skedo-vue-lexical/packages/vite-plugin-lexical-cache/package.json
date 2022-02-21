@@ -1,0 +1,17 @@
+{
+  "name": "vite-plugin-vue-lexical-cache",
+  "version": "0.0.7",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.14.8",
+    "@rollup/pluginutils": "^4.1.1",
+    "@types/babel__core": "^7.1.15",
+    "babel-plugin-closure-id": "0.0.4"
+  }
+}

@@ -1,0 +1,6 @@
+digraph {
+  a [shape=doublecircle, style=fill, fillcolor=green]
+  a -> b -> c;
+  c -> e;
+  c -> d [label="xxx"]
+}

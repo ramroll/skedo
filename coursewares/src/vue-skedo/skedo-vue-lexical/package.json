@@ -1,0 +1,14 @@
+{
+  "name": "@skedo/vue-lexical-cache",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.5"
+  },
+  "author": "",
+  "license": "ISC"
+}

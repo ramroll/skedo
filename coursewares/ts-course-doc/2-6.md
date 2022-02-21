@@ -1,0 +1,230 @@
+
+
+# 类型的计算
+
+
+
+## Infer和强大的类型计算能力
+
+
+
+Typescript提供了强大的类型计算能力。
+
+
+
+不仅仅是……
+
+
+
+联合
+
+```ts
+type Shape = Cirle | Rect | Triangle
+```
+
+
+
+求并集
+
+```tsx
+type A = { a : number, b : number }
+type B = { a : number, c : number }
+type C = A & B
+// C 是 {a : number, b : number , c : number}
+
+
+```
+
+
+
+接口的联合
+
+```ts
+interface A {
+	foo() : void
+}
+
+interface A {
+	bar() : void
+}
+
+class X implements A {
+	foo(){
+
+	}
+}
+
+ERROR Class 'X' incorrectly implements interface 'A'.
+  Property 'bar' is missing in type 'X' but required in type 'A'.
+```
+
+
+
+
+
+## 而是更复杂的`infer` 
+
+思考如何解决这个问题的描述呢？
+
+```ts
+function flattern(arr){
+    
+}
+```
+
+
+
+这样可以吗？
+
+```tsx
+function flattern(arr : Array<any>) : Array<any> {
+    
+}
+```
+
+
+
+可以，但是——不够完整（好多any)
+
+这样呢？
+
+```tsx
+
+type Flatterned<T> = T extends (V)[] ? V : T
+// Cannot find name 'V'
+```
+
+这句已经非常接近我们的语义了。
+
+考虑下这样：
+
+```tsx
+type Flatterned<T> = T extends (infer V)[] ? V : T
+
+type D = Flatterned<Array<number>> // ? D
+type E = Flatterned<Array<Array<number>>> // ? E
+
+```
+
+如果：
+
+```tsx
+type Flatterned<T> = T extends (infer V)[] ? Flatterned<V>[] : T
+
+type K = Flatterned<Array<Array<number>>> // ? K
+```
+
+
+
+然后补全完整的程序：
+
+```tsx
+function flattern<T extends Array<any>>(arr : T) : Array<Flatterned<T>> {
+    return (new Array<Flatterned<T>>())
+        .concat(
+        ...arr.map(x => Array.isArray(x) ? flattern(x) : x)
+    )
+}
+```
+
+
+
+`infer` 关键字告诉typescript V不是一个存在的类型，而是要推导的。
+
+烧脑不？
+
+看一个简单的做法：
+
+```tsx
+type Atom = string | boolean | number
+type Nested<T> = (T | (T | T[])[])[]
+
+function flattern<T extends Atom> (arr : Nested<Atom>) : Atom[] {
+	return (new Array<Atom>()).concat(
+		...arr.map(x => Array.isArray(x) ? flattern(x) : x)
+	)
+}
+```
+
+
+
+## 类型提取
+
+`infer` 是一种类型的运算能力，在extends后面使用，让typescript去运算出目标类型。
+
+```js
+type Unwrapped<T> =  T extends (infer U)[] ? U : T
+
+function first<T>(arr : Array<T>) : Unwrapped<Array<T>> {
+	return arr[0]
+}
+function first<T>(arr : Array<T>) : T {
+	return arr[0]
+}
+
+type T0 = Unwrapped<Array<string>> // string
+```
+
+
+
+出道题：如何把`Promise<string>[]` 提取成`string[]` 
+
+先思考一个不够模块化的做法：
+
+```tsx
+
+type Unwrapped<T> = T extends Array<infer U>
+  ? U extends Promise<infer R>
+    ? R[]
+    : U
+  : T
+
+```
+
+然后用这一个更加模块化的做法：
+
+```tsx
+e Unwrap<T> = T extends Promise<infer U> ? Unwrap<U> 
+	: T extends Array<infer V> ?
+		UnwrapArray<T> :
+	T
+
+type UnwrapArray<T> = T  extends Array<infer R>
+	? { [P in keyof T] : Unwrap<T[P]> }
+	: T
+
+type T0 = Unwrap<Promise<Promise<number>>[]>
+
+```
+
+
+
+
+
+## Vue Reactivity 源码解读(类型部分)
+
+```tsx
+import {UnwrapRef, reactive, ref, Ref} from 'vue'
+type UnwrapNestedRefs<T> = T extends Ref ? T : UnwrapRef<T>
+type D = UnwrapNestedRefs<{
+	x : Ref<number>
+}>
+type E = UnwrapNestedRefs<Ref<number>>
+const d = reactive({
+	x : ref(0),
+	arr : [{
+		y : ref(0)
+	}]
+})
+const m = reactive([ref(0)])
+
+const f = reactive(ref(0))
+```
+
+
+
+## 总结
+
+
+
+思考题：如何去掉`Flatterned` 例子中的any?

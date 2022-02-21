@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"target": "es3",
+		"module": "commonjs",
+		"outDir": "build",
+		"lib" : ["es6"],
+		"declaration": true,
+		"esModuleInterop": true,
+		"downlevelIteration": true, 
+		"moduleResolution": "node"
+	},
+	"include": ["./src/**/*.ts"],
+	"exclude": ["./packages"]
+}

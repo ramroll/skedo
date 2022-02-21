@@ -1,0 +1,32 @@
+{
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "@types/immutable": "^3.8.7",
+    "@types/mockjs": "^1.0.4",
+    "@vitejs/plugin-vue-jsx": "^1.1.6",
+    "immutable": "^4.0.0-rc.14",
+    "mockjs": "^1.1.0",
+    "rxjs": "^7.3.0",
+    "sass": "^1.35.2",
+    "vue": "^3.2.20",
+    "vue-router": "^4.0.11"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "@babel/types": "^7.14.5",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@types/babel__core": "^7.1.15",
+    "@vitejs/plugin-vue": "^1.2.5",
+    "@vue/compiler-sfc": "^3.0.5",
+    "typescript": "^4.3.2",
+    "vite": "^2.6.5",
+    "vite-babel-plugin": "^0.0.2",
+    "vite-plugin-closure-id": "0.0.7",
+    "vue-tsc": "^0.0.24"
+  }
+}

@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"target": "ES5",
+		"outDir": "build",
+		"lib" : ["es6"],
+		"declaration": true,
+		"downlevelIteration": true, 
+		"esModuleInterop": false
+	},
+	"include": ["./src/**/*.ts", "index.js"],
+	"exclude": ["./node_modules"]
+}
