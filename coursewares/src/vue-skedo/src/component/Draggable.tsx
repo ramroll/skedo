@@ -45,8 +45,8 @@ function useDrag({onDragend, onDragstart} : {
       diffY.value = value.getDiffY()
     },
     onDragend : (e : DragEvent) => {
-      value.update(e)
       onDragend && onDragend([value.getDiffX(), value.getDiffY()])
+      value.start(e)
     }
   }
 
